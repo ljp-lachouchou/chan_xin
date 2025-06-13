@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./user";
+
+// ===== 核心数据结构 =====
+message User {
+  string id = 1;          // 用户唯一ID（服务端分配）
+  string name = 2;        // 昵称
+  string avatar_url = 3;  // 头像URL
+  string phone = 4;       // 手机号（加密存储）
+  int32   status  = 5;           // 是否锁住
+  int32   sex = 6;
+}
+
+// ===== 鉴权服务 =====
+message LoginRequest {
+  string phone = 1;     // 手机号登录
+  string password = 2;  // 密码/验证码/微信Token
+}
+
+message LoginResponse {
+  string user_id = 1;     // 用户ID
+  string auth_token = 2;  // JWT鉴权令牌
+  int64 expires_at = 3;   // 令牌过期时间戳(Unix毫秒)
+}
+
+// ===== 用户资料管理 =====
+message GetUserRequest {
+  string user_id = 1;     // 需要查询的用户ID
+}
+
+message UpdateUserRequest {
+  string user_id = 1;
+  optional string name = 2;      // 可选更新昵称
+  optional string avatar_url = 3; // 可选更新头像
+}
+
+// ===== 服务接口 =====
+service UserService {
+  // 用户鉴权
+  rpc Login(LoginRequest) returns (LoginResponse);
+
+  // 用户资料
+  rpc GetUser(GetUserRequest) returns (User);
+  rpc UpdateUser(UpdateUserRequest) returns (User);
+}
