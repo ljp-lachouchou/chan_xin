@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/ljp-lachouchou/chan_xin/deploy/configserver"
+	"github.com/ljp-lachouchou/chan_xin/pkg/lresoult"
+	"github.com/zeromicro/go-zero/rest/httpx"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/config"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/handler"
@@ -38,7 +40,8 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
-
+	httpx.SetOkHandler(lresoult.OkHandler)
+	httpx.SetErrorHandler(lresoult.ErrorHandler(c.Name))
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

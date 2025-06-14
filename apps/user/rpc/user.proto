@@ -13,6 +13,10 @@ message User {
   int32   status  = 5;           // 是否锁住
   int32   sex = 6;
 }
+message PingReq {}
+message PingResp {
+  string msg = 1;
+}
 
 // ===== 鉴权服务 =====
 message LoginRequest {
@@ -54,7 +58,7 @@ message UpdateUserRequest {
 service UserService {
   // 用户鉴权
   rpc Login(LoginRequest) returns (LoginResponse);
-
+  rpc Ping(PingReq) returns(PingResp);
   // 用户资料
   rpc GetUser(GetUserRequest) returns (User);
   rpc UpdateUser(UpdateUserRequest) returns (User);

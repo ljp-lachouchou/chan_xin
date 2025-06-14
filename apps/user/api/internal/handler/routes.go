@@ -23,6 +23,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: user.LoginHandler(serverCtx),
 			},
 			{
+				// 保持与etcd的连接
+				Method:  http.MethodGet,
+				Path:    "/ping",
+				Handler: user.PingRpcHandler(serverCtx),
+			},
+			{
 				// 用户注册
 				Method:  http.MethodPost,
 				Path:    "/register",

@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	UserService_Login_FullMethodName      = "/user.UserService/Login"
+	UserService_Ping_FullMethodName       = "/user.UserService/Ping"
 	UserService_GetUser_FullMethodName    = "/user.UserService/GetUser"
 	UserService_UpdateUser_FullMethodName = "/user.UserService/UpdateUser"
 	UserService_Register_FullMethodName   = "/user.UserService/Register"
@@ -33,6 +34,7 @@ const (
 type UserServiceClient interface {
 	// 用户鉴权
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	Ping(ctx context.Context, in *PingReq, opts ...grpc.CallOption) (*PingResp, error)
 	// 用户资料
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*User, error)
@@ -51,6 +53,16 @@ func (c *userServiceClient) Login(ctx context.Context, in *LoginRequest, opts ..
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LoginResponse)
 	err := c.cc.Invoke(ctx, UserService_Login_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) Ping(ctx context.Context, in *PingReq, opts ...grpc.CallOption) (*PingResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PingResp)
+	err := c.cc.Invoke(ctx, UserService_Ping_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -95,6 +107,7 @@ func (c *userServiceClient) Register(ctx context.Context, in *RegisterReq, opts 
 type UserServiceServer interface {
 	// 用户鉴权
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	Ping(context.Context, *PingReq) (*PingResp, error)
 	// 用户资料
 	GetUser(context.Context, *GetUserRequest) (*User, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*User, error)
@@ -111,6 +124,9 @@ type UnimplementedUserServiceServer struct{}
 
 func (UnimplementedUserServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedUserServiceServer) Ping(context.Context, *PingReq) (*PingResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
 func (UnimplementedUserServiceServer) GetUser(context.Context, *GetUserRequest) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
@@ -156,6 +172,24 @@ func _UserService_Login_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).Login(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).Ping(ctx, req.(*PingReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -224,6 +258,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _UserService_Login_Handler,
+		},
+		{
+			MethodName: "Ping",
+			Handler:    _UserService_Ping_Handler,
 		},
 		{
 			MethodName: "GetUser",

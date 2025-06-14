@@ -61,6 +61,10 @@ service user {
 	@doc "用户登入"
 	@handler login
 	post /login (LoginReq) returns (LoginResp)
+
+	@doc "保持与etcd的连接"
+	@handler pingRpc
+	get /ping
 }
 
 @server (

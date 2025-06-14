@@ -17,6 +17,8 @@ type (
 	GetUserRequest    = user.GetUserRequest
 	LoginRequest      = user.LoginRequest
 	LoginResponse     = user.LoginResponse
+	PingReq           = user.PingReq
+	PingResp          = user.PingResp
 	RegisterReq       = user.RegisterReq
 	RegisterResp      = user.RegisterResp
 	UpdateUserRequest = user.UpdateUserRequest
@@ -25,6 +27,7 @@ type (
 	UserService interface {
 		// 用户鉴权
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+		Ping(ctx context.Context, in *PingReq, opts ...grpc.CallOption) (*PingResp, error)
 		// 用户资料
 		GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error)
 		UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*User, error)
@@ -46,6 +49,11 @@ func NewUserService(cli zrpc.Client) UserService {
 func (m *defaultUserService) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	client := user.NewUserServiceClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
+}
+
+func (m *defaultUserService) Ping(ctx context.Context, in *PingReq, opts ...grpc.CallOption) (*PingResp, error) {
+	client := user.NewUserServiceClient(m.cli.Conn())
+	return client.Ping(ctx, in, opts...)
 }
 
 // 用户资料

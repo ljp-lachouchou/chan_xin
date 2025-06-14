@@ -29,6 +29,11 @@ func (s *UserServiceServer) Login(ctx context.Context, in *user.LoginRequest) (*
 	return l.Login(in)
 }
 
+func (s *UserServiceServer) Ping(ctx context.Context, in *user.PingReq) (*user.PingResp, error) {
+	l := logic.NewPingLogic(ctx, s.svcCtx)
+	return l.Ping(in)
+}
+
 // 用户资料
 func (s *UserServiceServer) GetUser(ctx context.Context, in *user.GetUserRequest) (*user.User, error) {
 	l := logic.NewGetUserLogic(ctx, s.svcCtx)
