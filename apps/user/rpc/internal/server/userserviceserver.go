@@ -39,3 +39,8 @@ func (s *UserServiceServer) UpdateUser(ctx context.Context, in *user.UpdateUserR
 	l := logic.NewUpdateUserLogic(ctx, s.svcCtx)
 	return l.UpdateUser(in)
 }
+
+func (s *UserServiceServer) Register(ctx context.Context, in *user.RegisterReq) (*user.RegisterResp, error) {
+	l := logic.NewRegisterLogic(ctx, s.svcCtx)
+	return l.Register(in)
+}

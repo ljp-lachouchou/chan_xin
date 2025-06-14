@@ -1,0 +1,19 @@
+cache:
+    - host: 192.168.142.101:16379
+      pass: chan-xin
+      type: node
+etcd:
+    hosts:
+        - 192.168.142.101:3379
+    key: user.rpc
+jwt:
+    accessexpire: 864000
+    accesssecret: github.com/ljp-lachouchou/chan_xin
+listenon: 0.0.0.0:10000
+mysql:
+    datasource: root:chan-xin@tcp(192.168.142.101:13306)/chan-xin?charset=utf8mb4&parseTime=True&loc=Local
+name: user.rpc
+redisx:
+    host: 192.168.142.101:16379
+    pass: chan-xin
+    type: node

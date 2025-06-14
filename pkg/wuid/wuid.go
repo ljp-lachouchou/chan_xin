@@ -20,7 +20,7 @@ func Init(dsn string) {
 		return db, true, nil
 	}
 
-	w = wuid.NewWUID("default", nil)
+	w = wuid.NewWUID("ldefault", nil)
 	_ = w.LoadH28FromMysql(newDB, "wuid")
 }
 

@@ -17,6 +17,8 @@ type (
 	GetUserRequest    = user.GetUserRequest
 	LoginRequest      = user.LoginRequest
 	LoginResponse     = user.LoginResponse
+	RegisterReq       = user.RegisterReq
+	RegisterResp      = user.RegisterResp
 	UpdateUserRequest = user.UpdateUserRequest
 	User              = user.User
 
@@ -26,6 +28,7 @@ type (
 		// 用户资料
 		GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error)
 		UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*User, error)
+		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 	}
 
 	defaultUserService struct {
@@ -54,4 +57,9 @@ func (m *defaultUserService) GetUser(ctx context.Context, in *GetUserRequest, op
 func (m *defaultUserService) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*User, error) {
 	client := user.NewUserServiceClient(m.cli.Conn())
 	return client.UpdateUser(ctx, in, opts...)
+}
+
+func (m *defaultUserService) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
+	client := user.NewUserServiceClient(m.cli.Conn())
+	return client.Register(ctx, in, opts...)
 }

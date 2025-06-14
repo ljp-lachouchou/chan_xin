@@ -25,6 +25,18 @@ message LoginResponse {
   string auth_token = 2;  // JWT鉴权令牌
   int64 expires_at = 3;   // 令牌过期时间戳(Unix毫秒)
 }
+message RegisterReq{
+  string  phone = 1;
+  string  nickname = 2;
+  string  password = 3;
+  string  avatar = 4;
+  int32   sex = 5;
+}
+
+message RegisterResp {
+  string Token = 1;
+  int64 expire = 2;
+}
 
 // ===== 用户资料管理 =====
 message GetUserRequest {
@@ -35,6 +47,7 @@ message UpdateUserRequest {
   string user_id = 1;
   optional string name = 2;      // 可选更新昵称
   optional string avatar_url = 3; // 可选更新头像
+  optional int32   sex = 4;
 }
 
 // ===== 服务接口 =====
@@ -45,4 +58,5 @@ service UserService {
   // 用户资料
   rpc GetUser(GetUserRequest) returns (User);
   rpc UpdateUser(UpdateUserRequest) returns (User);
+  rpc Register(RegisterReq) returns (RegisterResp);
 }

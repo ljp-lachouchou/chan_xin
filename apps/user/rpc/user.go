@@ -3,26 +3,41 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/ljp-lachouchou/chan_xin/deploy/configserver"
+	"github.com/ljp-lachouchou/chan_xin/pkg/interceptor/rpcserver"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/internal/config"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/internal/server"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/user"
 
-	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/user.yaml", "the config file")
+var configFile = flag.String("f", "etc/dev/user.yaml", "the config file")
 
 func main() {
 	flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	//conf.MustLoad(*configFile, &c)
+	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
+		ETCDEndpoints:  "192.168.142.101:3379",
+		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
+		Namespace:      "user",
+		Configs:        "user-rpc.yaml",
+		ConfigFilePath: "",
+		LogLevel:       "DEBUG",
+	})).MustLoad(&c, func(bytes []byte) error {
+		fmt.Println("更新配置", string(bytes))
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
@@ -33,7 +48,7 @@ func main() {
 		}
 	})
 	defer s.Stop()
-
+	s.AddUnaryInterceptors(rpcserver.LogInterceptor)
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

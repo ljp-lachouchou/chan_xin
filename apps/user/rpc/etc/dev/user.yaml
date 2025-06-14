@@ -13,4 +13,8 @@ Cache:
     pass: chan-xin
 Jwt:
   AccessSecret: github.com/ljp-lachouchou/chan_xin
-  AccessExpire: 8640000
+  AccessExpire: 864000
+Redisx:
+  Host: 192.168.142.101:16379
+  Type: node
+  pass: chan-xin

@@ -19,7 +19,7 @@ conf:
   listen:
     host: 0.0.0.0     # `manager api` listening ip or host name
     port: 9000          # `manager api` listening port
-  allow_list:           # If we don't set any IP list, then any IP access is allowed by default.
+  allow_list:           # If we don't set any IP list, then any IP access is allowed by ldefault.
     - 0.0.0.0/0
   etcd:
     endpoints:          # supports defining multiple etcd host addresses for an etcd cluster
@@ -31,7 +31,7 @@ conf:
       key_file: ""          # Path of your self-signed client side key
       cert_file: ""         # Path of your self-signed client side cert
       ca_file: ""           # Path of your self-signed ca cert, the CA is used to sign callers' certificates
-    # prefix: /apisix     # apisix config's prefix in etcd, /apisix by default
+    # prefix: /apisix     # apisix config's prefix in etcd, /apisix by ldefault
   log:
     error_log:
       level: warn       # supports levels, lower to higher: debug, info, warn, error, panic, fatal
@@ -49,13 +49,13 @@ conf:
     # access_control_allow_headers: "Authorization"
     # access_control-allow_methods: "*"
     # x_frame_options: "deny"
-    content_security_policy: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-src *"  # You can set frame-src to provide content for your grafana panel.
+    content_security_policy: "ldefault-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-src *"  # You can set frame-src to provide content for your grafana panel.
 
 authentication:
   secret:
     secret              # secret for jwt token generation.
   # NOTE: Highly recommended to modify this value to protect `manager api`.
-  # if it's default value, when `manager api` start, it will generate a random string to replace it.
+  # if it's ldefault value, when `manager api` start, it will generate a random string to replace it.
   expire_time: 3600     # jwt token expire time, in second
   users:                # yamllint enable rule:comments-indentation
     - username: admin   # username and password for login `manager api`
