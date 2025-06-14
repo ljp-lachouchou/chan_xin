@@ -24,11 +24,11 @@ const (
 // ===== 核心数据结构 =====
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                // 用户唯一ID（服务端分配）
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                            // 昵称
-	AvatarUrl     string                 `protobuf:"bytes,3,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"` // 头像URL
-	Phone         string                 `protobuf:"bytes,4,opt,name=phone,proto3" json:"phone,omitempty"`                          // 手机号（加密存储）
-	Status        int32                  `protobuf:"varint,5,opt,name=status,proto3" json:"status,omitempty"`                       // 是否锁住
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`             // 用户唯一ID（服务端分配）
+	Nickname      string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"` // 昵称
+	Avatar        string                 `protobuf:"bytes,3,opt,name=avatar,proto3" json:"avatar,omitempty"`     // 头像URL
+	Phone         string                 `protobuf:"bytes,4,opt,name=phone,proto3" json:"phone,omitempty"`       // 手机号（加密存储）
+	Status        int32                  `protobuf:"varint,5,opt,name=status,proto3" json:"status,omitempty"`    // 是否锁住
 	Sex           int32                  `protobuf:"varint,6,opt,name=sex,proto3" json:"sex,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -71,16 +71,16 @@ func (x *User) GetId() string {
 	return ""
 }
 
-func (x *User) GetName() string {
+func (x *User) GetNickname() string {
 	if x != nil {
-		return x.Name
+		return x.Nickname
 	}
 	return ""
 }
 
-func (x *User) GetAvatarUrl() string {
+func (x *User) GetAvatar() string {
 	if x != nil {
-		return x.AvatarUrl
+		return x.Avatar
 	}
 	return ""
 }
@@ -161,7 +161,7 @@ func (x *LoginRequest) GetPassword() string {
 
 type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`           // 用户ID
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                 // 用户ID
 	AuthToken     string                 `protobuf:"bytes,2,opt,name=auth_token,json=authToken,proto3" json:"auth_token,omitempty"`  // JWT鉴权令牌
 	ExpiresAt     int64                  `protobuf:"varint,3,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"` // 令牌过期时间戳(Unix毫秒)
 	unknownFields protoimpl.UnknownFields
@@ -198,9 +198,9 @@ func (*LoginResponse) Descriptor() ([]byte, []int) {
 	return file_apps_user_rpc_user_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *LoginResponse) GetUserId() string {
+func (x *LoginResponse) GetId() string {
 	if x != nil {
-		return x.UserId
+		return x.Id
 	}
 	return ""
 }
@@ -350,7 +350,7 @@ func (x *RegisterResp) GetExpire() int64 {
 // ===== 用户资料管理 =====
 type GetUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // 需要查询的用户ID
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // 需要查询的用户ID
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -385,18 +385,19 @@ func (*GetUserRequest) Descriptor() ([]byte, []int) {
 	return file_apps_user_rpc_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GetUserRequest) GetUserId() string {
+func (x *GetUserRequest) GetId() string {
 	if x != nil {
-		return x.UserId
+		return x.Id
 	}
 	return ""
 }
 
 type UpdateUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`                            // 可选更新昵称
-	AvatarUrl     *string                `protobuf:"bytes,3,opt,name=avatar_url,json=avatarUrl,proto3,oneof" json:"avatar_url,omitempty"` // 可选更新头像
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Nickname      *string                `protobuf:"bytes,2,opt,name=nickname,proto3,oneof" json:"nickname,omitempty"` // 可选更新昵称
+	Avatar        *string                `protobuf:"bytes,3,opt,name=avatar,proto3,oneof" json:"avatar,omitempty"`     // 可选更新头像
+	Sex           *int32                 `protobuf:"varint,4,opt,name=sex,proto3,oneof" json:"sex,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -431,45 +432,51 @@ func (*UpdateUserRequest) Descriptor() ([]byte, []int) {
 	return file_apps_user_rpc_user_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *UpdateUserRequest) GetUserId() string {
+func (x *UpdateUserRequest) GetId() string {
 	if x != nil {
-		return x.UserId
+		return x.Id
 	}
 	return ""
 }
 
-func (x *UpdateUserRequest) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
+func (x *UpdateUserRequest) GetNickname() string {
+	if x != nil && x.Nickname != nil {
+		return *x.Nickname
 	}
 	return ""
 }
 
-func (x *UpdateUserRequest) GetAvatarUrl() string {
-	if x != nil && x.AvatarUrl != nil {
-		return *x.AvatarUrl
+func (x *UpdateUserRequest) GetAvatar() string {
+	if x != nil && x.Avatar != nil {
+		return *x.Avatar
 	}
 	return ""
+}
+
+func (x *UpdateUserRequest) GetSex() int32 {
+	if x != nil && x.Sex != nil {
+		return *x.Sex
+	}
+	return 0
 }
 
 var File_apps_user_rpc_user_proto protoreflect.FileDescriptor
 
 const file_apps_user_rpc_user_proto_rawDesc = "" +
 	"\n" +
-	"\x18apps/user/rpc/user.proto\x12\x04user\"\x89\x01\n" +
+	"\x18apps/user/rpc/user.proto\x12\x04user\"\x8a\x01\n" +
 	"\x04User\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1d\n" +
-	"\n" +
-	"avatar_url\x18\x03 \x01(\tR\tavatarUrl\x12\x14\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
+	"\bnickname\x18\x02 \x01(\tR\bnickname\x12\x16\n" +
+	"\x06avatar\x18\x03 \x01(\tR\x06avatar\x12\x14\n" +
 	"\x05phone\x18\x04 \x01(\tR\x05phone\x12\x16\n" +
 	"\x06status\x18\x05 \x01(\x05R\x06status\x12\x10\n" +
 	"\x03sex\x18\x06 \x01(\x05R\x03sex\"@\n" +
 	"\fLoginRequest\x12\x14\n" +
 	"\x05phone\x18\x01 \x01(\tR\x05phone\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"f\n" +
-	"\rLoginResponse\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"]\n" +
+	"\rLoginResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
 	"auth_token\x18\x02 \x01(\tR\tauthToken\x12\x1d\n" +
 	"\n" +
@@ -482,16 +489,17 @@ const file_apps_user_rpc_user_proto_rawDesc = "" +
 	"\x03sex\x18\x05 \x01(\x05R\x03sex\"<\n" +
 	"\fRegisterResp\x12\x14\n" +
 	"\x05Token\x18\x01 \x01(\tR\x05Token\x12\x16\n" +
-	"\x06expire\x18\x02 \x01(\x03R\x06expire\")\n" +
-	"\x0eGetUserRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x81\x01\n" +
-	"\x11UpdateUserRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x17\n" +
-	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12\"\n" +
-	"\n" +
-	"avatar_url\x18\x03 \x01(\tH\x01R\tavatarUrl\x88\x01\x01B\a\n" +
-	"\x05_nameB\r\n" +
-	"\v_avatar_url2\xd2\x01\n" +
+	"\x06expire\x18\x02 \x01(\x03R\x06expire\" \n" +
+	"\x0eGetUserRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x98\x01\n" +
+	"\x11UpdateUserRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
+	"\bnickname\x18\x02 \x01(\tH\x00R\bnickname\x88\x01\x01\x12\x1b\n" +
+	"\x06avatar\x18\x03 \x01(\tH\x01R\x06avatar\x88\x01\x01\x12\x15\n" +
+	"\x03sex\x18\x04 \x01(\x05H\x02R\x03sex\x88\x01\x01B\v\n" +
+	"\t_nicknameB\t\n" +
+	"\a_avatarB\x06\n" +
+	"\x04_sex2\xd2\x01\n" +
 	"\vUserService\x120\n" +
 	"\x05Login\x12\x12.user.LoginRequest\x1a\x13.user.LoginResponse\x12+\n" +
 	"\aGetUser\x12\x14.user.GetUserRequest\x1a\n" +

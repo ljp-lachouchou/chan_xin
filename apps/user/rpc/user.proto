@@ -7,8 +7,8 @@ option go_package = "./user";
 // ===== 核心数据结构 =====
 message User {
   string id = 1;          // 用户唯一ID（服务端分配）
-  string name = 2;        // 昵称
-  string avatar_url = 3;  // 头像URL
+  string nickname = 2;        // 昵称
+  string avatar = 3;  // 头像URL
   string phone = 4;       // 手机号（加密存储）
   int32   status  = 5;           // 是否锁住
   int32   sex = 6;
@@ -21,7 +21,7 @@ message LoginRequest {
 }
 
 message LoginResponse {
-  string user_id = 1;     // 用户ID
+  string id = 1;     // 用户ID
   string auth_token = 2;  // JWT鉴权令牌
   int64 expires_at = 3;   // 令牌过期时间戳(Unix毫秒)
 }
@@ -40,13 +40,13 @@ message RegisterResp {
 
 // ===== 用户资料管理 =====
 message GetUserRequest {
-  string user_id = 1;     // 需要查询的用户ID
+  string id = 1;     // 需要查询的用户ID
 }
 
 message UpdateUserRequest {
-  string user_id = 1;
-  optional string name = 2;      // 可选更新昵称
-  optional string avatar_url = 3; // 可选更新头像
+  string id = 1;
+  optional string nickname = 2;      // 可选更新昵称
+  optional string avatar = 3; // 可选更新头像
   optional int32   sex = 4;
 }
 

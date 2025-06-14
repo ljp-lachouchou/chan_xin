@@ -61,7 +61,7 @@ func (l *LoginLogic) LoginResp(id string) (*user.LoginResponse, error) {
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "user-rpc Register GetToken")
 	}
 	return &user.LoginResponse{
-		UserId:    id,
+		Id:        id,
 		AuthToken: token,
 		ExpiresAt: iat + l.svcCtx.Config.Jwt.AccessExpire,
 	}, nil
