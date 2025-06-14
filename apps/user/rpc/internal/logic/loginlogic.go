@@ -2,10 +2,10 @@ package logic
 
 import (
 	"context"
+	"fmt"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/user"
 	"github.com/ljp-lachouchou/chan_xin/pkg/ctxdata"
-	"github.com/ljp-lachouchou/chan_xin/pkg/ldefault"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lhash"
 	"github.com/pkg/errors"
@@ -43,20 +43,23 @@ func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 		}
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "user-rpc Login UsersModel.FindByPhone", in.Phone)
 	}
-	if _, err := l.svcCtx.Redis.Get(ldefault.SYSTEM_REDIS_UID); err == nil {
-		return l.LoginResp(hasRegister.Id)
-	}
+	//if _, err := l.svcCtx.Redis.Get(ldefault.SYSTEM_REDIS_UID); err == nil {
+	//	return l.LoginResp(hasRegister.Id)
+	//}
 	if !lhash.ComparePasswords(hasRegister.Password.String, in.Password) {
 		return nil, errors.WithStack(ErrUserPwdError)
 	}
-	if err := l.svcCtx.SetRootToken(); err != nil {
-		return nil, lerr.NewWrapError(lerr.NewCOMMONError(), err, "user-rpc SetRootToken")
-	}
+
 	return l.LoginResp(hasRegister.Id)
 }
 func (l *LoginLogic) LoginResp(id string) (*user.LoginResponse, error) {
 	iat := time.Now().Unix()
 	token, err := ctxdata.GetToken(l.svcCtx.Config.Jwt.AccessSecret, iat, l.svcCtx.Config.Jwt.AccessExpire, id)
+	redisKey := fmt.Sprintf("user_token:%s", id)
+
+	if err := l.svcCtx.Redis.Setex(redisKey, token, int(l.svcCtx.Config.Jwt.AccessExpire)); err != nil {
+		return nil, lerr.NewWrapError(lerr.NewCOMMONError(), err, "user-rpc SetRootToken")
+	}
 	if err != nil {
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "user-rpc Register GetToken")
 	}

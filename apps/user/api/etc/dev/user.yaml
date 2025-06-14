@@ -1,0 +1,16 @@
+Name: user
+Host: 0.0.0.0
+Port: 20000
+UserRpc:
+  Etcd:
+    Hosts:
+      #    - 127.0.0.1:3379
+      - 192.168.142.101:3379
+    Key: user.rpc
+JwtAuth:
+  AccessSecret: github.com/ljp-lachouchou/chan_xin
+  AccessExpire: 864000
+Redisx:
+  Host: 192.168.142.101:16379
+  Type: node
+  pass: chan-xin
