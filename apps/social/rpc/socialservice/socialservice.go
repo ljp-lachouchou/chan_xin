@@ -16,10 +16,16 @@ import (
 type (
 	FriendApplyAction            = social.FriendApplyAction
 	FriendApplyActionResp        = social.FriendApplyActionResp
+	FriendApplyListReq           = social.FriendApplyListReq
+	FriendApplyListResp          = social.FriendApplyListResp
 	FriendApplyRequest           = social.FriendApplyRequest
+	FriendApplyResp              = social.FriendApplyResp
 	FriendApplyResponse          = social.FriendApplyResponse
 	FriendInfoRequest            = social.FriendInfoRequest
+	FriendListReq                = social.FriendListReq
+	FriendListResp               = social.FriendListResp
 	FriendStatus                 = social.FriendStatus
+	FriendStatusInfo             = social.FriendStatusInfo
 	FriendStatusUpdate           = social.FriendStatusUpdate
 	FriendStatusUpdateResp       = social.FriendStatusUpdateResp
 	GroupCreationRequest         = social.GroupCreationRequest
@@ -52,6 +58,8 @@ type (
 		DeleteFriend(ctx context.Context, in *RelationRequest, opts ...grpc.CallOption) (*RelationResp, error)
 		UpdateFriendStatus(ctx context.Context, in *FriendStatusUpdate, opts ...grpc.CallOption) (*FriendStatusUpdateResp, error)
 		GetFriendInfo(ctx context.Context, in *FriendInfoRequest, opts ...grpc.CallOption) (*UserInfo, error)
+		GetFriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error)
+		GetFriendApplyList(ctx context.Context, in *FriendApplyListReq, opts ...grpc.CallOption) (*FriendApplyListResp, error)
 		// === 群组管理接口 ===
 		CreateGroup(ctx context.Context, in *GroupCreationRequest, opts ...grpc.CallOption) (*GroupInfo, error)
 		QuitGroup(ctx context.Context, in *GroupQuitRequest, opts ...grpc.CallOption) (*GroupQuitResp, error)
@@ -99,6 +107,16 @@ func (m *defaultSocialService) UpdateFriendStatus(ctx context.Context, in *Frien
 func (m *defaultSocialService) GetFriendInfo(ctx context.Context, in *FriendInfoRequest, opts ...grpc.CallOption) (*UserInfo, error) {
 	client := social.NewSocialServiceClient(m.cli.Conn())
 	return client.GetFriendInfo(ctx, in, opts...)
+}
+
+func (m *defaultSocialService) GetFriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error) {
+	client := social.NewSocialServiceClient(m.cli.Conn())
+	return client.GetFriendList(ctx, in, opts...)
+}
+
+func (m *defaultSocialService) GetFriendApplyList(ctx context.Context, in *FriendApplyListReq, opts ...grpc.CallOption) (*FriendApplyListResp, error) {
+	client := social.NewSocialServiceClient(m.cli.Conn())
+	return client.GetFriendApplyList(ctx, in, opts...)
 }
 
 // === 群组管理接口 ===

@@ -35,6 +35,10 @@ type (
 		FindOneByUserIdFriendId(ctx context.Context, userId string, friendId string) (*FriendRelation, error)
 		Update(ctx context.Context, data *FriendRelation) error
 		Delete(ctx context.Context, id uint64) error
+		DeleteByUserIdFriendId(ctx context.Context,session sqlx.Session, userId string, friendId string) error
+		Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
+		ListByUserid(ctx context.Context, uid string) ([]*FriendRelation, error)
+		ListByUserIdWithUsers(ctx context.Context,uid string) ([]*FriendRelationJoinUsers, error)
 	}
 
 	defaultFriendRelationModel struct {
@@ -53,15 +57,60 @@ type (
 		CreatedAt time.Time `db:"created_at"` // 创建时间
 		UpdatedAt time.Time `db:"updated_at"` // 更新时间
 	}
+	FriendRelationJoinUsers struct {
+		Id        string    `db:"id"`         // 关系ID
+		Nickname    string    `db:"nickname"`    // 好友昵称
+		Avatar  string    `db:"avatar"`  // 好友头像
+		Sex uint32 `db:"sex"`
+		Remark    string    `db:"remark"`     // 好友备注
+		IsMuted   int64     `db:"is_muted"`   // 免打扰 (0:否, 1:是)
+		IsTopped  int64     `db:"is_topped"`  // 置顶 (0:否, 1:是)
+		IsBlocked int64     `db:"is_blocked"` // 拉黑 (0:否, 1:是)
+	}
 )
-
+func (m *defaultFriendRelationModel) ListByUserIdWithUsers(ctx context.Context,uid string) ([]*FriendRelationJoinUsers, error) {
+	query := fmt.Sprintf("SELECT friend_relation.friend_id as id,users.nickname as nickname,users.avatar as avatar,users.sex as sex,friend_relation.remark as remark,friend_relation.is_muted as is_muted,friend_relation.is_topped as is_topped,friend_relation.is_blocked as is_blocked FROM friend_relation JOIN users ON friend_relation.friend_id = users.id where friend_relation.user_id=?;")
+	var resp []*FriendRelationJoinUsers
+	err:= m.QueryRowsNoCacheCtx(ctx,&resp,query,uid)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func newFriendRelationModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultFriendRelationModel {
 	return &defaultFriendRelationModel{
 		CachedConn: sqlc.NewConn(conn, c, opts...),
 		table:      "`friend_relation`",
 	}
 }
+func (m *defaultFriendRelationModel) Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error {
+	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
+		return fn(ctx,session)
+	})
+}
 
+func (m *defaultFriendRelationModel) DeleteByUserIdFriendId(ctx context.Context,session sqlx.Session, userId string, friendId string) error {
+	friendRelationUserIdFriendIdKey1 := fmt.Sprintf("%s%v:%v", cacheFriendRelationUserIdFriendIdPrefix, userId, friendId)
+	friendRelationUserIdFriendIdKey2 := fmt.Sprintf("%s%v:%v", cacheFriendRelationUserIdFriendIdPrefix, friendId, userId)
+	execSql1 := fmt.Sprintf("delete from %s where `user_id` = ? and friend_id = ?", m.table)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		return session.ExecCtx(ctx, execSql1, userId, friendId)
+	}, friendRelationUserIdFriendIdKey1)
+	if err != nil {
+		return err
+	}
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+
+		return session.ExecCtx(ctx, execSql1, friendId, userId)
+	}, friendRelationUserIdFriendIdKey2)
+	m.DelCacheCtx(ctx, friendRelationUserIdFriendIdKey1)
+	m.DelCacheCtx(ctx, friendRelationUserIdFriendIdKey2)
+	return err
+}
 func (m *defaultFriendRelationModel) Delete(ctx context.Context, id uint64) error {
 	data, err := m.FindOne(ctx, id)
 	if err != nil {
@@ -77,6 +126,19 @@ func (m *defaultFriendRelationModel) Delete(ctx context.Context, id uint64) erro
 	return err
 }
 
+func (m *defaultFriendRelationModel) ListByUserid(ctx context.Context, uid string) ([]*FriendRelation, error) {
+	query := fmt.Sprintf("select %s from %s where `user_id` = ?", friendRelationRows, m.table)
+	var resp []*FriendRelation
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uid)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultFriendRelationModel) FindOne(ctx context.Context, id uint64) (*FriendRelation, error) {
 	friendRelationIdKey := fmt.Sprintf("%s%v", cacheFriendRelationIdPrefix, id)
 	var resp FriendRelation

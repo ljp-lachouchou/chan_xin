@@ -35,6 +35,7 @@ type (
 		Update(ctx context.Context,session sqlx.Session, data *FriendApply) error
 		Delete(ctx context.Context, applyId string) error
 		Tranx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
+		ListByUserIdJoinUsers(ctx context.Context,uid string) ([]*FriendApplyJoinUsers, error)
 	}
 
 	defaultFriendApplyModel struct {
@@ -50,8 +51,28 @@ type (
 		Status      int64     `db:"status"`       // 状态 (0:待处理, 1:同意, 2:拒绝)
 		CreatedAt   time.Time `db:"created_at"`   // 申请时间
 	}
+	FriendApplyJoinUsers struct {
+		Id     string    `db:"id"`     // 对方ID
+		Nickname string    `db:"nickname"` // 对方昵称
+		Avatar    string    `db:"avatar"`    // 对方头像
+		Sex uint32 `db:"sex"` //对方性别 (0-未知 1-男 2-女)
+		GreetMsg    string    `db:"greet_msg"`    // 打招呼消息
+		Status      int64     `db:"status"`       // 状态 (0:待处理, 1:同意, 2:拒绝)
+	}
 )
-
+func (m *defaultFriendApplyModel) ListByUserIdJoinUsers(ctx context.Context,uid string) ([]*FriendApplyJoinUsers, error) {
+	query := fmt.Sprintf("SELECT friend_apply.target_id as id,users.nickname as nickname,users.avatar as avatar,users.sex as sex,friend_apply.greet_msg as greet_msg,friend_apply.`status` as status FROM  friend_apply JOIN users ON friend_apply.target_id = users.id where friend_apply.applicant_id=?;")
+	var resp []*FriendApplyJoinUsers
+	err:= m.QueryRowsNoCacheCtx(ctx,&resp,query,uid)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func newFriendApplyModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultFriendApplyModel {
 	return &defaultFriendApplyModel{
 		CachedConn: sqlc.NewConn(conn, c, opts...),

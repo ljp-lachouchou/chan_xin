@@ -12,6 +12,7 @@ message UserInfo {
   string nickname = 2;     // 昵称
   string avatar_url = 3;   // 头像URL
   uint32 gender = 4;       // 性别 (0-未知 1-男 2-女)
+  FriendStatusInfo status = 5; //对于好友的状态
 }
 
 message GroupInfo {
@@ -24,12 +25,18 @@ message GroupInfo {
 }
 
 // ========== 好友管理模块 ==========
-// 好友状态设置 (免打扰/置顶/黑名单)
-message FriendStatus {
+message FriendStatusInfo {
   bool is_muted = 1;       // 消息免打扰
   bool is_topped = 2;       // 置顶聊天
   bool is_blocked = 3;      // 拉黑好友
   string remark = 4;        // 好友备注
+}
+// 好友状态设置 (免打扰/置顶/黑名单)
+message FriendStatus {
+  optional bool is_muted = 1;       // 消息免打扰
+  optional bool is_topped = 2;       // 置顶聊天
+  optional bool is_blocked = 3;      // 拉黑好友
+  optional string remark = 4;        // 好友备注
 }
 
 // 好友申请请求
@@ -39,12 +46,26 @@ message FriendApplyRequest {
   string greet_msg = 3;     // 打招呼消息
 }
 
+
 // 好友申请响应
 message FriendApplyResponse {
   string apply_id = 1;      // 申请记录ID
   int64 apply_time = 2;
 }
-
+message FriendApplyListReq {
+  string user_id = 1;
+}
+message FriendApplyResp {
+  string user_id = 1;      // 用户全局ID
+  string nickname = 2;     // 昵称
+  string avatar_url = 3;   // 头像URL
+  uint32 gender = 4;       // 性别 (0-未知 1-男 2-女)
+  string greet_msg = 5;     // 打招呼消息
+  int32 status=6; //申请状态
+}
+message FriendApplyListResp {
+  repeated FriendApplyResp List = 1;
+}
 // 好友申请操作
 message FriendApplyAction {
   string apply_id = 1;      // 申请记录ID
@@ -87,6 +108,12 @@ message GroupMemberManageResp{}
 message GroupMemberSettingUpdateResp{}
 message GroupQuitResp{}
 message GroupInvitationResp{}
+message FriendListReq {
+  string user_id = 1;
+}
+message FriendListResp {
+  repeated UserInfo friend_list = 1;
+}
 // ========== 服务接口定义 ==========
 service SocialService {
   // === 好友管理接口 ===
@@ -95,6 +122,8 @@ service SocialService {
   rpc DeleteFriend(RelationRequest) returns (RelationResp);
   rpc UpdateFriendStatus(FriendStatusUpdate) returns (FriendStatusUpdateResp);
   rpc GetFriendInfo(FriendInfoRequest) returns (UserInfo);
+  rpc GetFriendList(FriendListReq) returns(FriendListResp);
+  rpc GetFriendApplyList(FriendApplyListReq) returns(FriendApplyListResp);
 
   // === 群组管理接口 ===
   rpc CreateGroup(GroupCreationRequest) returns (GroupInfo);

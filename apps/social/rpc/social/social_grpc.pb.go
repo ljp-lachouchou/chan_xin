@@ -24,6 +24,8 @@ const (
 	SocialService_DeleteFriend_FullMethodName          = "/social.SocialService/DeleteFriend"
 	SocialService_UpdateFriendStatus_FullMethodName    = "/social.SocialService/UpdateFriendStatus"
 	SocialService_GetFriendInfo_FullMethodName         = "/social.SocialService/GetFriendInfo"
+	SocialService_GetFriendList_FullMethodName         = "/social.SocialService/GetFriendList"
+	SocialService_GetFriendApplyList_FullMethodName    = "/social.SocialService/GetFriendApplyList"
 	SocialService_CreateGroup_FullMethodName           = "/social.SocialService/CreateGroup"
 	SocialService_QuitGroup_FullMethodName             = "/social.SocialService/QuitGroup"
 	SocialService_InviteToGroup_FullMethodName         = "/social.SocialService/InviteToGroup"
@@ -47,6 +49,8 @@ type SocialServiceClient interface {
 	DeleteFriend(ctx context.Context, in *RelationRequest, opts ...grpc.CallOption) (*RelationResp, error)
 	UpdateFriendStatus(ctx context.Context, in *FriendStatusUpdate, opts ...grpc.CallOption) (*FriendStatusUpdateResp, error)
 	GetFriendInfo(ctx context.Context, in *FriendInfoRequest, opts ...grpc.CallOption) (*UserInfo, error)
+	GetFriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error)
+	GetFriendApplyList(ctx context.Context, in *FriendApplyListReq, opts ...grpc.CallOption) (*FriendApplyListResp, error)
 	// === 群组管理接口 ===
 	CreateGroup(ctx context.Context, in *GroupCreationRequest, opts ...grpc.CallOption) (*GroupInfo, error)
 	QuitGroup(ctx context.Context, in *GroupQuitRequest, opts ...grpc.CallOption) (*GroupQuitResp, error)
@@ -111,6 +115,26 @@ func (c *socialServiceClient) GetFriendInfo(ctx context.Context, in *FriendInfoR
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UserInfo)
 	err := c.cc.Invoke(ctx, SocialService_GetFriendInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *socialServiceClient) GetFriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FriendListResp)
+	err := c.cc.Invoke(ctx, SocialService_GetFriendList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *socialServiceClient) GetFriendApplyList(ctx context.Context, in *FriendApplyListReq, opts ...grpc.CallOption) (*FriendApplyListResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FriendApplyListResp)
+	err := c.cc.Invoke(ctx, SocialService_GetFriendApplyList_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -219,6 +243,8 @@ type SocialServiceServer interface {
 	DeleteFriend(context.Context, *RelationRequest) (*RelationResp, error)
 	UpdateFriendStatus(context.Context, *FriendStatusUpdate) (*FriendStatusUpdateResp, error)
 	GetFriendInfo(context.Context, *FriendInfoRequest) (*UserInfo, error)
+	GetFriendList(context.Context, *FriendListReq) (*FriendListResp, error)
+	GetFriendApplyList(context.Context, *FriendApplyListReq) (*FriendApplyListResp, error)
 	// === 群组管理接口 ===
 	CreateGroup(context.Context, *GroupCreationRequest) (*GroupInfo, error)
 	QuitGroup(context.Context, *GroupQuitRequest) (*GroupQuitResp, error)
@@ -253,6 +279,12 @@ func (UnimplementedSocialServiceServer) UpdateFriendStatus(context.Context, *Fri
 }
 func (UnimplementedSocialServiceServer) GetFriendInfo(context.Context, *FriendInfoRequest) (*UserInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFriendInfo not implemented")
+}
+func (UnimplementedSocialServiceServer) GetFriendList(context.Context, *FriendListReq) (*FriendListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFriendList not implemented")
+}
+func (UnimplementedSocialServiceServer) GetFriendApplyList(context.Context, *FriendApplyListReq) (*FriendApplyListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFriendApplyList not implemented")
 }
 func (UnimplementedSocialServiceServer) CreateGroup(context.Context, *GroupCreationRequest) (*GroupInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
@@ -388,6 +420,42 @@ func _SocialService_GetFriendInfo_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SocialServiceServer).GetFriendInfo(ctx, req.(*FriendInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SocialService_GetFriendList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServiceServer).GetFriendList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SocialService_GetFriendList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServiceServer).GetFriendList(ctx, req.(*FriendListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SocialService_GetFriendApplyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendApplyListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServiceServer).GetFriendApplyList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SocialService_GetFriendApplyList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServiceServer).GetFriendApplyList(ctx, req.(*FriendApplyListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -580,6 +648,14 @@ var SocialService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetFriendInfo",
 			Handler:    _SocialService_GetFriendInfo_Handler,
+		},
+		{
+			MethodName: "GetFriendList",
+			Handler:    _SocialService_GetFriendList_Handler,
+		},
+		{
+			MethodName: "GetFriendApplyList",
+			Handler:    _SocialService_GetFriendApplyList_Handler,
 		},
 		{
 			MethodName: "CreateGroup",
