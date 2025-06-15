@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/userservice"
 	"github.com/ljp-lachouchou/chan_xin/pkg/ctxdata"
-	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
+	"github.com/pkg/errors"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/types"
@@ -35,7 +35,7 @@ func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (*types.UserInfoResp, e
 	}
 	rpcResp, err := l.svcCtx.UserService.GetUser(l.ctx, &rpcReq)
 	if err != nil {
-		return nil, lerr.NewWrapError(lerr.NewCOMMONError(), err, "GetUser failed")
+		return nil, errors.WithStack(err)
 	}
 	resp := &types.UserInfoResp{
 		Info: types.User{

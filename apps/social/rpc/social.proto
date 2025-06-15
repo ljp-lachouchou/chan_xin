@@ -1,0 +1,182 @@
+syntax = "proto3";
+
+package social;
+
+option go_package = "./social";
+
+
+
+// ========== 基础数据结构 ==========
+message UserInfo {
+  string user_id = 1;      // 用户全局ID
+  string nickname = 2;     // 昵称
+  string avatar_url = 3;   // 头像URL
+  uint32 gender = 4;       // 性别 (0-未知 1-男 2-女)
+}
+
+message GroupInfo {
+  string group_id = 1;      // 群ID
+  string name = 2;          // 群名称
+  string owner_id = 3;      // 群主ID
+  repeated string admin_ids = 4; // 管理员ID列表
+  repeated string member_ids = 5; // 成员ID列表
+  uint32 max_members = 6;   // 群人数上限
+}
+
+// ========== 好友管理模块 ==========
+// 好友状态设置 (免打扰/置顶/黑名单)
+message FriendStatus {
+  bool is_muted = 1;       // 消息免打扰
+  bool is_topped = 2;       // 置顶聊天
+  bool is_blocked = 3;      // 拉黑好友
+  string remark = 4;        // 好友备注
+}
+
+// 好友申请请求
+message FriendApplyRequest {
+  string applicant_id = 1;  // 申请人ID
+  string target_id = 2;     // 目标用户ID
+  string greet_msg = 3;     // 打招呼消息
+}
+
+// 好友申请响应
+message FriendApplyResponse {
+  string apply_id = 1;      // 申请记录ID
+  int64 apply_time = 2;
+}
+
+// 好友申请操作
+message FriendApplyAction {
+  string apply_id = 1;      // 申请记录ID
+  bool is_approved = 2;    // 是否同意
+}
+
+// ========== 群组管理模块 ==========
+// 群成员个性化设置
+message GroupMemberSetting {
+  string group_nickname = 1; // 群内昵称
+  bool show_member_nickname = 2; // 是否显示群成员昵称
+}
+
+// 群状态设置
+message GroupStatus {
+  bool is_muted = 1;         // 群消息免打扰
+  bool is_topped = 2;        // 置顶群聊
+  string remark = 3;         // 群备注
+}
+
+// 群操作权限类型
+enum GroupPermission {
+  KICK_MEMBER = 0;      // 踢出成员
+  SET_ADMIN = 1;        // 设置/取消管理员
+  CHANGE_GROUP_NAME = 2; // 修改群名
+}
+
+// 群邀请请求
+message GroupInvitation {
+  string inviter_id = 1;    // 邀请人ID（群主/管理员）
+  string group_id = 2;      // 群ID
+  repeated string target_ids = 3; // 被邀请人ID列表
+}
+message FriendApplyActionResp {}
+message RelationResp{}
+message FriendStatusUpdateResp{}
+message GroupInviteActionResp{}
+message GroupStatusUpdateResp{}
+message GroupMemberManageResp{}
+message GroupMemberSettingUpdateResp{}
+message GroupQuitResp{}
+message GroupInvitationResp{}
+// ========== 服务接口定义 ==========
+service SocialService {
+  // === 好友管理接口 ===
+  rpc ApplyFriend(FriendApplyRequest) returns (FriendApplyResponse);
+  rpc HandleFriendApply(FriendApplyAction) returns (FriendApplyActionResp);
+  rpc DeleteFriend(RelationRequest) returns (RelationResp);
+  rpc UpdateFriendStatus(FriendStatusUpdate) returns (FriendStatusUpdateResp);
+  rpc GetFriendInfo(FriendInfoRequest) returns (UserInfo);
+
+  // === 群组管理接口 ===
+  rpc CreateGroup(GroupCreationRequest) returns (GroupInfo);
+  rpc QuitGroup(GroupQuitRequest) returns (GroupQuitResp);
+  rpc InviteToGroup(GroupInvitation) returns (GroupInvitationResp);
+  rpc HandleGroupInvite(GroupInviteAction) returns (GroupInviteActionResp);
+  rpc UpdateGroupStatus(GroupStatusUpdate) returns (GroupStatusUpdateResp);
+  rpc ManageGroupMember(GroupMemberManage) returns (GroupMemberManageResp);
+  rpc GetGroupInfo(GroupInfoRequest) returns (GroupInfo);
+  rpc SetGroupMemberSetting(GroupMemberSettingUpdate) returns (GroupMemberSettingUpdateResp);
+
+  rpc Ping(PingReq) returns(PingResp);
+}
+
+// ========== 详细结构定义 ==========
+// 好友状态更新请求
+message FriendStatusUpdate {
+  string user_id = 1;      // 操作者ID
+  string friend_id = 2;    // 好友ID
+  FriendStatus status = 3; // 新状态
+}
+
+// 群创建请求
+message GroupCreationRequest {
+  string creator_id = 1;    // 创建者ID
+  string group_name = 2;    // 初始群名
+  repeated string member_ids = 3; // 初始成员ID
+}
+
+// 群成员管理操作
+message GroupMemberManage {
+  string operator_id = 1;  // 操作者ID
+  string group_id = 2;
+  string target_id = 3;    // 被操作成员ID
+  GroupPermission action = 4;
+}
+
+// 群邀请处理
+message GroupInviteAction {
+  string invite_id = 1;    // 邀请记录ID
+  bool is_accepted = 2;    // 是否接受
+}
+
+// 群状态更新
+message GroupStatusUpdate {
+  string user_id = 1;      // 操作者ID
+  string group_id = 2;
+  GroupStatus status = 3;  // 新状态
+}
+
+// 群成员设置更新
+message GroupMemberSettingUpdate {
+  string user_id = 1;
+  string group_id = 2;
+  GroupMemberSetting setting = 3;
+}
+
+// 关系操作通用请求
+message RelationRequest {
+  string from_uid = 1;    // 发起方
+  string to_uid = 2;       // 目标方
+}
+
+// 群退出请求
+message GroupQuitRequest {
+  string user_id = 1;     // 退出者ID
+  string group_id = 2;
+}
+
+// 信息查询请求
+message FriendInfoRequest {
+  string user_id = 1;      // 查询者ID
+  string friend_id = 2;    // 目标好友ID
+}
+
+message GroupInfoRequest {
+  string user_id = 1;      // 查询者ID
+  string group_id = 2;     // 目标群ID
+}
+
+
+message PingReq {}
+message PingResp {
+  string msg = 1;
+}

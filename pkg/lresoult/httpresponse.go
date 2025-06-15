@@ -11,18 +11,18 @@ import (
 )
 
 type response struct {
-	code int         `json:"code"`
-	msg  string      `json:"msg"`
-	data interface{} `json:"data"`
+	Code int         `json:"code"`
+	Msg  string      `json:"msg"`
+	Data interface{} `json:"data"`
 }
 
 func Success(data interface{}) *response {
-	return &response{code: 200, msg: "success", data: data}
+	return &response{Code: 200, Msg: "success", Data: data}
 }
 func Fail(code int, msg string) *response {
-	return &response{code: code, msg: msg, data: nil}
+	return &response{Code: code, Msg: msg, Data: nil}
 }
-func OkHandler(_ context.Context, data any) any {
+func OkHandler(_ context.Context, data interface{}) any {
 	return Success(data)
 }
 func ErrorHandler(name string) func(err error) (int, any) {

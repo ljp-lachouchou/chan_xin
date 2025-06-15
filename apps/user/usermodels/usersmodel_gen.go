@@ -32,6 +32,7 @@ type (
 		Insert(ctx context.Context, data *Users) (sql.Result, error)
 		FindOne(ctx context.Context, id string) (*Users, error)
 		FindByPhone(ctx context.Context, phone string) (*Users, error)
+		GetNicknameByUid(ctx context.Context, uid string) (string, error)
 		Update(ctx context.Context, data *Users) error
 		Delete(ctx context.Context, id string) error
 	}
@@ -60,7 +61,19 @@ func newUsersModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *
 		table:      "`users`",
 	}
 }
-
+func (m *defaultUsersModel) GetNicknameByUid(ctx context.Context, uid string) (string, error) {
+	query := fmt.Sprintf("select %s from %s where `id` = ?",usersRows,m.table)
+	var resp Users
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uid)
+	switch err {
+	case nil:
+		return resp.Nickname, nil
+	case sqlc.ErrNotFound:
+		return "", ErrNotFound
+	default:
+		return "", err
+	}
+}
 func (m *defaultUsersModel) Delete(ctx context.Context, id string) error {
 	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

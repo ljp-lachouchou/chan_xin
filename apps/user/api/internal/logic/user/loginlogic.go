@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/userservice"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
+	"github.com/pkg/errors"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/types"
@@ -36,7 +37,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (*types.LoginResp, error) {
 	}
 	rpcResp, err := l.svcCtx.Login(l.ctx, &rpcReq)
 	if err != nil {
-		return nil, lerr.NewWrapError(lerr.NewCOMMONError(), err, "user-api login failed")
+		return nil, errors.WithStack(err)
 	}
 	resp := types.LoginResp{
 		Id:     rpcResp.Id,

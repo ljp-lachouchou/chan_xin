@@ -6,6 +6,7 @@ import (
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/userservice"
 	"github.com/ljp-lachouchou/chan_xin/pkg/ctxdata"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
+	"github.com/pkg/errors"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/types"
@@ -39,7 +40,7 @@ func (l *UpdateLogic) Update(req *types.UpdateReq) (resp *types.UpdateResp, err 
 	}
 	rpcResp, err := l.svcCtx.UserService.UpdateUser(l.ctx, &rpcReq)
 	if err != nil {
-		return nil, lerr.NewWrapError(lerr.NewSYSTEMError(), err, "user-api update user failed")
+		return nil, errors.WithStack(err)
 	}
 	return &types.UpdateResp{
 		Info: types.User{

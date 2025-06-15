@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/userservice"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
+	"github.com/pkg/errors"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/types"
@@ -36,7 +37,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (*types.RegisterResp, e
 	}
 	rpcResp, err := l.svcCtx.UserService.Register(l.ctx, &rpcReq)
 	if err != nil {
-		return nil, lerr.NewWrapError(lerr.NewCOMMONError(), err, "user-api UserService.Register()")
+		return nil, errors.WithStack(err)
 	}
 	resp := &types.RegisterResp{
 		Token:  rpcResp.Token,
