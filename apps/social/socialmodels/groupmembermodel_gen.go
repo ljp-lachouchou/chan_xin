@@ -21,6 +21,7 @@ import (
 var (
 	groupMemberFieldNames          = builder.RawFieldNames(&GroupMember{})
 	groupMemberRows                = strings.Join(groupMemberFieldNames, ",")
+	groupMemberRowsExpectAutoSetInsets   = strings.Join(stringx.Remove(groupMemberFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`","`id`","`joined_at`"), ",")
 	groupMemberRowsExpectAutoSet   = strings.Join(stringx.Remove(groupMemberFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	groupMemberRowsWithPlaceHolder = strings.Join(stringx.Remove(groupMemberFieldNames, "`group_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
@@ -31,10 +32,12 @@ var (
 type (
 	groupMemberModel interface {
 		Insert(ctx context.Context, data *GroupMember) (sql.Result, error)
+		InsertMembers(ctx context.Context,session sqlx.Session, data ...*GroupMember) (sql.Result, error)
 		FindOne(ctx context.Context, groupId string) (*GroupMember, error)
 		FindOneByGroupIdUserId(ctx context.Context, groupId string, userId string) (*GroupMember, error)
 		Update(ctx context.Context, data *GroupMember) error
 		Delete(ctx context.Context, groupId string) error
+		Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
 	}
 
 	defaultGroupMemberModel struct {
@@ -62,7 +65,31 @@ func newGroupMemberModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Opt
 		table:      "`group_member`",
 	}
 }
-
+func (m *defaultGroupMemberModel) Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error{
+	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
+		return fn(ctx, session)
+	})
+}
+func (m *defaultGroupMemberModel) InsertMembers(ctx context.Context,session sqlx.Session, data ...*GroupMember) (sql.Result, error) {
+	var (
+		sql strings.Builder
+		args []any
+	)
+	if len(data) == 0{
+		return nil,nil
+	}
+	fmt.Println(groupMemberRowsExpectAutoSetInsets)
+	sql.WriteString(fmt.Sprintf("insert into %s (%s) values ",m.table,groupMemberRowsExpectAutoSetInsets))
+	for i,v := range data {
+		sql.WriteString("(?, ?, ?, ?, ?, ?, ?, ?)")
+		args = append(args, v.GroupId, v.UserId, v.GroupNickname, v.ShowNickname, v.IsAdmin, v.IsMuted, v.IsTopped, v.Remark)
+		if i == len(data) - 1 {
+			break
+		}
+		sql.WriteString(",")
+	}
+	return session.ExecCtx(ctx,sql.String(),args...)
+}
 func (m *defaultGroupMemberModel) Delete(ctx context.Context, groupId string) error {
 	data, err := m.FindOne(ctx, groupId)
 	if err != nil {
