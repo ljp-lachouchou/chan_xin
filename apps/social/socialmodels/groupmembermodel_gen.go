@@ -37,6 +37,7 @@ type (
 		FindOneByGroupIdUserId(ctx context.Context, groupId string, userId string) (*GroupMember, error)
 		Update(ctx context.Context, data *GroupMember) error
 		Delete(ctx context.Context, groupId string) error
+		DeleteByGIdAndUId(ctx context.Context, groupId string, userId string) error
 		Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
 	}
 
@@ -89,6 +90,15 @@ func (m *defaultGroupMemberModel) InsertMembers(ctx context.Context,session sqlx
 		sql.WriteString(",")
 	}
 	return session.ExecCtx(ctx,sql.String(),args...)
+}
+func (m *defaultGroupMemberModel) DeleteByGIdAndUId(ctx context.Context, groupId string, userId string) error {
+	groupMemberGroupIdKey := fmt.Sprintf("%s%v", cacheGroupMemberGroupIdPrefix, groupId)
+	groupMemberGroupIdUserIdKey := fmt.Sprintf("%s%v:%v", cacheGroupMemberGroupIdUserIdPrefix, groupId, userId)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("delete from %s where `group_id` = ? and `user_id` = ?", m.table)
+		return conn.ExecCtx(ctx, query, groupId,userId)
+	}, groupMemberGroupIdKey, groupMemberGroupIdUserIdKey)
+	return err
 }
 func (m *defaultGroupMemberModel) Delete(ctx context.Context, groupId string) error {
 	data, err := m.FindOne(ctx, groupId)

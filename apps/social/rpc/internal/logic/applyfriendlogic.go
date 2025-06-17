@@ -5,6 +5,7 @@ import (
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/social"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/socialmodels"
+	"github.com/ljp-lachouchou/chan_xin/deploy/constant"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
 	"github.com/ljp-lachouchou/chan_xin/pkg/wuid"
 	"github.com/pkg/errors"
@@ -46,6 +47,18 @@ func (l *ApplyFriendLogic) ApplyFriend(in *social.FriendApplyRequest) (*social.F
 		return nil, lerr.NewWrapError(lerr.NewSYSTEMError(), err, "social-rpc ApplyFriend", in.ApplicantId, in.TargetId)
 	}
 	if hasFriendApply != nil {
+		switch constant.FriendApplyHandle(hasFriendApply.Status) {
+		case constant.FailHandleApply:
+			hasFriendApply.Status = 0
+			if err := l.svcCtx.FriendApplyModel.Update(l.ctx, hasFriendApply); err != nil {
+				return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply", hasFriendApply.ApplyId)
+			}
+			return &social.FriendApplyResponse{
+				ApplyId:   hasFriendApply.ApplyId,
+				ApplyTime: time.Now().Unix(),
+			}, nil
+		default:
+		}
 		return nil, errors.WithStack(FriendApplyHasExistErr)
 	}
 	applyId := wuid.GenUid(l.svcCtx.Config.Mysql.DataSource)

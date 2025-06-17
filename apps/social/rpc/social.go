@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/ljp-lachouchou/chan_xin/deploy/configserver"
+	"github.com/ljp-lachouchou/chan_xin/pkg/interceptor/rpcserver"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/internal/config"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/internal/server"
@@ -47,7 +48,7 @@ func main() {
 		}
 	})
 	defer s.Stop()
-
+	s.AddUnaryInterceptors(rpcserver.LogInterceptor)
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

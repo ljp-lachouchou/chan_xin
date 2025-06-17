@@ -1,0 +1,16 @@
+cache:
+    - host: 192.168.142.101:16379
+      pass: chan-xin
+      type: node
+etcd:
+    hosts:
+        - 192.168.142.101:3379
+    key: social.rpc
+listenon: 0.0.0.0:10001
+mysql:
+    datasource: root:chan-xin@tcp(192.168.142.101:13306)/chan-xin?charset=utf8mb4&parseTime=True&loc=Local
+name: social.rpc
+redisx:
+    host: 192.168.142.101:16379
+    pass: chan-xin
+    type: node

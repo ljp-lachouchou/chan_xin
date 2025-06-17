@@ -33,6 +33,7 @@ type (
 		FindOne(ctx context.Context, groupId string) (*GroupInfo, error)
 		Update(ctx context.Context, data *GroupInfo) error
 		Delete(ctx context.Context, groupId string) error
+		GetNicknameByGid(ctx context.Context,groupId string) (string, error)
 	}
 
 	defaultGroupInfoModel struct {
@@ -82,7 +83,19 @@ func (m *defaultGroupInfoModel) FindOne(ctx context.Context, groupId string) (*G
 		return nil, err
 	}
 }
-
+func (m *defaultGroupInfoModel)GetNicknameByGid(ctx context.Context,groupId string) (string, error) {
+	query := fmt.Sprintf("select %s from %s where `group_id` = ?",groupInfoRows,m.table)
+	var resp GroupInfo
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, groupId)
+	switch err {
+	case nil:
+		return resp.Name, nil
+	case sqlc.ErrNotFound:
+		return "", ErrNotFound
+	default:
+		return "", err
+	}
+}
 func (m *defaultGroupInfoModel) Insert(ctx context.Context, data *GroupInfo) (sql.Result, error) {
 	groupInfoGroupIdKey := fmt.Sprintf("%s%v", cacheGroupInfoGroupIdPrefix, data.GroupId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

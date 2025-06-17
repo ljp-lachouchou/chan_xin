@@ -40,14 +40,8 @@ func (l *HandleFriendApplyLogic) HandleFriendApply(in *social.FriendApplyAction)
 	}
 	switch constant.FriendApplyHandle(findOne.Status) {
 	case constant.SuccessHandleApply:
-		if err := l.svcCtx.FriendApplyModel.Delete(l.ctx, in.ApplyId); err != nil {
-			return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply", in.ApplyId)
-		}
 		return nil, errors.WithStack(ApplyHasPassErr)
 	case constant.FailHandleApply:
-		if err := l.svcCtx.FriendApplyModel.Delete(l.ctx, in.ApplyId); err != nil {
-			return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply", in.ApplyId)
-		}
 		return nil, errors.WithStack(ApplyHasRefuseErr)
 	}
 	if in.IsApproved {
@@ -56,7 +50,7 @@ func (l *HandleFriendApplyLogic) HandleFriendApply(in *social.FriendApplyAction)
 		findOne.Status = 2
 	}
 	err = l.svcCtx.FriendApplyModel.Tranx(l.ctx, func(ctx context.Context, session sqlx.Session) error {
-		if err := l.svcCtx.FriendApplyModel.Update(l.ctx, session, findOne); err != nil {
+		if err := l.svcCtx.FriendApplyModel.UpdateWithSession(l.ctx, session, findOne); err != nil {
 			return lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply Tranx FriendApplyModel.Update", findOne)
 		}
 		if constant.FriendApplyHandle(findOne.Status) != constant.SuccessHandleApply {

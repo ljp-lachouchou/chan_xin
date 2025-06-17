@@ -32,7 +32,8 @@ type (
 		Insert(ctx context.Context, data *FriendApply) (sql.Result, error)
 		FindOne(ctx context.Context, applyId string) (*FriendApply, error)
 		FindByApplicantIdAndTargetId(ctx context.Context, applicantId string, targetId string) (*FriendApply, error)
-		Update(ctx context.Context,session sqlx.Session, data *FriendApply) error
+		UpdateWithSession(ctx context.Context,session sqlx.Session, data *FriendApply) error
+		Update(ctx context.Context, data *FriendApply) error
 		Delete(ctx context.Context, applyId string) error
 		Tranx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
 		ListByUserIdJoinUsers(ctx context.Context,uid string) ([]*FriendApplyJoinUsers, error)
@@ -131,11 +132,19 @@ func (m *defaultFriendApplyModel) Insert(ctx context.Context, data *FriendApply)
 	return ret, err
 }
 
-func (m *defaultFriendApplyModel) Update(ctx context.Context,session sqlx.Session, data *FriendApply) error {
+func (m *defaultFriendApplyModel) UpdateWithSession(ctx context.Context,session sqlx.Session, data *FriendApply) error {
 	friendApplyApplyIdKey := fmt.Sprintf("%s%v", cacheFriendApplyApplyIdPrefix, data.ApplyId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `apply_id` = ?", m.table, friendApplyRowsWithPlaceHolder)
 		return session.ExecCtx(ctx, query, data.ApplicantId, data.TargetId, data.GreetMsg, data.Status, data.ApplyId)
+	}, friendApplyApplyIdKey)
+	return err
+}
+func (m *defaultFriendApplyModel) Update(ctx context.Context, data *FriendApply) error {
+	friendApplyApplyIdKey := fmt.Sprintf("%s%v", cacheFriendApplyApplyIdPrefix, data.ApplyId)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set %s where `apply_id` = ?", m.table, friendApplyRowsWithPlaceHolder)
+		return conn.ExecCtx(ctx, query, data.ApplicantId, data.TargetId, data.GreetMsg, data.Status, data.ApplyId)
 	}, friendApplyApplyIdKey)
 	return err
 }

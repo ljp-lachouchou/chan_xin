@@ -10,3 +10,7 @@ Cache:
   - Host: 192.168.142.101:16379
     Type: node
     pass: chan-xin
+Redisx:
+  Host: 192.168.142.101:16379
+  Type: node
+  pass: chan-xin
