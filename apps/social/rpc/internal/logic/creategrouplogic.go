@@ -41,11 +41,21 @@ func (l *CreateGroupLogic) CreateGroup(in *social.GroupCreationRequest) (*social
 	}
 	err = l.svcCtx.GroupMemberModel.Transx(l.ctx, func(ctx context.Context, session sqlx.Session) error {
 		var members []*socialmodels.GroupMember
+		member := &socialmodels.GroupMember{
+			GroupId:       groupId,
+			UserId:        in.CreatorId,
+			GroupNickname: "",
+			ShowNickname:  1,
+			IsAdmin:       1,
+			IsMuted:       0,
+			IsTopped:      0,
+		}
+		members = append(members, member)
 		for _, v := range in.MemberIds {
 			member := &socialmodels.GroupMember{
 				GroupId:       groupId,
 				UserId:        v,
-				GroupNickname: in.GroupName,
+				GroupNickname: "",
 				ShowNickname:  1,
 				IsAdmin:       0,
 				IsMuted:       0,

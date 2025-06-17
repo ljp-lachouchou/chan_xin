@@ -75,22 +75,23 @@ message FriendApplyAction {
 // ========== 群组管理模块 ==========
 // 群成员个性化设置
 message GroupMemberSetting {
-  string group_nickname = 1; // 群内昵称
-  bool show_member_nickname = 2; // 是否显示群成员昵称
+  optional string group_nickname = 1; // 群内昵称
+  optional bool show_member_nickname = 2; // 是否显示群成员昵称
 }
 
 // 群状态设置
 message GroupStatus {
-  bool is_muted = 1;         // 群消息免打扰
-  bool is_topped = 2;        // 置顶群聊
-  string remark = 3;         // 群备注
+  optional bool is_muted = 1;         // 群消息免打扰
+  optional bool is_topped = 2;        // 置顶群聊
+  optional string remark = 3;         // 群备注
+
 }
 
 // 群操作权限类型
 enum GroupPermission {
-  KICK_MEMBER = 0;      // 踢出成员
+  KICK = 0;      // 踢出成员
   SET_ADMIN = 1;        // 设置/取消管理员
-  CHANGE_GROUP_NAME = 2; // 修改群名
+  CHANGE_NAME = 2; // 修改群名
 }
 
 // 群邀请请求
@@ -114,6 +115,43 @@ message FriendListReq {
 message FriendListResp {
   repeated UserInfo friend_list = 1;
 }
+message GroupApplyReq {
+  string applicant_id = 1;  // 申请人ID
+  string target_id = 2;     // 目标用户ID
+  string greet_msg = 3;     // 打招呼消息
+}
+// 群组申请响应
+message GroupApplyResp {
+  string apply_id = 1;      // 申请记录ID
+  int64 apply_time = 2;
+}
+message GroupApplyAction {
+  string apply_id = 1;      // 申请记录ID
+  string manager_id = 2; //处理人id
+  bool is_approved = 3;    // 是否同意
+}
+message GroupApplyActionResp {
+
+}
+message GetGroupMembersReq {
+  string group_id = 1; //群组id
+}
+message BaseUserInfo {
+  string user_id = 1;      // 用户全局ID
+  string nickname = 2;     // 昵称
+  string avatar_url = 3;   // 头像URL
+  uint32 gender = 4;       // 性别 (0-未知 1-男 2-女)
+}
+message GetGroupMembersResp {
+  repeated BaseUserInfo List = 1;
+}
+
+message RemoveAdminReq {
+  string operator_id = 1;  // 操作者ID
+  string group_id = 2;
+  string target_id = 3;    // 被操作成员ID
+}
+message RemoveAdminResp {}
 // ========== 服务接口定义 ==========
 service SocialService {
   // === 好友管理接口 ===
@@ -130,10 +168,16 @@ service SocialService {
   rpc QuitGroup(GroupQuitRequest) returns (GroupQuitResp);
   rpc InviteToGroup(GroupInvitation) returns (GroupInvitationResp);
   rpc HandleGroupInvite(GroupInviteAction) returns (GroupInviteActionResp);
+  rpc ApplyGroup(GroupApplyReq) returns(GroupApplyResp);
+  rpc HandleGroupApply(GroupApplyAction) returns(GroupApplyActionResp);
   rpc UpdateGroupStatus(GroupStatusUpdate) returns (GroupStatusUpdateResp);
   rpc ManageGroupMember(GroupMemberManage) returns (GroupMemberManageResp);
+  rpc RemoveAdmin(RemoveAdminReq) returns(RemoveAdminResp);
   rpc GetGroupInfo(GroupInfoRequest) returns (GroupInfo);
+  rpc GetGroupMembers(GetGroupMembersReq) returns(GetGroupMembersResp);
+  rpc GetGroupAdmins(GetGroupMembersReq) returns(GetGroupMembersResp);
   rpc SetGroupMemberSetting(GroupMemberSettingUpdate) returns (GroupMemberSettingUpdateResp);
+
 
   rpc Ping(PingReq) returns(PingResp);
 }
@@ -158,7 +202,7 @@ message GroupMemberManage {
   string operator_id = 1;  // 操作者ID
   string group_id = 2;
   string target_id = 3;    // 被操作成员ID
-  GroupPermission action = 4;
+  GroupPermission action = 4;//操作
 }
 
 // 群邀请处理

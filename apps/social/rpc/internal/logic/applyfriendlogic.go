@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/go-sql-driver/mysql"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/social"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/socialmodels"
@@ -71,6 +72,12 @@ func (l *ApplyFriendLogic) ApplyFriend(in *social.FriendApplyRequest) (*social.F
 	}
 	_, err = l.svcCtx.FriendApplyModel.Insert(l.ctx, &friendApply)
 	if err != nil {
+		err2 := errors.Cause(err)
+		if v, ok := err2.(*mysql.MySQLError); ok {
+			if v.Number == 1062 {
+				return nil, errors.WithStack(errors.New("已提交申请,请等待申请通知"))
+			}
+		}
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc ApplyFriend Insert", friendApply)
 	}
 	return &social.FriendApplyResponse{

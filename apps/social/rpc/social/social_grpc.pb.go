@@ -30,9 +30,14 @@ const (
 	SocialService_QuitGroup_FullMethodName             = "/social.SocialService/QuitGroup"
 	SocialService_InviteToGroup_FullMethodName         = "/social.SocialService/InviteToGroup"
 	SocialService_HandleGroupInvite_FullMethodName     = "/social.SocialService/HandleGroupInvite"
+	SocialService_ApplyGroup_FullMethodName            = "/social.SocialService/ApplyGroup"
+	SocialService_HandleGroupApply_FullMethodName      = "/social.SocialService/HandleGroupApply"
 	SocialService_UpdateGroupStatus_FullMethodName     = "/social.SocialService/UpdateGroupStatus"
 	SocialService_ManageGroupMember_FullMethodName     = "/social.SocialService/ManageGroupMember"
+	SocialService_RemoveAdmin_FullMethodName           = "/social.SocialService/RemoveAdmin"
 	SocialService_GetGroupInfo_FullMethodName          = "/social.SocialService/GetGroupInfo"
+	SocialService_GetGroupMembers_FullMethodName       = "/social.SocialService/GetGroupMembers"
+	SocialService_GetGroupAdmins_FullMethodName        = "/social.SocialService/GetGroupAdmins"
 	SocialService_SetGroupMemberSetting_FullMethodName = "/social.SocialService/SetGroupMemberSetting"
 	SocialService_Ping_FullMethodName                  = "/social.SocialService/Ping"
 )
@@ -56,9 +61,14 @@ type SocialServiceClient interface {
 	QuitGroup(ctx context.Context, in *GroupQuitRequest, opts ...grpc.CallOption) (*GroupQuitResp, error)
 	InviteToGroup(ctx context.Context, in *GroupInvitation, opts ...grpc.CallOption) (*GroupInvitationResp, error)
 	HandleGroupInvite(ctx context.Context, in *GroupInviteAction, opts ...grpc.CallOption) (*GroupInviteActionResp, error)
+	ApplyGroup(ctx context.Context, in *GroupApplyReq, opts ...grpc.CallOption) (*GroupApplyResp, error)
+	HandleGroupApply(ctx context.Context, in *GroupApplyAction, opts ...grpc.CallOption) (*GroupApplyActionResp, error)
 	UpdateGroupStatus(ctx context.Context, in *GroupStatusUpdate, opts ...grpc.CallOption) (*GroupStatusUpdateResp, error)
 	ManageGroupMember(ctx context.Context, in *GroupMemberManage, opts ...grpc.CallOption) (*GroupMemberManageResp, error)
+	RemoveAdmin(ctx context.Context, in *RemoveAdminReq, opts ...grpc.CallOption) (*RemoveAdminResp, error)
 	GetGroupInfo(ctx context.Context, in *GroupInfoRequest, opts ...grpc.CallOption) (*GroupInfo, error)
+	GetGroupMembers(ctx context.Context, in *GetGroupMembersReq, opts ...grpc.CallOption) (*GetGroupMembersResp, error)
+	GetGroupAdmins(ctx context.Context, in *GetGroupMembersReq, opts ...grpc.CallOption) (*GetGroupMembersResp, error)
 	SetGroupMemberSetting(ctx context.Context, in *GroupMemberSettingUpdate, opts ...grpc.CallOption) (*GroupMemberSettingUpdateResp, error)
 	Ping(ctx context.Context, in *PingReq, opts ...grpc.CallOption) (*PingResp, error)
 }
@@ -181,6 +191,26 @@ func (c *socialServiceClient) HandleGroupInvite(ctx context.Context, in *GroupIn
 	return out, nil
 }
 
+func (c *socialServiceClient) ApplyGroup(ctx context.Context, in *GroupApplyReq, opts ...grpc.CallOption) (*GroupApplyResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GroupApplyResp)
+	err := c.cc.Invoke(ctx, SocialService_ApplyGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *socialServiceClient) HandleGroupApply(ctx context.Context, in *GroupApplyAction, opts ...grpc.CallOption) (*GroupApplyActionResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GroupApplyActionResp)
+	err := c.cc.Invoke(ctx, SocialService_HandleGroupApply_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *socialServiceClient) UpdateGroupStatus(ctx context.Context, in *GroupStatusUpdate, opts ...grpc.CallOption) (*GroupStatusUpdateResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GroupStatusUpdateResp)
@@ -201,10 +231,40 @@ func (c *socialServiceClient) ManageGroupMember(ctx context.Context, in *GroupMe
 	return out, nil
 }
 
+func (c *socialServiceClient) RemoveAdmin(ctx context.Context, in *RemoveAdminReq, opts ...grpc.CallOption) (*RemoveAdminResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RemoveAdminResp)
+	err := c.cc.Invoke(ctx, SocialService_RemoveAdmin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *socialServiceClient) GetGroupInfo(ctx context.Context, in *GroupInfoRequest, opts ...grpc.CallOption) (*GroupInfo, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GroupInfo)
 	err := c.cc.Invoke(ctx, SocialService_GetGroupInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *socialServiceClient) GetGroupMembers(ctx context.Context, in *GetGroupMembersReq, opts ...grpc.CallOption) (*GetGroupMembersResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetGroupMembersResp)
+	err := c.cc.Invoke(ctx, SocialService_GetGroupMembers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *socialServiceClient) GetGroupAdmins(ctx context.Context, in *GetGroupMembersReq, opts ...grpc.CallOption) (*GetGroupMembersResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetGroupMembersResp)
+	err := c.cc.Invoke(ctx, SocialService_GetGroupAdmins_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -250,9 +310,14 @@ type SocialServiceServer interface {
 	QuitGroup(context.Context, *GroupQuitRequest) (*GroupQuitResp, error)
 	InviteToGroup(context.Context, *GroupInvitation) (*GroupInvitationResp, error)
 	HandleGroupInvite(context.Context, *GroupInviteAction) (*GroupInviteActionResp, error)
+	ApplyGroup(context.Context, *GroupApplyReq) (*GroupApplyResp, error)
+	HandleGroupApply(context.Context, *GroupApplyAction) (*GroupApplyActionResp, error)
 	UpdateGroupStatus(context.Context, *GroupStatusUpdate) (*GroupStatusUpdateResp, error)
 	ManageGroupMember(context.Context, *GroupMemberManage) (*GroupMemberManageResp, error)
+	RemoveAdmin(context.Context, *RemoveAdminReq) (*RemoveAdminResp, error)
 	GetGroupInfo(context.Context, *GroupInfoRequest) (*GroupInfo, error)
+	GetGroupMembers(context.Context, *GetGroupMembersReq) (*GetGroupMembersResp, error)
+	GetGroupAdmins(context.Context, *GetGroupMembersReq) (*GetGroupMembersResp, error)
 	SetGroupMemberSetting(context.Context, *GroupMemberSettingUpdate) (*GroupMemberSettingUpdateResp, error)
 	Ping(context.Context, *PingReq) (*PingResp, error)
 	mustEmbedUnimplementedSocialServiceServer()
@@ -298,14 +363,29 @@ func (UnimplementedSocialServiceServer) InviteToGroup(context.Context, *GroupInv
 func (UnimplementedSocialServiceServer) HandleGroupInvite(context.Context, *GroupInviteAction) (*GroupInviteActionResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HandleGroupInvite not implemented")
 }
+func (UnimplementedSocialServiceServer) ApplyGroup(context.Context, *GroupApplyReq) (*GroupApplyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApplyGroup not implemented")
+}
+func (UnimplementedSocialServiceServer) HandleGroupApply(context.Context, *GroupApplyAction) (*GroupApplyActionResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleGroupApply not implemented")
+}
 func (UnimplementedSocialServiceServer) UpdateGroupStatus(context.Context, *GroupStatusUpdate) (*GroupStatusUpdateResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroupStatus not implemented")
 }
 func (UnimplementedSocialServiceServer) ManageGroupMember(context.Context, *GroupMemberManage) (*GroupMemberManageResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ManageGroupMember not implemented")
 }
+func (UnimplementedSocialServiceServer) RemoveAdmin(context.Context, *RemoveAdminReq) (*RemoveAdminResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveAdmin not implemented")
+}
 func (UnimplementedSocialServiceServer) GetGroupInfo(context.Context, *GroupInfoRequest) (*GroupInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroupInfo not implemented")
+}
+func (UnimplementedSocialServiceServer) GetGroupMembers(context.Context, *GetGroupMembersReq) (*GetGroupMembersResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGroupMembers not implemented")
+}
+func (UnimplementedSocialServiceServer) GetGroupAdmins(context.Context, *GetGroupMembersReq) (*GetGroupMembersResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGroupAdmins not implemented")
 }
 func (UnimplementedSocialServiceServer) SetGroupMemberSetting(context.Context, *GroupMemberSettingUpdate) (*GroupMemberSettingUpdateResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetGroupMemberSetting not implemented")
@@ -532,6 +612,42 @@ func _SocialService_HandleGroupInvite_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SocialService_ApplyGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GroupApplyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServiceServer).ApplyGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SocialService_ApplyGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServiceServer).ApplyGroup(ctx, req.(*GroupApplyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SocialService_HandleGroupApply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GroupApplyAction)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServiceServer).HandleGroupApply(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SocialService_HandleGroupApply_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServiceServer).HandleGroupApply(ctx, req.(*GroupApplyAction))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SocialService_UpdateGroupStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GroupStatusUpdate)
 	if err := dec(in); err != nil {
@@ -568,6 +684,24 @@ func _SocialService_ManageGroupMember_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SocialService_RemoveAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveAdminReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServiceServer).RemoveAdmin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SocialService_RemoveAdmin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServiceServer).RemoveAdmin(ctx, req.(*RemoveAdminReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SocialService_GetGroupInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GroupInfoRequest)
 	if err := dec(in); err != nil {
@@ -582,6 +716,42 @@ func _SocialService_GetGroupInfo_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SocialServiceServer).GetGroupInfo(ctx, req.(*GroupInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SocialService_GetGroupMembers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGroupMembersReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServiceServer).GetGroupMembers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SocialService_GetGroupMembers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServiceServer).GetGroupMembers(ctx, req.(*GetGroupMembersReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SocialService_GetGroupAdmins_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGroupMembersReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServiceServer).GetGroupAdmins(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SocialService_GetGroupAdmins_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServiceServer).GetGroupAdmins(ctx, req.(*GetGroupMembersReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -674,6 +844,14 @@ var SocialService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SocialService_HandleGroupInvite_Handler,
 		},
 		{
+			MethodName: "ApplyGroup",
+			Handler:    _SocialService_ApplyGroup_Handler,
+		},
+		{
+			MethodName: "HandleGroupApply",
+			Handler:    _SocialService_HandleGroupApply_Handler,
+		},
+		{
 			MethodName: "UpdateGroupStatus",
 			Handler:    _SocialService_UpdateGroupStatus_Handler,
 		},
@@ -682,8 +860,20 @@ var SocialService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SocialService_ManageGroupMember_Handler,
 		},
 		{
+			MethodName: "RemoveAdmin",
+			Handler:    _SocialService_RemoveAdmin_Handler,
+		},
+		{
 			MethodName: "GetGroupInfo",
 			Handler:    _SocialService_GetGroupInfo_Handler,
+		},
+		{
+			MethodName: "GetGroupMembers",
+			Handler:    _SocialService_GetGroupMembers_Handler,
+		},
+		{
+			MethodName: "GetGroupAdmins",
+			Handler:    _SocialService_GetGroupAdmins_Handler,
 		},
 		{
 			MethodName: "SetGroupMemberSetting",

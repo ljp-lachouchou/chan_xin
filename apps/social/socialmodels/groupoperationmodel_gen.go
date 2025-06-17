@@ -25,14 +25,18 @@ var (
 	groupOperationRowsWithPlaceHolder = strings.Join(stringx.Remove(groupOperationFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheGroupOperationIdPrefix = "cache:groupOperation:id:"
+	cacheGroupOperationPrefix = "cache:groupOperation:gid:oid:tid:"
 )
 
 type (
 	groupOperationModel interface {
 		Insert(ctx context.Context, data *GroupOperation) (sql.Result, error)
+		InertWithSession(ctx context.Context,session sqlx.Session, data *GroupOperation) (sql.Result, error)
 		FindOne(ctx context.Context, id uint64) (*GroupOperation, error)
 		Update(ctx context.Context, data *GroupOperation) error
 		Delete(ctx context.Context, id uint64) error
+		DeleteByGIdOidTid(ctx context.Context,session sqlx.Session,gid,oid,tid string) error
+		Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
 	}
 
 	defaultGroupOperationModel struct {
@@ -57,7 +61,20 @@ func newGroupOperationModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.
 		table:      "`group_operation`",
 	}
 }
+func (m *defaultGroupOperationModel) DeleteByGIdOidTid(ctx context.Context,session sqlx.Session,gid,oid,tid string) error {
+	groupOperationKey := fmt.Sprintf("%s%v:%v:%v", cacheGroupOperationPrefix, gid,oid,tid)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("delete from %s where `group_id` = ? and `operator_id` = ? and `target_id` = ?", m.table)
+		return session.ExecCtx(ctx, query, gid, oid, tid)
+	}, groupOperationKey)
+	return err
 
+}
+func (m *defaultGroupOperationModel) Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error {
+	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
+		return fn(ctx, session)
+	})
+}
 func (m *defaultGroupOperationModel) Delete(ctx context.Context, id uint64) error {
 	groupOperationIdKey := fmt.Sprintf("%s%v", cacheGroupOperationIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
@@ -85,11 +102,19 @@ func (m *defaultGroupOperationModel) FindOne(ctx context.Context, id uint64) (*G
 }
 
 func (m *defaultGroupOperationModel) Insert(ctx context.Context, data *GroupOperation) (sql.Result, error) {
-	groupOperationIdKey := fmt.Sprintf("%s%v", cacheGroupOperationIdPrefix, data.Id)
+	groupOperationKey := fmt.Sprintf("%s%v:%v:%v", cacheGroupOperationPrefix, data.GroupId,data.OperatorId,data.TargetId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, groupOperationRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.GroupId, data.OperatorId, data.TargetId, data.ActionType, data.ExtraInfo)
-	}, groupOperationIdKey)
+	}, groupOperationKey)
+	return ret, err
+}
+func (m *defaultGroupOperationModel) InertWithSession(ctx context.Context,session sqlx.Session, data *GroupOperation) (sql.Result, error) {
+	groupOperationKey := fmt.Sprintf("%s%v:%v:%v", cacheGroupOperationPrefix, data.GroupId,data.OperatorId,data.TargetId)
+	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, groupOperationRowsExpectAutoSet)
+		return session.ExecCtx(ctx, query, data.GroupId, data.OperatorId, data.TargetId, data.ActionType, data.ExtraInfo)
+	}, groupOperationKey)
 	return ret, err
 }
 

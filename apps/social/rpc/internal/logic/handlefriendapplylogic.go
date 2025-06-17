@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/social"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/socialmodels"
@@ -56,14 +55,11 @@ func (l *HandleFriendApplyLogic) HandleFriendApply(in *social.FriendApplyAction)
 		if constant.FriendApplyHandle(findOne.Status) != constant.SuccessHandleApply {
 			return nil
 		}
-		myNicknameToFriend, err2 := l.svcCtx.UsersModel.GetNicknameByUid(l.ctx, findOne.ApplicantId)
-		friendNicknameTome, _ := l.svcCtx.UsersModel.GetNicknameByUid(l.ctx, findOne.TargetId)
-		fmt.Println(myNicknameToFriend, friendNicknameTome)
 		friends := []*socialmodels.FriendRelation{
 			{
 				UserId:    findOne.ApplicantId,
 				FriendId:  findOne.TargetId,
-				Remark:    friendNicknameTome,
+				Remark:    "",
 				IsMuted:   0,
 				IsTopped:  0,
 				IsBlocked: 0,
@@ -71,17 +67,14 @@ func (l *HandleFriendApplyLogic) HandleFriendApply(in *social.FriendApplyAction)
 			{
 				UserId:    findOne.TargetId,
 				FriendId:  findOne.ApplicantId,
-				Remark:    myNicknameToFriend,
+				Remark:    "",
 				IsMuted:   0,
 				IsTopped:  0,
 				IsBlocked: 0,
 			},
 		}
-		_, err2 = l.svcCtx.FriendRelationModel.Insert(l.ctx, session, friends...)
-		if err2 != nil {
-			return err2
-		}
-		return nil
+		_, err2 := l.svcCtx.FriendRelationModel.Insert(l.ctx, session, friends...)
+		return err2
 	})
 	if err != nil {
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply Tranx")

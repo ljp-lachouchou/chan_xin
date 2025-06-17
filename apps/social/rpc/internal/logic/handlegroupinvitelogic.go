@@ -71,8 +71,11 @@ func (l *HandleGroupInviteLogic) HandleGroupInvite(in *social.GroupInviteAction)
 	if err != nil {
 		err2 := errors.Cause(err)
 		if v, ok := err2.(*mysql.MySQLError); ok {
-			if v.Number == 1062 {
+			switch v.Number {
+			case 1062:
 				return nil, errors.WithStack(errors.New("用户ID为" + findOne.TargetId + "的用户已经在本群中"))
+			case 1452:
+				return nil, errors.WithStack(errors.New("该群已被解散"))
 			}
 		}
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleGroupInvite Tranx")

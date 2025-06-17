@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"strings"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/internal/svc"
@@ -36,9 +37,14 @@ func (l *QuitGroupLogic) QuitGroup(in *social.GroupQuitRequest) (*social.GroupQu
 		}
 		return &social.GroupQuitResp{}, nil
 	}
-	err = l.svcCtx.GroupMemberModel.DeleteByGIdAndUId(l.ctx, in.GroupId, in.UserId)
+	err = l.svcCtx.GroupMemberModel.Transx(l.ctx, func(ctx context.Context, session sqlx.Session) error {
+		if err := l.svcCtx.GroupApplyModel.DeleteByGIdAndUId(l.ctx, session, in.GroupId, in.UserId); err != nil {
+			return lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply", in.GroupId, in.UserId)
+		}
+		return l.svcCtx.GroupMemberModel.DeleteByGIdAndUId(l.ctx, in.GroupId, in.UserId)
+	})
 	if err != nil {
-		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc QuitGroup", in.GroupId, in.UserId)
+		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc QuitGroup GroupMemberModel.Transx")
 	}
 	return &social.GroupQuitResp{}, nil
 }

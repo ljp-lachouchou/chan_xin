@@ -25,6 +25,7 @@ var (
 	friendApplyRowsWithPlaceHolder = strings.Join(stringx.Remove(friendApplyFieldNames, "`apply_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheFriendApplyApplyIdPrefix = "cache:friendApply:applyId:"
+	cacheFriendApplyApplicantIdTargetIdPrefix = "cache:friendApply:applicantId:targetId:"
 )
 
 type (
@@ -35,6 +36,7 @@ type (
 		UpdateWithSession(ctx context.Context,session sqlx.Session, data *FriendApply) error
 		Update(ctx context.Context, data *FriendApply) error
 		Delete(ctx context.Context, applyId string) error
+		DeleteByUidAndFId(ctx context.Context,session sqlx.Session, userId, friendId string) error
 		Tranx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
 		ListByUserIdJoinUsers(ctx context.Context,uid string) ([]*FriendApplyJoinUsers, error)
 	}
@@ -61,6 +63,24 @@ type (
 		Status      int64     `db:"status"`       // 状态 (0:待处理, 1:同意, 2:拒绝)
 	}
 )
+func (m *defaultFriendApplyModel) DeleteByUidAndFId(ctx context.Context,session sqlx.Session, userId, friendId string) error {
+	cacheFriendApplyApplicantIdTargetIdKey1 := fmt.Sprintf("%s%v:%v", cacheFriendApplyApplicantIdTargetIdPrefix, userId, friendId)
+	cacheFriendApplyApplicantIdTargetIdKey2 := fmt.Sprintf("%s%v:%v", cacheFriendApplyApplicantIdTargetIdPrefix, friendId, userId)
+	execSql1 := fmt.Sprintf("delete from %s where `applicant_id` = ? and target_id = ?", m.table)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		return session.ExecCtx(ctx, execSql1, userId, friendId)
+	}, cacheFriendApplyApplicantIdTargetIdKey1)
+	if err != nil {
+		return err
+	}
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+
+		return session.ExecCtx(ctx, execSql1, friendId, userId)
+	}, cacheFriendApplyApplicantIdTargetIdKey2)
+	m.DelCacheCtx(ctx, cacheFriendApplyApplicantIdTargetIdKey1)
+	m.DelCacheCtx(ctx, cacheFriendApplyApplicantIdTargetIdKey2)
+	return err
+}
 func (m *defaultFriendApplyModel) ListByUserIdJoinUsers(ctx context.Context,uid string) ([]*FriendApplyJoinUsers, error) {
 	query := fmt.Sprintf("SELECT friend_apply.target_id as id,users.nickname as nickname,users.avatar as avatar,users.sex as sex,friend_apply.greet_msg as greet_msg,friend_apply.`status` as status FROM  friend_apply JOIN users ON friend_apply.target_id = users.id where friend_apply.applicant_id=?;")
 	var resp []*FriendApplyJoinUsers

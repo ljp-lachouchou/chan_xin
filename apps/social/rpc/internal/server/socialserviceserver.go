@@ -80,6 +80,16 @@ func (s *SocialServiceServer) HandleGroupInvite(ctx context.Context, in *social.
 	return l.HandleGroupInvite(in)
 }
 
+func (s *SocialServiceServer) ApplyGroup(ctx context.Context, in *social.GroupApplyReq) (*social.GroupApplyResp, error) {
+	l := logic.NewApplyGroupLogic(ctx, s.svcCtx)
+	return l.ApplyGroup(in)
+}
+
+func (s *SocialServiceServer) HandleGroupApply(ctx context.Context, in *social.GroupApplyAction) (*social.GroupApplyActionResp, error) {
+	l := logic.NewHandleGroupApplyLogic(ctx, s.svcCtx)
+	return l.HandleGroupApply(in)
+}
+
 func (s *SocialServiceServer) UpdateGroupStatus(ctx context.Context, in *social.GroupStatusUpdate) (*social.GroupStatusUpdateResp, error) {
 	l := logic.NewUpdateGroupStatusLogic(ctx, s.svcCtx)
 	return l.UpdateGroupStatus(in)
@@ -90,9 +100,24 @@ func (s *SocialServiceServer) ManageGroupMember(ctx context.Context, in *social.
 	return l.ManageGroupMember(in)
 }
 
+func (s *SocialServiceServer) RemoveAdmin(ctx context.Context, in *social.RemoveAdminReq) (*social.RemoveAdminResp, error) {
+	l := logic.NewRemoveAdminLogic(ctx, s.svcCtx)
+	return l.RemoveAdmin(in)
+}
+
 func (s *SocialServiceServer) GetGroupInfo(ctx context.Context, in *social.GroupInfoRequest) (*social.GroupInfo, error) {
 	l := logic.NewGetGroupInfoLogic(ctx, s.svcCtx)
 	return l.GetGroupInfo(in)
+}
+
+func (s *SocialServiceServer) GetGroupMembers(ctx context.Context, in *social.GetGroupMembersReq) (*social.GetGroupMembersResp, error) {
+	l := logic.NewGetGroupMembersLogic(ctx, s.svcCtx)
+	return l.GetGroupMembers(in)
+}
+
+func (s *SocialServiceServer) GetGroupAdmins(ctx context.Context, in *social.GetGroupMembersReq) (*social.GetGroupMembersResp, error) {
+	l := logic.NewGetGroupAdminsLogic(ctx, s.svcCtx)
+	return l.GetGroupAdmins(in)
 }
 
 func (s *SocialServiceServer) SetGroupMemberSetting(ctx context.Context, in *social.GroupMemberSettingUpdate) (*social.GroupMemberSettingUpdateResp, error) {

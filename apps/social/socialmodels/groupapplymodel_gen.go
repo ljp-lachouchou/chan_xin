@@ -25,16 +25,20 @@ var (
 	groupApplyRowsWithPlaceHolder = strings.Join(stringx.Remove(groupApplyFieldNames, "`apply_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheGroupApplyApplyIdPrefix = "cache:groupApply:applyId:"
+	cacheGroupApplyGidUidPrefix = "cache:groupApply:gid:Uid:"
 )
 
 type (
 	groupApplyModel interface {
 		Insert(ctx context.Context, data *GroupApply) (sql.Result, error)
 		FindOne(ctx context.Context, applyId string) (*GroupApply, error)
+		UpdateNoSession(ctx context.Context, data *GroupApply) error
 		Update(ctx context.Context,session sqlx.Session, data *GroupApply) error
 		Delete(ctx context.Context, applyId string) error
+		DeleteByGIdAndUId(ctx context.Context, session sqlx.Session,gid, uid string) error
 		InsertByTargetIdList(ctx context.Context,session sqlx.Session,data ...*GroupApply) (sql.Result, error)
 		Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
+		FindByApplicantIdAndTargetId(ctx context.Context, applicantId string, targetId string) (*GroupApply, error)
 	}
 
 	defaultGroupApplyModel struct {
@@ -71,7 +75,18 @@ func (m *defaultGroupApplyModel) Delete(ctx context.Context, applyId string) err
 	}, groupApplyApplyIdKey)
 	return err
 }
-
+func (m *defaultGroupApplyModel) DeleteByGIdAndUId(ctx context.Context, session sqlx.Session,gid, uid string) error {
+	cacheGroupApplyApplicantIdTargetIdKey1 := fmt.Sprintf("%s%v:%v", cacheGroupApplyGidUidPrefix, gid, uid)
+	execSql1 := fmt.Sprintf("delete from %s where `applicant_id` = ? and target_id = ?", m.table)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		return session.ExecCtx(ctx, execSql1,  uid,gid)
+	}, cacheGroupApplyApplicantIdTargetIdKey1)
+	if err != nil {
+		return err
+	}
+	m.DelCacheCtx(ctx, cacheGroupApplyApplicantIdTargetIdKey1)
+	return err
+}
 func (m *defaultGroupApplyModel) FindOne(ctx context.Context, applyId string) (*GroupApply, error) {
 	groupApplyApplyIdKey := fmt.Sprintf("%s%v", cacheGroupApplyApplyIdPrefix, applyId)
 	var resp GroupApply
@@ -124,7 +139,27 @@ func (m *defaultGroupApplyModel) Update(ctx context.Context,session sqlx.Session
 	}, groupApplyApplyIdKey)
 	return err
 }
-
+func (m *defaultGroupApplyModel) FindByApplicantIdAndTargetId(ctx context.Context, applicantId string, targetId string) (*GroupApply, error) {
+	var resp GroupApply
+	query := fmt.Sprintf("select %s from %s where `applicant_id` = ? and `target_id` = ?", friendApplyRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx,&resp,query, applicantId, targetId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+func (m *defaultGroupApplyModel) UpdateNoSession(ctx context.Context, data *GroupApply) error {
+	groupApplyApplyIdKey := fmt.Sprintf("%s%v", cacheGroupApplyApplyIdPrefix, data.ApplyId)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set %s where `apply_id` = ?", m.table, groupApplyRowsWithPlaceHolder)
+		return conn.ExecCtx(ctx, query, data.ApplicantId, data.TargetId, data.GreetMsg, data.Status, data.ApplyId)
+	}, groupApplyApplyIdKey)
+	return err
+}
 func (m *defaultGroupApplyModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cacheGroupApplyApplyIdPrefix, primary)
 }

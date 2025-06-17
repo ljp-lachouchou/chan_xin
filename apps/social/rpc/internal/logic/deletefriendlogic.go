@@ -26,8 +26,10 @@ func NewDeleteFriendLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Dele
 }
 
 func (l *DeleteFriendLogic) DeleteFriend(in *social.RelationRequest) (*social.RelationResp, error) {
-	// todo: add your logic here and delete this line
 	err := l.svcCtx.FriendRelationModel.Transx(l.ctx, func(ctx context.Context, session sqlx.Session) error {
+		if err := l.svcCtx.FriendApplyModel.DeleteByUidAndFId(l.ctx, session, in.FromUid, in.ToUid); err != nil {
+			return lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply", in.FromUid, in.ToUid)
+		}
 		return l.svcCtx.FriendRelationModel.DeleteByUserIdFriendId(l.ctx, session, in.FromUid, in.ToUid)
 	})
 	if err != nil {

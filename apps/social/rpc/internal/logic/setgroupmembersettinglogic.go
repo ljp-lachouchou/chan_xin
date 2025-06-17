@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/social"
@@ -24,7 +25,27 @@ func NewSetGroupMemberSettingLogic(ctx context.Context, svcCtx *svc.ServiceConte
 }
 
 func (l *SetGroupMemberSettingLogic) SetGroupMemberSetting(in *social.GroupMemberSettingUpdate) (*social.GroupMemberSettingUpdateResp, error) {
-	// todo: add your logic here and delete this line
+	member, err := l.svcCtx.GroupMemberModel.FindOneByGroupIdUserId(l.ctx, in.GroupId, in.UserId)
+	if err != nil {
+		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc SetGroupMemberSetting GroupMemberModel.FindOneByGroupIdUserId", in.GroupId, in.UserId)
+	}
+	if in.Setting == nil {
+		return &social.GroupMemberSettingUpdateResp{}, nil
+	}
 
+	if in.Setting.GroupNickname != nil {
+		member.GroupNickname = *in.Setting.GroupNickname
+	}
+	if in.Setting.ShowMemberNickname != nil {
+		if *in.Setting.ShowMemberNickname {
+			member.ShowNickname = 1
+		} else {
+			member.ShowNickname = 0
+		}
+	}
+	err = l.svcCtx.GroupMemberModel.Update(l.ctx, member)
+	if err != nil {
+		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc SetGroupMemberSetting GroupMemberModel.Update", member)
+	}
 	return &social.GroupMemberSettingUpdateResp{}, nil
 }

@@ -14,6 +14,7 @@ import (
 )
 
 type (
+	BaseUserInfo                 = social.BaseUserInfo
 	FriendApplyAction            = social.FriendApplyAction
 	FriendApplyActionResp        = social.FriendApplyActionResp
 	FriendApplyListReq           = social.FriendApplyListReq
@@ -28,6 +29,12 @@ type (
 	FriendStatusInfo             = social.FriendStatusInfo
 	FriendStatusUpdate           = social.FriendStatusUpdate
 	FriendStatusUpdateResp       = social.FriendStatusUpdateResp
+	GetGroupMembersReq           = social.GetGroupMembersReq
+	GetGroupMembersResp          = social.GetGroupMembersResp
+	GroupApplyAction             = social.GroupApplyAction
+	GroupApplyActionResp         = social.GroupApplyActionResp
+	GroupApplyReq                = social.GroupApplyReq
+	GroupApplyResp               = social.GroupApplyResp
 	GroupCreationRequest         = social.GroupCreationRequest
 	GroupInfo                    = social.GroupInfo
 	GroupInfoRequest             = social.GroupInfoRequest
@@ -49,6 +56,8 @@ type (
 	PingResp                     = social.PingResp
 	RelationRequest              = social.RelationRequest
 	RelationResp                 = social.RelationResp
+	RemoveAdminReq               = social.RemoveAdminReq
+	RemoveAdminResp              = social.RemoveAdminResp
 	UserInfo                     = social.UserInfo
 
 	SocialService interface {
@@ -65,9 +74,14 @@ type (
 		QuitGroup(ctx context.Context, in *GroupQuitRequest, opts ...grpc.CallOption) (*GroupQuitResp, error)
 		InviteToGroup(ctx context.Context, in *GroupInvitation, opts ...grpc.CallOption) (*GroupInvitationResp, error)
 		HandleGroupInvite(ctx context.Context, in *GroupInviteAction, opts ...grpc.CallOption) (*GroupInviteActionResp, error)
+		ApplyGroup(ctx context.Context, in *GroupApplyReq, opts ...grpc.CallOption) (*GroupApplyResp, error)
+		HandleGroupApply(ctx context.Context, in *GroupApplyAction, opts ...grpc.CallOption) (*GroupApplyActionResp, error)
 		UpdateGroupStatus(ctx context.Context, in *GroupStatusUpdate, opts ...grpc.CallOption) (*GroupStatusUpdateResp, error)
 		ManageGroupMember(ctx context.Context, in *GroupMemberManage, opts ...grpc.CallOption) (*GroupMemberManageResp, error)
+		RemoveAdmin(ctx context.Context, in *RemoveAdminReq, opts ...grpc.CallOption) (*RemoveAdminResp, error)
 		GetGroupInfo(ctx context.Context, in *GroupInfoRequest, opts ...grpc.CallOption) (*GroupInfo, error)
+		GetGroupMembers(ctx context.Context, in *GetGroupMembersReq, opts ...grpc.CallOption) (*GetGroupMembersResp, error)
+		GetGroupAdmins(ctx context.Context, in *GetGroupMembersReq, opts ...grpc.CallOption) (*GetGroupMembersResp, error)
 		SetGroupMemberSetting(ctx context.Context, in *GroupMemberSettingUpdate, opts ...grpc.CallOption) (*GroupMemberSettingUpdateResp, error)
 		Ping(ctx context.Context, in *PingReq, opts ...grpc.CallOption) (*PingResp, error)
 	}
@@ -140,6 +154,16 @@ func (m *defaultSocialService) HandleGroupInvite(ctx context.Context, in *GroupI
 	return client.HandleGroupInvite(ctx, in, opts...)
 }
 
+func (m *defaultSocialService) ApplyGroup(ctx context.Context, in *GroupApplyReq, opts ...grpc.CallOption) (*GroupApplyResp, error) {
+	client := social.NewSocialServiceClient(m.cli.Conn())
+	return client.ApplyGroup(ctx, in, opts...)
+}
+
+func (m *defaultSocialService) HandleGroupApply(ctx context.Context, in *GroupApplyAction, opts ...grpc.CallOption) (*GroupApplyActionResp, error) {
+	client := social.NewSocialServiceClient(m.cli.Conn())
+	return client.HandleGroupApply(ctx, in, opts...)
+}
+
 func (m *defaultSocialService) UpdateGroupStatus(ctx context.Context, in *GroupStatusUpdate, opts ...grpc.CallOption) (*GroupStatusUpdateResp, error) {
 	client := social.NewSocialServiceClient(m.cli.Conn())
 	return client.UpdateGroupStatus(ctx, in, opts...)
@@ -150,9 +174,24 @@ func (m *defaultSocialService) ManageGroupMember(ctx context.Context, in *GroupM
 	return client.ManageGroupMember(ctx, in, opts...)
 }
 
+func (m *defaultSocialService) RemoveAdmin(ctx context.Context, in *RemoveAdminReq, opts ...grpc.CallOption) (*RemoveAdminResp, error) {
+	client := social.NewSocialServiceClient(m.cli.Conn())
+	return client.RemoveAdmin(ctx, in, opts...)
+}
+
 func (m *defaultSocialService) GetGroupInfo(ctx context.Context, in *GroupInfoRequest, opts ...grpc.CallOption) (*GroupInfo, error) {
 	client := social.NewSocialServiceClient(m.cli.Conn())
 	return client.GetGroupInfo(ctx, in, opts...)
+}
+
+func (m *defaultSocialService) GetGroupMembers(ctx context.Context, in *GetGroupMembersReq, opts ...grpc.CallOption) (*GetGroupMembersResp, error) {
+	client := social.NewSocialServiceClient(m.cli.Conn())
+	return client.GetGroupMembers(ctx, in, opts...)
+}
+
+func (m *defaultSocialService) GetGroupAdmins(ctx context.Context, in *GetGroupMembersReq, opts ...grpc.CallOption) (*GetGroupMembersResp, error) {
+	client := social.NewSocialServiceClient(m.cli.Conn())
+	return client.GetGroupAdmins(ctx, in, opts...)
 }
 
 func (m *defaultSocialService) SetGroupMemberSetting(ctx context.Context, in *GroupMemberSettingUpdate, opts ...grpc.CallOption) (*GroupMemberSettingUpdateResp, error) {

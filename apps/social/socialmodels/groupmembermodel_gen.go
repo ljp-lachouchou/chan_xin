@@ -23,7 +23,7 @@ var (
 	groupMemberRows                = strings.Join(groupMemberFieldNames, ",")
 	groupMemberRowsExpectAutoSetInsets   = strings.Join(stringx.Remove(groupMemberFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`","`id`","`joined_at`"), ",")
 	groupMemberRowsExpectAutoSet   = strings.Join(stringx.Remove(groupMemberFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	groupMemberRowsWithPlaceHolder = strings.Join(stringx.Remove(groupMemberFieldNames, "`group_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	groupMemberRowsWithPlaceHolder = strings.Join(stringx.Remove(groupMemberFieldNames, "`group_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`","`id`","`user_id`"), "=?,") + "=?"
 
 	cacheGroupMemberGroupIdPrefix       = "cache:groupMember:groupId:"
 	cacheGroupMemberGroupIdUserIdPrefix = "cache:groupMember:groupId:userId:"
@@ -36,8 +36,11 @@ type (
 		FindOne(ctx context.Context, groupId string) (*GroupMember, error)
 		FindOneByGroupIdUserId(ctx context.Context, groupId string, userId string) (*GroupMember, error)
 		Update(ctx context.Context, data *GroupMember) error
+		UpdateWithSession(ctx context.Context,session sqlx.Session, newData *GroupMember) error
 		Delete(ctx context.Context, groupId string) error
 		DeleteByGIdAndUId(ctx context.Context, groupId string, userId string) error
+		FindGroupMembers(ctx context.Context, groupId string) ([]*GroupMember, error)
+		FindGroupAdmins(ctx context.Context, groupId string) ([]*GroupMember, error)
 		Transx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
 	}
 
@@ -131,7 +134,32 @@ func (m *defaultGroupMemberModel) FindOne(ctx context.Context, groupId string) (
 		return nil, err
 	}
 }
-
+func (m *defaultGroupMemberModel) FindGroupMembers(ctx context.Context, groupId string) ([]*GroupMember, error)  {
+	query := fmt.Sprintf("select %s from %s where `group_id` = ?", groupMemberRows, m.table)
+	var resp []*GroupMember
+	err := m.QueryRowsNoCacheCtx(ctx, &resp,query,groupId)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+func (m *defaultGroupMemberModel) FindGroupAdmins(ctx context.Context, groupId string) ([]*GroupMember, error) {
+	query := fmt.Sprintf("select %s from %s where `group_id` = ? and `is_admin` = 1", groupMemberRows, m.table)
+	var resp []*GroupMember
+	err := m.QueryRowsNoCacheCtx(ctx, &resp,query,groupId)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultGroupMemberModel) FindOneByGroupIdUserId(ctx context.Context, groupId string, userId string) (*GroupMember, error) {
 	groupMemberGroupIdUserIdKey := fmt.Sprintf("%s%v:%v", cacheGroupMemberGroupIdUserIdPrefix, groupId, userId)
 	var resp GroupMember
@@ -156,14 +184,14 @@ func (m *defaultGroupMemberModel) Insert(ctx context.Context, data *GroupMember)
 	groupMemberGroupIdKey := fmt.Sprintf("%s%v", cacheGroupMemberGroupIdPrefix, data.GroupId)
 	groupMemberGroupIdUserIdKey := fmt.Sprintf("%s%v:%v", cacheGroupMemberGroupIdUserIdPrefix, data.GroupId, data.UserId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, groupMemberRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Id, data.GroupId, data.UserId, data.GroupNickname, data.ShowNickname, data.IsAdmin, data.IsMuted, data.IsTopped, data.Remark, data.JoinedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, groupMemberRowsExpectAutoSetInsets)
+		return conn.ExecCtx(ctx, query,   data.GroupId, data.UserId, data.GroupNickname, data.ShowNickname, data.IsAdmin, data.IsMuted, data.IsTopped, data.Remark)
 	}, groupMemberGroupIdKey, groupMemberGroupIdUserIdKey)
 	return ret, err
 }
 
 func (m *defaultGroupMemberModel) Update(ctx context.Context, newData *GroupMember) error {
-	data, err := m.FindOne(ctx, newData.GroupId)
+	data, err := m.FindOneByGroupIdUserId(ctx, newData.GroupId,newData.UserId)
 	if err != nil {
 		return err
 	}
@@ -171,12 +199,25 @@ func (m *defaultGroupMemberModel) Update(ctx context.Context, newData *GroupMemb
 	groupMemberGroupIdKey := fmt.Sprintf("%s%v", cacheGroupMemberGroupIdPrefix, data.GroupId)
 	groupMemberGroupIdUserIdKey := fmt.Sprintf("%s%v:%v", cacheGroupMemberGroupIdUserIdPrefix, data.GroupId, data.UserId)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `group_id` = ?", m.table, groupMemberRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.Id, newData.UserId, newData.GroupNickname, newData.ShowNickname, newData.IsAdmin, newData.IsMuted, newData.IsTopped, newData.Remark, newData.JoinedAt, newData.GroupId)
+		query := fmt.Sprintf("update %s set %s where `group_id` = ? and `user_id` = ?", m.table, groupMemberRowsWithPlaceHolder)
+		return conn.ExecCtx(ctx, query, newData.GroupNickname, newData.ShowNickname, newData.IsAdmin, newData.IsMuted, newData.IsTopped, newData.Remark, newData.JoinedAt, newData.GroupId,newData.UserId)
 	}, groupMemberGroupIdKey, groupMemberGroupIdUserIdKey)
 	return err
 }
+func (m *defaultGroupMemberModel) UpdateWithSession(ctx context.Context,session sqlx.Session, newData *GroupMember) error {
+	data, err := m.FindOneByGroupIdUserId(ctx, newData.GroupId,newData.UserId)
+	if err != nil {
+		return err
+	}
 
+	groupMemberGroupIdKey := fmt.Sprintf("%s%v", cacheGroupMemberGroupIdPrefix, data.GroupId)
+	groupMemberGroupIdUserIdKey := fmt.Sprintf("%s%v:%v", cacheGroupMemberGroupIdUserIdPrefix, data.GroupId, data.UserId)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set %s where `group_id` = ? and `user_id` = ?", m.table, groupMemberRowsWithPlaceHolder)
+		return session.ExecCtx(ctx, query, newData.GroupNickname, newData.ShowNickname, newData.IsAdmin, newData.IsMuted, newData.IsTopped, newData.Remark, newData.JoinedAt, newData.GroupId,newData.UserId)
+	}, groupMemberGroupIdKey, groupMemberGroupIdUserIdKey)
+	return err
+}
 func (m *defaultGroupMemberModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cacheGroupMemberGroupIdPrefix, primary)
 }
