@@ -1,0 +1,269 @@
+// social.api
+syntax = "v1"
+
+info (
+	title:  "社交api"
+	author: "ljp"
+)
+
+type (
+	// 基础数据结构
+	UserInfo {
+		UserId    string           `json:"user_id"` // 用户全局ID
+		Nickname  string           `json:"nickname"` // 昵称
+		AvatarUrl string           `json:"avatar_url"` // 头像URL
+		Gender    uint32           `json:"gender"` // 性别 (0-未知 1-男 2-女)
+		Status    FriendStatusInfo `json:"status"` // 对于好友的状态
+	}
+	GroupInfo {
+		GroupId    string   `json:"group_id"` // 群ID
+		Name       string   `json:"name"` // 群名称
+		OwnerId    string   `json:"owner_id"` // 群主ID
+		AdminIds   []string `json:"admin_ids"` // 管理员ID列表
+		MemberIds  []string `json:"member_ids"` // 成员ID列表
+		MaxMembers uint32   `json:"max_members"` // 群人数上限
+	}
+	// 好友管理模块
+	FriendStatusInfo {
+		IsMuted   bool   `json:"is_muted"` // 消息免打扰
+		IsTopped  bool   `json:"is_topped"` // 置顶聊天
+		IsBlocked bool   `json:"is_blocked"` // 拉黑好友
+		Remark    string `json:"remark"` // 好友备注
+	}
+	FriendStatus {
+		IsMuted   *bool   `json:"is_muted,omitempty"` // 消息免打扰
+		IsTopped  *bool   `json:"is_topped,omitempty"` // 置顶聊天
+		IsBlocked *bool   `json:"is_blocked,omitempty"` // 拉黑好友
+		Remark    *string `json:"remark,omitempty"` // 好友备注
+	}
+	FriendApplyRequest {
+		ApplicantId string `json:"applicant_id"` // 申请人ID
+		TargetId    string `json:"target_id"` // 目标用户ID
+		GreetMsg    string `json:"greet_msg"` // 打招呼消息
+	}
+	FriendApplyResponse {
+		ApplyId   string `json:"apply_id"` // 申请记录ID
+		ApplyTime int64  `json:"apply_time"`
+	}
+	FriendApplyListReq {
+		UserId string `json:"user_id"`
+	}
+	FriendApplyResp {
+		UserId    string `json:"user_id"` // 用户全局ID
+		Nickname  string `json:"nickname"` // 昵称
+		AvatarUrl string `json:"avatar_url"` // 头像URL
+		Gender    uint32 `json:"gender"` // 性别 (0-未知 1-男 2-女)
+		GreetMsg  string `json:"greet_msg"` // 打招呼消息
+		Status    int32  `json:"status"` // 申请状态
+	}
+	FriendApplyListResp {
+		List []*FriendApplyResp `json:"list"`
+	}
+	FriendApplyAction {
+		ApplyId    string `json:"apply_id"` // 申请记录ID
+		IsApproved bool   `json:"is_approved"` // 是否同意
+	}
+	FriendListReq {
+		UserId string `json:"user_id"`
+	}
+	FriendListResp {
+		FriendList []*UserInfo `json:"friend_list"`
+	}
+	// 群组管理模块
+	GroupMemberSetting {
+		GroupNickname      string `json:"group_nickname,omitempty"` // 群内昵称
+		ShowMemberNickname bool   `json:"show_member_nickname,omitempty"` // 是否显示群成员昵称
+	}
+	GroupStatus {
+		IsMuted  bool   `json:"is_muted,omitempty"` // 群消息免打扰
+		IsTopped bool   `json:"is_topped,omitempty"` // 置顶群聊
+		Remark   string `json:"remark,omitempty"` // 群备注
+	}
+	GroupPermission {
+		Action int32 `json:"action"`
+	}
+	GroupInvitation {
+		InviterId string   `json:"inviter_id"` // 邀请人ID（群主/管理员）
+		GroupId   string   `json:"group_id"` // 群ID
+		TargetIds []string `json:"target_ids"` // 被邀请人ID列表
+	}
+	RelationRequest {
+		FromUid string `json:"from_uid"` // 发起方
+		ToUid   string `json:"to_uid"` // 目标方
+	}
+	GroupApplyReq {
+		ApplicantId string `json:"applicant_id"`
+		TargetId    string `json:"target_id"`
+		GreetMsg    string `json:"greet_msg"`
+	}
+	GroupApplyResp {
+		ApplyId   string `json:"apply_id"`
+		ApplyTime int64  `json:"apply_time"`
+	}
+	GroupApplyAction {
+		ApplyId    string `json:"apply_id"`
+		ManagerId  string `json:"manager_id"`
+		IsApproved bool   `json:"is_approved"`
+	}
+	FriendStatusUpdate {
+		UserId   string       `json:"user_id"` // 操作者ID
+		FriendId string       `json:"friend_id"` // 好友ID
+		Status   FriendStatus `json:"status"` // 新状态
+	}
+	GroupCreationRequest {
+		CreatorId string   `json:"creator_id"` // 创建者ID
+		GroupName string   `json:"group_name"` // 初始群名
+		MemberIds []string `json:"member_ids"` // 初始成员ID
+	}
+	GroupMemberManage {
+		OperatorId string          `json:"operator_id"` // 操作者ID
+		GroupId    string          `json:"group_id"`
+		TargetId   string          `json:"target_id"` // 被操作成员ID
+		Action     GroupPermission `json:"action"` // 操作
+	}
+	GroupInviteAction {
+		InviteId   string `json:"invite_id"` // 邀请记录ID
+		IsAccepted bool   `json:"is_accepted"` // 是否接受
+	}
+	GroupStatusUpdate {
+		UserId  string      `json:"user_id"` // 操作者ID
+		GroupId string      `json:"group_id"`
+		Status  GroupStatus `json:"status"` // 新状态
+	}
+	GroupMemberSettingUpdate {
+		UserId  string             `json:"user_id"`
+		GroupId string             `json:"group_id"`
+		Setting GroupMemberSetting `json:"setting"`
+	}
+	GroupQuitRequest {
+		UserId  string `json:"user_id"` // 退出者ID
+		GroupId string `json:"group_id"`
+	}
+	FriendInfoRequest {
+		UserId   string `json:"user_id"` // 查询者ID
+		FriendId string `json:"friend_id"` // 目标好友ID
+	}
+	GroupInfoRequest {
+		UserId  string `json:"user_id"` // 查询者ID
+		GroupId string `json:"group_id"` // 目标群ID
+	}
+	GetGroupMembersReq {
+		GroupId string `json:"group_id"` // 群组id
+	}
+	GetGroupMembersResp {
+		List []*BaseUserInfo `json:"list"`
+	}
+	BaseUserInfo {
+		UserId    string `json:"user_id"` // 用户全局ID
+		Nickname  string `json:"nickname"` // 昵称
+		AvatarUrl string `json:"avatar_url"` // 头像URL
+		Gender    uint32 `json:"gender"` // 性别 (0-未知 1-男 2-女)
+	}
+	RemoveAdminReq {
+		OperatorId string `json:"operator_id"` // 操作者ID
+		GroupId    string `json:"group_id"`
+		TargetId   string `json:"target_id"` // 被操作成员ID
+	}
+)
+
+@server (
+	prefix: v1/social/firend
+	group:  friend
+)
+service social {
+	@doc "申请好友"
+	@handler applyFriend
+	post /applyFriend (FriendApplyRequest) returns (FriendApplyResponse)
+
+	@doc "目标方处理申请"
+	@handler handleFriendApply
+	post /handleFriendApply (FriendApplyAction)
+
+	@doc "删除好友"
+	@handler deleteFriend
+	delete /deleteFriend (RelationRequest)
+
+	@doc "更新我对此好友的状态"
+	@handler updateFriendStatus
+	put /updateFriendStatus (FriendStatusUpdate)
+
+	@doc "获取好友信息"
+	@handler getFriendInfo
+	get /getFriendInfo (FriendInfoRequest) returns (UserInfo)
+
+	@doc "获取用户好友列表"
+	@handler getFriendList
+	get /getFriendList (FriendListReq) returns (FriendListResp)
+
+	@doc "获取你请求添加的好友列表"
+	@handler getFriendApplyList
+	get /getFriendApplyList (FriendApplyListReq) returns (FriendApplyListResp)
+}
+
+@server (
+	prefix: v1/social/group
+	group:  group
+)
+service social {
+	@doc "创建群"
+	@handler createGroup
+	post /createGroup (GroupCreationRequest) returns (GroupInfo)
+
+	@doc "退出群/踢出群成员"
+	@handler quitGroup
+	delete /quitGroup (GroupQuitRequest)
+
+	@doc "邀请某人入群"
+	@handler inviteToGroup
+	post /inviteToGroup (GroupInvitation)
+
+	@doc "被邀请者处理群申请"
+	@handler handleGroupInvite
+	post /handleGroupInvite (GroupInviteAction)
+
+	@doc "某人申请入群"
+	@handler applyGroup
+	post /applyGroup (GroupApplyReq) returns (GroupApplyResp)
+
+	@doc "群处理申请"
+	@handler handleGroupApply
+	post /handleGroupApply (GroupApplyAction)
+
+	@doc "更新某人对此群的状态"
+	@handler updateGroupStatus
+	put /updateGroupStatus (GroupStatusUpdate)
+
+	@doc "设置管理员"
+	@handler manageGroupMember
+	post /manageGroupMember (GroupMemberManage)
+
+	@doc "移除管理员"
+	@handler removeAdmin
+	delete /removeAdminremoveAdmin (RemoveAdminReq)
+
+	@doc "获取群信息"
+	@handler getGroupInfo
+	get /getGroupInfo (GroupInfoRequest) returns (GroupInfo)
+
+	@doc "获取群里成员"
+	@handler getGroupMembers
+	get /getGroupMembers (GetGroupMembersReq) returns (GetGroupMembersResp)
+
+	@doc "获取管理员"
+	@handler getGroupAdmins
+	get /getGroupAdmins (GetGroupMembersReq) returns (GetGroupMembersResp)
+
+	@doc "群员的个性化设置"
+	@handler setGroupMemberSetting
+	put /setGroupMemberSetting (GroupMemberSettingUpdate)
+}
+
+@server (
+	prefix: v1/social
+)
+service social {
+	@doc "保持与etcd的连接"
+	@handler pingRpc
+	get /ping
+}
+

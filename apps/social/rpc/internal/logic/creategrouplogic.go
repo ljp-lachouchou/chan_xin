@@ -60,7 +60,6 @@ func (l *CreateGroupLogic) CreateGroup(in *social.GroupCreationRequest) (*social
 				IsAdmin:       0,
 				IsMuted:       0,
 				IsTopped:      0,
-				Remark:        in.GroupName,
 			}
 			members = append(members, member)
 		}
