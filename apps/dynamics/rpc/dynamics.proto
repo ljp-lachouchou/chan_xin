@@ -1,0 +1,166 @@
+syntax = "proto3";  // 使用proto3语法规范[1,5](@ref)
+package dynamics;
+
+option go_package = "./dynamics";
+
+import "google/protobuf/timestamp.proto"; // 时间戳支持
+import "google/protobuf/empty.proto";     // 空响应支持
+
+// ================== 枚举定义 ==================
+// 动态内容类型（文字/图文）[7](@ref)
+enum ContentType {
+  TEXT = 0;             // 纯文字动态
+  TEXT_WITH_IMAGES = 1; // 图文混合动态（静态图）
+  TEXT_WITH_GIF = 2;    // 图文混合动态（支持动态图）
+}
+
+// 动态可见范围控制[6](@ref)
+enum VisibleScope {
+  FRIENDS = 0; // 仅好友可见
+  PRIVATE = 1; // 仅自己可见
+  CUSTOM = 2;  // 自定义用户可见
+}
+
+// 通知事件类型[3](@ref)
+enum NotificationType {
+  LIKE = 0;  // 点赞通知
+  REPLY = 1; // 评论回复通知
+}
+
+// ================== 消息结构 ==================
+// 动态内容主体（支持文字/图片/GIF/表情）[7](@ref)
+message PostContent {
+  string text = 1;              // 文字内容（必填）
+  repeated string image_urls = 2; // 图片或GIF的URL列表（最多9个）[4](@ref)
+  string emoji = 3;             // 表情符号（Unicode或自定义标识）
+}
+
+// 动态元数据（隐私控制与附加信息）
+message PostMeta {
+  string location = 1;           // 发布地点（如"北京·故宫"）
+  VisibleScope scope = 2;        // 可见范围控制[6](@ref)
+  repeated string visible_user_ids = 3; // 当scope=CUSTOM时生效的可见用户ID列表
+}
+
+// 动态核心结构
+message Post {
+  string post_id = 1;  // 动态唯一ID（服务端生成）
+  string user_id = 2;  // 发布者ID
+  PostContent content = 3;  // 动态内容主体
+  PostMeta meta = 4;       // 动态元数据
+  google.protobuf.Timestamp create_time = 5; // 创建时间（服务端生成）
+  bool is_pinned = 6;      // 是否置顶（置顶动态不参与时间线排序）
+}
+
+// 点赞/取消点赞操作
+message LikeAction {
+  string post_id = 1;    // 目标动态ID
+  string liker_id = 2;   // 操作者ID
+  bool is_cancel = 3;    // true=取消点赞，false=点赞
+}
+
+// 通知信息（支持点赞/评论回复）
+message Notification {
+  string id = 1;                // 通知唯一ID
+  NotificationType type = 2;     // 通知类型[3](@ref)
+  string trigger_user_id = 3;   // 触发通知的用户ID
+  string post_id = 4;            // 关联的动态ID
+  string comment_id = 5;        // 关联的评论ID（仅REPLY类型有效）
+  google.protobuf.Timestamp time = 6; // 通知生成时间
+  bool is_read = 7;              // 是否已读（新增字段）
+}
+
+// 分页请求结构[1](@ref)
+message Pagination {
+  int32 page_size = 1;    // 每页数量（建议值：10-20）
+  string page_token = 2;  // 翻页令牌（首次请求留空，后续使用响应中的next_page_token）
+}
+
+// 动态列表响应
+message PostListResponse {
+  repeated Post posts = 1;         // 动态列表
+  string next_page_token = 2;      // 下一页令牌（无更多数据时为空）
+}
+
+// ================== 服务接口 ==================
+service dynamics {
+  // 创建动态（需提供内容和隐私设置）
+  rpc CreatePost (CreatePostRequest) returns (Post);
+
+  // 删除动态（仅创建者可操作）
+  rpc DeletePost (DeletePostRequest) returns (google.protobuf.Empty);
+
+  // 点赞/取消点赞
+  rpc ToggleLike (LikeAction) returns (google.protobuf.Empty);
+
+  // 置顶/取消置顶动态
+  rpc PinPost (PinPostRequest) returns (google.protobuf.Empty);
+
+  // 获取用户所有动态（按置顶状态+时间倒序）
+  rpc ListUserPosts (ListUserPostsRequest) returns (PostListResponse);
+
+  // 设置个人动态封面（用于个人主页）
+  rpc SetCover (SetCoverRequest) returns (google.protobuf.Empty);
+
+  // 浏览可见动态流（根据权限过滤+分页）
+  rpc ListVisiblePosts (ListVisiblePostsRequest) returns (PostListResponse);
+
+  // 获取通知列表（分页）
+  rpc ListNotifications (ListNotificationsRequest) returns (ListNotificationsResponse);
+
+  // 新增：获取未读通知数量
+  rpc GetUnreadCount (GetUnreadCountRequest) returns (GetUnreadCountResponse);
+}
+
+// ================== 请求/响应结构 ==================
+message CreatePostRequest {
+  string user_id = 1;      // 发布者ID
+  PostContent content = 2; // 动态内容
+  PostMeta meta = 3;       // 动态元数据
+}
+
+message DeletePostRequest {
+  string user_id = 1;  // 操作者ID（需与动态创建者匹配）
+  string post_id = 2;  // 要删除的动态ID
+}
+
+message PinPostRequest {
+  string user_id = 1;  // 操作者ID（需与动态创建者匹配）
+  string post_id = 2;  // 目标动态ID
+  bool pin = 3;        // 操作标识（true=置顶，false=取消置顶）
+}
+
+message ListUserPostsRequest {
+  string user_id = 1;          // 目标用户ID
+  Pagination pagination = 2;   // 分页参数
+}
+
+message SetCoverRequest {
+  string user_id = 1;    // 用户ID
+  string cover_url = 2;  // 封面图URL（需CDN地址）
+}
+
+message ListVisiblePostsRequest {
+  string viewer_id = 1;      // 浏览者ID（用于权限校验）
+  Pagination pagination = 2; // 分页参数
+}
+
+message ListNotificationsRequest {
+  string user_id = 1;        // 用户ID
+  Pagination pagination = 2; // 分页参数
+}
+
+message ListNotificationsResponse {
+  repeated Notification notifications = 1; // 通知列表
+  string next_page_token = 2;              // 下一页令牌
+}
+
+// 新增：未读通知计数请求
+message GetUnreadCountRequest {
+  string user_id = 1;  // 用户ID
+}
+
+// 新增：未读通知计数响应
+message GetUnreadCountResponse {
+  int32 unread_count = 1;  // 未读通知总数
+}

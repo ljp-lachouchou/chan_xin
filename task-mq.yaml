@@ -1,0 +1,19 @@
+listenon: 0.0.0.0:10091
+mongo:
+    db: chan-xin
+    url: mongodb://root:chan-xin@192.168.142.101:47017
+msgchattransfer:
+    brokers:
+        - 192.168.142.101:9092
+    consumers: 1
+    group: kafka
+    name: MsgChatTransfer
+    offset: first
+    topic: msgChatTransfer
+name: task.mq
+redisx:
+    host: 192.168.142.101:16379
+    pass: chan-xin
+    type: node
+ws:
+    host: 10.7.87.249:10086

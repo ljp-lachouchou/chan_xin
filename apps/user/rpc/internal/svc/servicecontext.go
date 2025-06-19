@@ -3,8 +3,8 @@ package svc
 import (
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/internal/config"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/usermodels"
+	"github.com/ljp-lachouchou/chan_xin/deploy/constant"
 	"github.com/ljp-lachouchou/chan_xin/pkg/ctxdata"
-	"github.com/ljp-lachouchou/chan_xin/pkg/ldefault"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"time"
@@ -26,10 +26,10 @@ func NewServiceContext(c config.Config) *ServiceContext {
 }
 func (svc *ServiceContext) SetRootToken() error {
 	//生成jwt
-	systemToken, err := ctxdata.GetToken(svc.Config.Jwt.AccessSecret, time.Now().Unix(), svc.Config.Jwt.AccessExpire, ldefault.SYSTEM_REDIS_UID)
+	systemToken, err := ctxdata.GetToken(svc.Config.Jwt.AccessSecret, time.Now().Unix(), svc.Config.Jwt.AccessExpire, constant.SYSTEM_ROOT_ID)
 	if err != nil {
 		return err
 	}
 	//写入redis
-	return svc.Redis.Setex(ldefault.SYSTEM_REDIS_TOPNKEN_KEY, systemToken, ldefault.DEFAULT_EXP)
+	return svc.Redis.Set(constant.REDIS_SYSTEM_ROOT_TOKEN, systemToken)
 }

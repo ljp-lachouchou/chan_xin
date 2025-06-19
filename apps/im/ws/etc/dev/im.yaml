@@ -1,0 +1,12 @@
+Name: im.ws
+ListenOn: 0.0.0.0:10086
+Mongo:
+  Url: "mongodb://root:chan-xin@192.168.142.101:47017"
+  Db: chan-xin
+MsgChatTransfer: #消费者配置信息
+  Topic: msgChatTransfer #会话
+  Addrs:  #kafka连接地址
+    - 192.168.142.101:9092
+Jwt:
+  AccessSecret: github.com/ljp-lachouchou/chan_xin
+  AccessExpire: 864000
