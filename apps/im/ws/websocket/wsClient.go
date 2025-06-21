@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"net/url"
+	"time"
 )
 
 type Client interface {
@@ -14,15 +15,19 @@ type Client interface {
 }
 type client struct {
 	*websocket.Conn
-	host string
-	opt  dailOption
+	host  string
+	opt   dailOption
+	done  chan struct{}
+	timer *time.Timer
 }
 
 func NewClient(host string, opts ...DailOption) Client {
 	o := newDailOptions(opts...)
 	c := &client{
-		host: host,
-		opt:  o,
+		host:  host,
+		opt:   o,
+		done:  make(chan struct{}),
+		timer: time.NewTimer(10 * time.Second),
 	}
 	dail, err := c.dail()
 	if err != nil {
@@ -30,6 +35,7 @@ func NewClient(host string, opts ...DailOption) Client {
 	}
 	c.Conn = dail
 	fmt.Println("conn::", c.Conn)
+	go c.pingServer(c.Conn)
 	return c
 }
 func (c *client) dail() (*websocket.Conn, error) {
@@ -41,7 +47,39 @@ func (c *client) dail() (*websocket.Conn, error) {
 	conn, _, err := websocket.DefaultDialer.Dial(u.String(), c.opt.header)
 	return conn, err
 }
+func (c *client) pingServer(conn *websocket.Conn) {
+	defer c.timer.Stop()
+	for {
+		select {
+		case <-c.timer.C:
+			msg := Message{
+				FrameType: FrameData,
+				Method:    "user.online",
+			}
+			data, err := json.Marshal(msg)
+			//fmt.Println("pingserver start:", string(data))
+			if err != nil {
+				fmt.Println("pingServer json marshal message error:", err)
+				return
+			}
+			err = conn.WriteMessage(websocket.TextMessage, data)
+			if err != nil {
+				fmt.Println("pingServer write ping message error:", err)
+				c.Close()
+				return
+			}
+			c.timer.Reset(10 * time.Second)
+		case <-c.done:
+			return
+		}
+	}
+}
 func (c *client) Close() error {
+	select {
+	case <-c.done:
+	default:
+		close(c.done)
+	}
 	return c.Conn.Close()
 }
 func (c *client) Send(v any) error {
@@ -49,8 +87,6 @@ func (c *client) Send(v any) error {
 	if err != nil {
 		return err
 	}
-	return c.Conn.WriteMessage(websocket.TextMessage, data)
-
 	err = c.Conn.WriteMessage(websocket.TextMessage, data)
 	if err == nil {
 		return nil

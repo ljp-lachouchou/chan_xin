@@ -1,7 +1,6 @@
 package immodels
 
 import (
-	"github.com/ljp-lachouchou/chan_xin/apps/im/ws/ws"
 	"github.com/ljp-lachouchou/chan_xin/deploy/constant"
 	"time"
 
@@ -14,7 +13,7 @@ type ChatLog struct {
 	SendId         string             `bson:"sendId"`
 	RecvId         string             `bson:"recvId"`
 	MsgType        constant.MType     `bson:"msgType"`
-	MsgContent     ws.MessageContent  `bson:"msgContent"`
+	MsgContent     string             `bson:"msgContent"`
 	SendTime       int64              `bson:"sendTime"`
 	UpdateAt       time.Time          `bson:"updateAt,omitempty" json:"updateAt,omitempty"`
 	CreateAt       time.Time          `bson:"createAt,omitempty" json:"createAt,omitempty"`

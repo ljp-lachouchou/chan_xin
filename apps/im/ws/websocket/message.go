@@ -1,6 +1,9 @@
 package websocket
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"time"
+)
 
 type FrameType int
 
@@ -13,12 +16,15 @@ const (
 )
 
 type Message struct {
-	FrameType FrameType   `json:"frameType"`
-	Id        string      `json:"id"`
-	FromId    string      `json:"fromId"`
-	ToId      string      `json:"toId"`
-	Method    string      `json:"method"`
-	Data      interface{} `json:"data"`
+	FrameType FrameType `json:"frameType"`
+	Id        string    `json:"id"`
+	FromId    string    `json:"fromId"`
+	ToId      string    `json:"toId"`
+	AckTime   time.Time `json:"ackTime"`
+
+	Method string      `json:"method"`
+	Seq    int         `json:"seq"`
+	Data   interface{} `json:"data"`
 }
 
 func NewMessage(fromId string, data interface{}) *Message {
@@ -27,6 +33,27 @@ func NewMessage(fromId string, data interface{}) *Message {
 		FrameType: FrameData,
 		Id:        id,
 		FromId:    fromId,
+		Data:      data,
+	}
+}
+func NewAckMessage(fromId string, ackTime time.Time) *Message {
+	return &Message{
+		FrameType: 0,
+		Id:        "",
+		FromId:    "",
+		ToId:      "",
+		AckTime:   time.Time{},
+		Method:    "",
+		Seq:       0,
+		Data:      nil,
+	}
+}
+func NewMessageWithId(id, fromId, toId string, data interface{}) *Message {
+	return &Message{
+		FrameType: FrameData,
+		Id:        id,
+		FromId:    fromId,
+		ToId:      toId,
 		Data:      data,
 	}
 }

@@ -5,7 +5,7 @@ import "github.com/ljp-lachouchou/chan_xin/deploy/constant"
 type (
 	Msg struct {
 		MsgType    constant.MType `mapstructure:"msgType"`
-		MsgContent MessageContent `mapstructure:"msgContent"`
+		MsgContent string         `mapstructure:"msgContent"`
 	}
 	Chat struct {
 		ConversationId string            `mapstructure:"conversationId"`
@@ -21,7 +21,7 @@ type (
 		RecvId         string            `json:"recvId"`
 		ChatType       constant.ChatType `json:"chatType"`
 		MsgType        constant.MType    `json:"msgType"`
-		MsgContent     MessageContent    `json:"msgContent"`
+		MsgContent     string            `json:"msgContent"`
 		SendTime       int64             `json:"sendTime"`
 	}
 )

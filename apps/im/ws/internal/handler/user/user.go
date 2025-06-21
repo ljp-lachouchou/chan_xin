@@ -7,6 +7,6 @@ import (
 
 func Online(svc *svc.ServiceContext) websocket2.HandlerFunc {
 	return func(server *websocket2.Server, conn *websocket2.Connection, msg *websocket2.Message) {
-
+		server.SendPingMessage()
 	}
 }

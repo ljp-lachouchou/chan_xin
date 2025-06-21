@@ -9,6 +9,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
 	"sync"
+	"time"
 )
 
 type Server struct {
@@ -47,16 +48,40 @@ func (s *Server) Send(msg interface{}, conns ...*Connection) error {
 		return err
 	}
 	for _, conn := range conns {
+		
 		if err := conn.WriteMessage(websocket.TextMessage, data); err != nil {
-			return err
+			continue
 		}
 	}
+	return nil
+}
+func (s *Server) SendPingMessage() error {
+	s.RWMutex.RLock()
+	defer s.RWMutex.RUnlock()
+	conns := make([]*Connection, 0, len(s.userToConn))
+	for _, conn := range s.userToConn {
+		conns = append(conns, conn)
+	}
+	go func() {
+		for _, v := range conns {
+			err := v.WriteMessage(websocket.PingMessage, []byte{})
+			if err != nil {
+				s.Errorf("ping 发送失败 %v", v)
+			}
+		}
+		return
+	}()
 	return nil
 }
 func (s *Server) GetConn(uid string) *Connection {
 	s.RWMutex.RLock()
 	defer s.RWMutex.RUnlock()
 	return s.userToConn[uid]
+}
+func (s *Server) GetUid(conn *Connection) string {
+	s.RWMutex.RLock()
+	defer s.RWMutex.RUnlock()
+	return s.connToUser[conn]
 }
 func (s *Server) AddRoutes(r []Route) {
 	for _, route := range r {
@@ -85,8 +110,12 @@ func (s *Server) WsServer(w http.ResponseWriter, r *http.Request) {
 
 }
 func (s *Server) handleConn(conn *Connection) {
+	conn.uid = s.GetUid(conn)
+	go s.handleWrite(conn)
+	go s.readAck(conn)
 	for {
 		_, msg, err := conn.ReadMessage()
+
 		if err != nil {
 			s.Errorf("websocket conn read message err: %v msg %v", err, string(msg))
 			s.Close(conn)
@@ -98,17 +127,55 @@ func (s *Server) handleConn(conn *Connection) {
 			s.Close(conn)
 			return
 		}
-		switch message.FrameType {
-		case FrameData:
-			handler := s.routes[message.Method]
-			if handler == nil {
-				s.Send(NewErrMessage(errors.New(fmt.Sprintf("找不到方法 %v", message.Method))))
-			} else {
-				handler(s, conn, &message)
+		conn.appendAckMq(&message)
+	}
+}
+func (s *Server) handleWrite(conn *Connection) {
+	for {
+		select {
+		case message := <-conn.message:
+			switch message.FrameType {
+			case FrameData:
+				handler := s.routes[message.Method]
+				if handler == nil {
+					s.Send(NewErrMessage(errors.New(fmt.Sprintf("找不到方法 %v", message.Method))))
+				} else {
+					handler(s, conn, message)
+
+				}
+			case FramePing:
+				s.Send(NewPingMessage(), conn)
 			}
-		case FramePing:
-			s.Send(NewPingMessage(), conn)
+		case <-conn.done:
+			return
 		}
+	}
+}
+func (s *Server) readAck(conn *Connection) {
+	for {
+		select {
+		case <-conn.done:
+			s.Info("close message ack uid %v", conn.uid)
+			return
+		default:
+		}
+		conn.messageMu.Lock()
+		if len(conn.ackMessages) == 0 {
+			conn.messageMu.Unlock()
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+		message := conn.ackMessages[0]
+		s.Send(&Message{
+			FrameType: FrameAck,
+			Id:        message.Id,
+			Seq:       message.Seq + 1,
+		}, conn)
+		//进行业务处理
+		//消息从队列中移除
+		conn.ackMessages = conn.ackMessages[1:]
+		conn.messageMu.Unlock()
+		conn.message <- message
 	}
 }
 func (s *Server) Start() {

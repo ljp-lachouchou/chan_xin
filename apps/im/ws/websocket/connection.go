@@ -10,12 +10,33 @@ import (
 type Connection struct {
 	*websocket.Conn
 	idleMu      sync.Mutex
+	messageMu   sync.Mutex
+	uid         string
 	s           *Server
 	idle        time.Time //当前空闲时间
 	maxConnIdle time.Duration
+	readAckMq   map[string]*Message
+	ackMessages []*Message
+	message     chan *Message
 	done        chan struct{}
 }
 
+func (c *Connection) appendAckMq(m *Message) {
+	c.messageMu.Lock()
+	defer c.messageMu.Unlock()
+	if v, ok := c.readAckMq[m.Id]; ok {
+		if len(c.ackMessages) == 0 {
+			return
+		}
+		if v.Seq >= m.Seq {
+			return
+		}
+		c.readAckMq[m.Id] = m
+		return
+	}
+	c.ackMessages = append(c.ackMessages, m)
+	c.readAckMq[m.Id] = m
+}
 func (c *Connection) readMessage() (messageType int, p []byte, err error) {
 	messageType, p, err = c.Conn.ReadMessage()
 	c.idleMu.Lock()
@@ -40,6 +61,9 @@ func NewConnection(s *Server, w http.ResponseWriter, r *http.Request) *Connectio
 		s:           s,
 		idle:        time.Now(),
 		maxConnIdle: s.opt.maxConnIdle,
+		readAckMq:   make(map[string]*Message, 2),
+		ackMessages: make([]*Message, 0, 2),
+		message:     make(chan *Message, 1),
 		done:        make(chan struct{}),
 	}
 	go conn.KeepAlive()

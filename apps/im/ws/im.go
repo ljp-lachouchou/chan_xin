@@ -8,6 +8,7 @@ import (
 	"github.com/ljp-lachouchou/chan_xin/apps/im/ws/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/im/ws/websocket"
 	"github.com/ljp-lachouchou/chan_xin/deploy/configserver"
+	"time"
 )
 
 var configFile = flag.String("f", "etc/dev/im.yaml", "the config file")
@@ -34,7 +35,7 @@ func main() {
 		panic(err)
 	}
 	ctx := svc.NewServiceContext(c)
-	srv := websocket.NewServer(c.ListenOn, websocket.WithAuthentication(handler.NewAuth(ctx)))
+	srv := websocket.NewServer(c.ListenOn, websocket.WithAuthentication(handler.NewAuth(ctx)), websocket.WithMaxConnIdle(60*time.Second))
 
 	//websocket.WithServerMaxConnectionIdle(10*time.Second)
 

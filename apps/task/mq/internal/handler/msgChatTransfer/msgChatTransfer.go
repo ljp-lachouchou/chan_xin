@@ -36,9 +36,12 @@ func (m *MsgChatTransfer) Consume(ctx context.Context, key, value string) error 
 		return err
 	}
 	fmt.Println("ws client is", m.svc.Client)
+
 	return m.svc.Client.Send(websocket.Message{
+		Id:        data.MsgId,
 		FrameType: websocket.FrameData,
 		FromId:    constant.SYSTEM_ROOT_ID,
+		ToId:      data.RecvId,
 		Method:    "conversation.push",
 		Data:      data,
 	})
