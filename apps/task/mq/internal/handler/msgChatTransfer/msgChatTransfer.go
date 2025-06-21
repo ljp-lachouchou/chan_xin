@@ -51,6 +51,7 @@ func (m *MsgChatTransfer) addChatLog(ctx context.Context, data *mq.MsgChatTransf
 		ConversationId: data.ConversationId,
 		SendId:         data.SendId,
 		RecvId:         data.RecvId,
+		ChatType:       data.ChatType,
 		MsgType:        data.MsgType,
 		MsgContent:     data.MsgContent,
 		SendTime:       data.SendTime,

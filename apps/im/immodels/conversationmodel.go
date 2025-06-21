@@ -1,6 +1,8 @@
 package immodels
 
-import "github.com/zeromicro/go-zero/core/stores/mon"
+import (
+	"github.com/zeromicro/go-zero/core/stores/mon"
+)
 
 var _ ConversationModel = (*customConversationModel)(nil)
 

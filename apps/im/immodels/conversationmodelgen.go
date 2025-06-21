@@ -16,6 +16,8 @@ import (
 type conversationModel interface {
 	Insert(ctx context.Context, data *Conversation) error
 	FindOne(ctx context.Context, id string) (*Conversation, error)
+	FindOneByConversationId(ctx context.Context, conversationId string) (*Conversation, error)
+	ListByConversationIds(ctx context.Context, ids []string) ([]*Conversation, error)
 	Update(ctx context.Context, data *Conversation) (*mongo.UpdateResult, error)
 	Delete(ctx context.Context, id string) (int64, error)
 	UpdateMsg(ctx context.Context, chatLog *ChatLog) error
@@ -39,7 +41,20 @@ func (m *defaultConversationModel) Insert(ctx context.Context, data *Conversatio
 	_, err := m.conn.InsertOne(ctx, data)
 	return err
 }
-
+func (m *defaultConversationModel) ListByConversationIds(ctx context.Context, ids []string) ([]*Conversation, error) {
+	var data []*Conversation
+	err := m.conn.Find(ctx, &data, bson.M{
+		"conversationId": bson.M{"$in": ids},
+	})
+	switch err {
+	case nil:
+		return data, nil
+	case mon.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultConversationModel) FindOne(ctx context.Context, id string) (*Conversation, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -58,7 +73,18 @@ func (m *defaultConversationModel) FindOne(ctx context.Context, id string) (*Con
 		return nil, err
 	}
 }
-
+func (m *defaultConversationModel) FindOneByConversationId(ctx context.Context, conversationId string) (*Conversation, error) {
+	var data Conversation
+	err := m.conn.FindOne(ctx,&data,bson.M{"conversationId": conversationId})
+	switch err {
+	case nil:
+		return &data, nil
+	case mon.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultConversationModel) Update(ctx context.Context, data *Conversation) (*mongo.UpdateResult, error) {
 	data.UpdateAt = time.Now()
 
