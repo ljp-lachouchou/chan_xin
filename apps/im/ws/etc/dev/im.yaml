@@ -10,3 +10,8 @@ MsgChatTransfer: #消费者配置信息
 Jwt:
   AccessSecret: github.com/ljp-lachouchou/chan_xin
   AccessExpire: 864000
+SocialRpc:
+  Etcd:
+    Hosts:
+      - 192.168.142.101:3379
+    Key: social.rpc

@@ -62,11 +62,17 @@ func (c *client) pingServer(conn *websocket.Conn) {
 				fmt.Println("pingServer json marshal message error:", err)
 				return
 			}
+
 			err = conn.WriteMessage(websocket.TextMessage, data)
 			if err != nil {
 				fmt.Println("pingServer write ping message error:", err)
 				c.Close()
-				return
+				dail, err := c.dail()
+				if err != nil {
+					panic(err)
+				}
+				c.Conn = dail
+				continue
 			}
 			c.timer.Reset(10 * time.Second)
 		case <-c.done:

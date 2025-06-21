@@ -10,3 +10,8 @@ msgchattransfer:
         - 192.168.142.101:9092
     topic: msgChatTransfer
 name: im.ws
+socialrpc:
+    etcd:
+        hosts:
+            - 192.168.142.101:3379
+        key: social.rpc

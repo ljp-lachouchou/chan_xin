@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/ljp-lachouchou/chan_xin/pkg/ldefault"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
@@ -47,14 +48,19 @@ func (s *Server) Send(msg interface{}, conns ...*Connection) error {
 	if err != nil {
 		return err
 	}
+	s.RWMutex.RLock()
+	defer s.RWMutex.RUnlock()
 	for _, conn := range conns {
-		
+		if _, ok := s.connToUser[conn]; !ok {
+			continue
+		}
 		if err := conn.WriteMessage(websocket.TextMessage, data); err != nil {
 			continue
 		}
 	}
 	return nil
 }
+
 func (s *Server) SendPingMessage() error {
 	s.RWMutex.RLock()
 	defer s.RWMutex.RUnlock()
@@ -127,7 +133,11 @@ func (s *Server) handleConn(conn *Connection) {
 			s.Close(conn)
 			return
 		}
-		conn.appendAckMq(&message)
+		if conn.uid == ldefault.SYSTEM_REDIS_UID {
+			conn.message <- &message
+		} else {
+			conn.appendAckMq(&message)
+		}
 	}
 }
 func (s *Server) handleWrite(conn *Connection) {
@@ -141,7 +151,9 @@ func (s *Server) handleWrite(conn *Connection) {
 					s.Send(NewErrMessage(errors.New(fmt.Sprintf("找不到方法 %v", message.Method))))
 				} else {
 					handler(s, conn, message)
-
+					conn.messageMu.Lock()
+					delete(conn.readAckMq, message.Id)
+					conn.messageMu.Unlock()
 				}
 			case FramePing:
 				s.Send(NewPingMessage(), conn)
@@ -206,4 +218,25 @@ func (s *Server) Close(conn *Connection) {
 
 func (s *Server) Stop() {
 	s.Info("停止服务")
+}
+
+func (s *Server) GetConns(ids []string) []*Connection {
+	s.RWMutex.RLock()
+	defer s.RWMutex.RUnlock()
+
+	var res []*Connection
+	if len(ids) == 0 {
+		// 获取全部
+		res = make([]*Connection, 0, len(s.userToConn))
+		for _, uid := range s.userToConn {
+			res = append(res, uid)
+		}
+	} else {
+		// 获取部分
+		res = make([]*Connection, 0, len(ids))
+		for _, conn := range ids {
+			res = append(res, s.userToConn[conn])
+		}
+	}
+	return res
 }

@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/zeromicro/go-zero/core/service"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type Config struct {
@@ -19,4 +20,5 @@ type Config struct {
 		Topic string
 		Addrs []string
 	}
+	SocialRpc zrpc.RpcClientConf
 }
