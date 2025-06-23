@@ -88,7 +88,11 @@ func (l *HandleGroupApplyLogic) HandleGroupApply(in *social.GroupApplyAction) (*
 	if err != nil {
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleGroupApply Transx")
 	}
-	return &social.GroupApplyActionResp{}, nil
+	return &social.GroupApplyActionResp{
+		IsApproved:    in.IsApproved,
+		ApplicationId: findOne.ApplicantId,
+		TargetId:      findOne.TargetId,
+	}, nil
 }
 func containsId(id string, list []*socialmodels.GroupMember) bool {
 	for _, v := range list {

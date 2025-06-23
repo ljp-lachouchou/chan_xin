@@ -79,5 +79,9 @@ func (l *HandleFriendApplyLogic) HandleFriendApply(in *social.FriendApplyAction)
 	if err != nil {
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply Tranx")
 	}
-	return &social.FriendApplyActionResp{}, nil
+	return &social.FriendApplyActionResp{
+		IsApproved:  constant.FriendApplyHandle(findOne.Status) == constant.SuccessHandleApply,
+		ApplicantId: findOne.ApplicantId,
+		TargetId:    findOne.TargetId,
+	}, nil
 }

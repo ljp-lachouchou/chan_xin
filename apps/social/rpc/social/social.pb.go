@@ -887,6 +887,9 @@ func (x *GroupInvitation) GetTargetIds() []string {
 
 type FriendApplyActionResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsApproved    bool                   `protobuf:"varint,1,opt,name=is_approved,json=isApproved,proto3" json:"is_approved,omitempty"` //是否成功
+	ApplicantId   string                 `protobuf:"bytes,2,opt,name=applicantId,proto3" json:"applicantId,omitempty"`
+	TargetId      string                 `protobuf:"bytes,3,opt,name=targetId,proto3" json:"targetId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -919,6 +922,27 @@ func (x *FriendApplyActionResp) ProtoReflect() protoreflect.Message {
 // Deprecated: Use FriendApplyActionResp.ProtoReflect.Descriptor instead.
 func (*FriendApplyActionResp) Descriptor() ([]byte, []int) {
 	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *FriendApplyActionResp) GetIsApproved() bool {
+	if x != nil {
+		return x.IsApproved
+	}
+	return false
+}
+
+func (x *FriendApplyActionResp) GetApplicantId() string {
+	if x != nil {
+		return x.ApplicantId
+	}
+	return ""
+}
+
+func (x *FriendApplyActionResp) GetTargetId() string {
+	if x != nil {
+		return x.TargetId
+	}
+	return ""
 }
 
 type RelationResp struct {
@@ -995,6 +1019,9 @@ func (*FriendStatusUpdateResp) Descriptor() ([]byte, []int) {
 
 type GroupInviteActionResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsApproved    bool                   `protobuf:"varint,1,opt,name=is_approved,json=isApproved,proto3" json:"is_approved,omitempty"`
+	ApplicationId string                 `protobuf:"bytes,2,opt,name=applicationId,proto3" json:"applicationId,omitempty"`
+	TargetId      string                 `protobuf:"bytes,3,opt,name=targetId,proto3" json:"targetId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1027,6 +1054,27 @@ func (x *GroupInviteActionResp) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GroupInviteActionResp.ProtoReflect.Descriptor instead.
 func (*GroupInviteActionResp) Descriptor() ([]byte, []int) {
 	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *GroupInviteActionResp) GetIsApproved() bool {
+	if x != nil {
+		return x.IsApproved
+	}
+	return false
+}
+
+func (x *GroupInviteActionResp) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+func (x *GroupInviteActionResp) GetTargetId() string {
+	if x != nil {
+		return x.TargetId
+	}
+	return ""
 }
 
 type GroupStatusUpdateResp struct {
@@ -1472,6 +1520,9 @@ func (x *GroupApplyAction) GetIsApproved() bool {
 
 type GroupApplyActionResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsApproved    bool                   `protobuf:"varint,1,opt,name=is_approved,json=isApproved,proto3" json:"is_approved,omitempty"`
+	ApplicationId string                 `protobuf:"bytes,2,opt,name=applicationId,proto3" json:"applicationId,omitempty"`
+	TargetId      string                 `protobuf:"bytes,3,opt,name=targetId,proto3" json:"targetId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1504,6 +1555,27 @@ func (x *GroupApplyActionResp) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GroupApplyActionResp.ProtoReflect.Descriptor instead.
 func (*GroupApplyActionResp) Descriptor() ([]byte, []int) {
 	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *GroupApplyActionResp) GetIsApproved() bool {
+	if x != nil {
+		return x.IsApproved
+	}
+	return false
+}
+
+func (x *GroupApplyActionResp) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+func (x *GroupApplyActionResp) GetTargetId() string {
+	if x != nil {
+		return x.TargetId
+	}
+	return ""
 }
 
 type GetGroupMembersReq struct {
@@ -2496,11 +2568,19 @@ const file_apps_social_rpc_social_proto_rawDesc = "" +
 	"inviter_id\x18\x01 \x01(\tR\tinviterId\x12\x19\n" +
 	"\bgroup_id\x18\x02 \x01(\tR\agroupId\x12\x1d\n" +
 	"\n" +
-	"target_ids\x18\x03 \x03(\tR\ttargetIds\"\x17\n" +
-	"\x15FriendApplyActionResp\"\x0e\n" +
+	"target_ids\x18\x03 \x03(\tR\ttargetIds\"v\n" +
+	"\x15FriendApplyActionResp\x12\x1f\n" +
+	"\vis_approved\x18\x01 \x01(\bR\n" +
+	"isApproved\x12 \n" +
+	"\vapplicantId\x18\x02 \x01(\tR\vapplicantId\x12\x1a\n" +
+	"\btargetId\x18\x03 \x01(\tR\btargetId\"\x0e\n" +
 	"\fRelationResp\"\x18\n" +
-	"\x16FriendStatusUpdateResp\"\x17\n" +
-	"\x15GroupInviteActionResp\"\x17\n" +
+	"\x16FriendStatusUpdateResp\"z\n" +
+	"\x15GroupInviteActionResp\x12\x1f\n" +
+	"\vis_approved\x18\x01 \x01(\bR\n" +
+	"isApproved\x12$\n" +
+	"\rapplicationId\x18\x02 \x01(\tR\rapplicationId\x12\x1a\n" +
+	"\btargetId\x18\x03 \x01(\tR\btargetId\"\x17\n" +
 	"\x15GroupStatusUpdateResp\"\x17\n" +
 	"\x15GroupMemberManageResp\"\x1e\n" +
 	"\x1cGroupMemberSettingUpdateResp\"\x0f\n" +
@@ -2524,8 +2604,12 @@ const file_apps_social_rpc_social_proto_rawDesc = "" +
 	"\n" +
 	"manager_id\x18\x02 \x01(\tR\tmanagerId\x12\x1f\n" +
 	"\vis_approved\x18\x03 \x01(\bR\n" +
-	"isApproved\"\x16\n" +
-	"\x14GroupApplyActionResp\"/\n" +
+	"isApproved\"y\n" +
+	"\x14GroupApplyActionResp\x12\x1f\n" +
+	"\vis_approved\x18\x01 \x01(\bR\n" +
+	"isApproved\x12$\n" +
+	"\rapplicationId\x18\x02 \x01(\tR\rapplicationId\x12\x1a\n" +
+	"\btargetId\x18\x03 \x01(\tR\btargetId\"/\n" +
 	"\x12GetGroupMembersReq\x12\x19\n" +
 	"\bgroup_id\x18\x01 \x01(\tR\agroupId\"z\n" +
 	"\fBaseUserInfo\x12\x17\n" +

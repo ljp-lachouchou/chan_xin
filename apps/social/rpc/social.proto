@@ -100,10 +100,18 @@ message GroupInvitation {
   string group_id = 2;      // 群ID
   repeated string target_ids = 3; // 被邀请人ID列表
 }
-message FriendApplyActionResp {}
+message FriendApplyActionResp {
+  bool is_approved = 1; //是否成功
+  string applicantId=2;
+  string targetId = 3;
+}
 message RelationResp{}
 message FriendStatusUpdateResp{}
-message GroupInviteActionResp{}
+message GroupInviteActionResp{
+  bool is_approved = 1;
+  string applicationId = 2;
+  string targetId = 3;
+}
 message GroupStatusUpdateResp{}
 message GroupMemberManageResp{}
 message GroupMemberSettingUpdateResp{}
@@ -131,6 +139,9 @@ message GroupApplyAction {
   bool is_approved = 3;    // 是否同意
 }
 message GroupApplyActionResp {
+    bool is_approved = 1;
+    string applicationId = 2;
+    string targetId = 3;
 
 }
 message GetGroupMembersReq {

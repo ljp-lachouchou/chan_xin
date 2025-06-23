@@ -1,0 +1,30 @@
+package logic
+
+import (
+	"context"
+
+	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/social"
+	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/w/internal/svc"
+
+	"github.com/zeromicro/go-zero/core/logx"
+)
+
+type HandleGroupInviteLogic struct {
+	ctx    context.Context
+	svcCtx *svc.ServiceContext
+	logx.Logger
+}
+
+func NewHandleGroupInviteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *HandleGroupInviteLogic {
+	return &HandleGroupInviteLogic{
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
+	}
+}
+
+func (l *HandleGroupInviteLogic) HandleGroupInvite(in *social.GroupInviteAction) (*social.GroupInviteActionResp, error) {
+	// todo: add your logic here and delete this line
+
+	return &social.GroupInviteActionResp{}, nil
+}

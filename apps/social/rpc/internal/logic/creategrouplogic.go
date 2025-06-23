@@ -51,6 +51,7 @@ func (l *CreateGroupLogic) CreateGroup(in *social.GroupCreationRequest) (*social
 			IsTopped:      0,
 		}
 		members = append(members, member)
+
 		for _, v := range in.MemberIds {
 			member := &socialmodels.GroupMember{
 				GroupId:       groupId,
@@ -70,7 +71,7 @@ func (l *CreateGroupLogic) CreateGroup(in *social.GroupCreationRequest) (*social
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc CreateGroup Transx")
 	}
 	return &social.GroupInfo{
-		GroupId:    in.CreatorId,
+		GroupId:    groupId,
 		Name:       in.GroupName,
 		OwnerId:    info.OwnerId,
 		MemberIds:  in.MemberIds,

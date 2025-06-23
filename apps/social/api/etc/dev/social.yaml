@@ -6,3 +6,8 @@ SocialRpc:
     Hosts:
       - 192.168.142.101:3379
     Key: social.rpc
+ImRpc:
+  Etcd:
+    Hosts:
+      - 192.168.142.101:3379
+    Key: im.rpc

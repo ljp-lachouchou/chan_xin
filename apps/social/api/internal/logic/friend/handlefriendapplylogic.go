@@ -2,7 +2,9 @@ package friend
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/im/rpc/im"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/socialservice"
+	"github.com/ljp-lachouchou/chan_xin/deploy/constant"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/social/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/api/internal/types"
@@ -30,6 +32,17 @@ func (l *HandleFriendApplyLogic) HandleFriendApply(req *types.FriendApplyAction)
 		ApplyId:    req.ApplyId,
 		IsApproved: req.IsApproved,
 	}
-	_, err := l.svcCtx.SocialService.HandleFriendApply(l.ctx, &in)
+	resp, err := l.svcCtx.SocialService.HandleFriendApply(l.ctx, &in)
+	if err != nil {
+		return err
+	}
+	if resp.IsApproved == false {
+		return nil
+	}
+	_, err = l.svcCtx.Im.SetUpUserConversation(l.ctx, &im.SetUpUserConversationReq{
+		SendId:   resp.ApplicantId,
+		RecvId:   resp.TargetId,
+		ChatType: int32(constant.SingleChat),
+	})
 	return err
 }

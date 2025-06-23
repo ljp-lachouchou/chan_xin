@@ -80,5 +80,9 @@ func (l *HandleGroupInviteLogic) HandleGroupInvite(in *social.GroupInviteAction)
 		}
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleGroupInvite Tranx")
 	}
-	return &social.GroupInviteActionResp{}, nil
+	return &social.GroupInviteActionResp{
+		IsApproved:    in.IsAccepted,
+		ApplicationId: findOne.TargetId,
+		TargetId:      findOne.ApplicantId,
+	}, nil
 }

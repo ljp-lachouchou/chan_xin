@@ -2,7 +2,9 @@ package group
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/im/rpc/im"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/rpc/socialservice"
+	"github.com/ljp-lachouchou/chan_xin/deploy/constant"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/social/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/social/api/internal/types"
@@ -30,7 +32,14 @@ func (l *HandleGroupInviteLogic) HandleGroupInvite(req *types.GroupInviteAction)
 		InviteId:   req.InviteId,
 		IsAccepted: req.IsAccepted,
 	}
-	_, err := l.svcCtx.SocialService.HandleGroupInvite(l.ctx, in)
-
+	resp, err := l.svcCtx.SocialService.HandleGroupInvite(l.ctx, in)
+	if err != nil {
+		return err
+	}
+	_, err = l.svcCtx.Im.SetUpUserConversation(l.ctx, &im.SetUpUserConversationReq{
+		SendId:   resp.ApplicationId,
+		RecvId:   resp.TargetId,
+		ChatType: int32(constant.GroupChat),
+	})
 	return err
 }
