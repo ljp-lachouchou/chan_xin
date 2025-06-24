@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 	"github.com/jinzhu/copier"
 	"github.com/ljp-lachouchou/chan_xin/apps/im/immodels"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
@@ -57,6 +58,20 @@ func (l *GetConversationsLogic) GetConversations(in *im.GetConversationsReq) (*i
 			res.ConversationList[conversation.ConversationId].Total = int32(conversation.Total)
 			res.ConversationList[conversation.ConversationId].ToRead = int32(conversation.Total - oldTotal)
 			res.ConversationList[conversation.ConversationId].IsShow = true
+			if conversation.LastMsg == nil {
+				continue
+			}
+			fmt.Println("lastMsg", conversation.LastMsg)
+			res.ConversationList[conversation.ConversationId].Msg = &im.ChatLog{
+				Id:             conversation.LastMsg.ID.Hex(),
+				ConversationId: conversation.LastMsg.ConversationId,
+				SendId:         conversation.LastMsg.SendId,
+				RecvId:         conversation.LastMsg.RecvId,
+				MsgType:        int32(conversation.LastMsg.MsgType),
+				MsgContent:     conversation.LastMsg.MsgContent,
+				ChatType:       int32(conversation.LastMsg.ChatType),
+				SendTime:       conversation.LastMsg.SendTime,
+			}
 		}
 	}
 	return &res, nil

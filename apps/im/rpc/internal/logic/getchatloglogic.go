@@ -44,7 +44,6 @@ func (l *GetChatLogLogic) GetChatLog(in *im.GetChatLogReq) (*im.GetChatLogResp, 
 					MsgContent:     chatLog.MsgContent,
 					ChatType:       int32(chatLog.ChatType),
 					SendTime:       chatLog.SendTime,
-					ReadRecords:    nil,
 				},
 			},
 		}, nil

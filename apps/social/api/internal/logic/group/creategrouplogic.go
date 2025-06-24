@@ -38,6 +38,13 @@ func (l *CreateGroupLogic) CreateGroup(req *types.GroupCreationRequest) (resp *t
 	if err != nil {
 		return nil, err
 	}
+	_, err = l.svcCtx.Im.CreateGroupConversation(l.ctx, &im.CreateGroupConversationReq{
+		GroupId:  group.GroupId,
+		CreateId: group.OwnerId,
+	})
+	if err != nil {
+		return nil, err
+	}
 	ids := req.MemberIds
 	ids = append(ids, req.CreatorId)
 	for _, id := range ids {

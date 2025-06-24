@@ -15,7 +15,6 @@ message ChatLog {
   string msgContent = 6;
   int32 chatType = 7;
   int64 SendTime = 8;
-  bytes readRecords = 9;
 }
 
 message Conversation {

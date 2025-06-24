@@ -31,7 +31,6 @@ type ChatLog struct {
 	MsgContent     string                 `protobuf:"bytes,6,opt,name=msgContent,proto3" json:"msgContent,omitempty"`
 	ChatType       int32                  `protobuf:"varint,7,opt,name=chatType,proto3" json:"chatType,omitempty"`
 	SendTime       int64                  `protobuf:"varint,8,opt,name=SendTime,proto3" json:"SendTime,omitempty"`
-	ReadRecords    []byte                 `protobuf:"bytes,9,opt,name=readRecords,proto3" json:"readRecords,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -120,13 +119,6 @@ func (x *ChatLog) GetSendTime() int64 {
 		return x.SendTime
 	}
 	return 0
-}
-
-func (x *ChatLog) GetReadRecords() []byte {
-	if x != nil {
-		return x.ReadRecords
-	}
-	return nil
 }
 
 type Conversation struct {
@@ -732,7 +724,7 @@ var File_apps_im_rpc_im_proto protoreflect.FileDescriptor
 
 const file_apps_im_rpc_im_proto_rawDesc = "" +
 	"\n" +
-	"\x14apps/im/rpc/im.proto\x12\x02im\"\x85\x02\n" +
+	"\x14apps/im/rpc/im.proto\x12\x02im\"\xe3\x01\n" +
 	"\aChatLog\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\x0econversationId\x18\x02 \x01(\tR\x0econversationId\x12\x16\n" +
@@ -743,8 +735,7 @@ const file_apps_im_rpc_im_proto_rawDesc = "" +
 	"msgContent\x18\x06 \x01(\tR\n" +
 	"msgContent\x12\x1a\n" +
 	"\bchatType\x18\a \x01(\x05R\bchatType\x12\x1a\n" +
-	"\bSendTime\x18\b \x01(\x03R\bSendTime\x12 \n" +
-	"\vreadRecords\x18\t \x01(\fR\vreadRecords\"\xf9\x01\n" +
+	"\bSendTime\x18\b \x01(\x03R\bSendTime\"\xf9\x01\n" +
 	"\fConversation\x12&\n" +
 	"\x0econversationId\x18\x01 \x01(\tR\x0econversationId\x12\x1a\n" +
 	"\bchatType\x18\x02 \x01(\x05R\bchatType\x12\x1a\n" +
