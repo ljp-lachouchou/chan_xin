@@ -1,0 +1,15 @@
+Name: dynamics.rpc
+ListenOn: 0.0.0.0:10003
+Etcd:
+  Hosts:
+    - 192.168.142.101:3379
+  Key: dynamics.rpc
+Mongo:
+  Url: "mongodb://root:chan-xin@192.168.142.101:47017"
+  Db: chan-xin
+Cache:
+  - Host: 192.168.142.101:16379
+    Type: node
+    pass: chan-xin
+Mysql:
+  DataSource: root:chan-xin@tcp(192.168.142.101:13306)/chan-xin?charset=utf8mb4&parseTime=True&loc=Local

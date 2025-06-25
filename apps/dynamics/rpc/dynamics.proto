@@ -3,9 +3,7 @@ package dynamics;
 
 option go_package = "./dynamics";
 
-import "google/protobuf/timestamp.proto"; // 时间戳支持
-import "google/protobuf/empty.proto";     // 空响应支持
-
+message Empty{}
 // ================== 枚举定义 ==================
 // 动态内容类型（文字/图文）[7](@ref)
 enum ContentType {
@@ -48,8 +46,7 @@ message Post {
   string user_id = 2;  // 发布者ID
   PostContent content = 3;  // 动态内容主体
   PostMeta meta = 4;       // 动态元数据
-  google.protobuf.Timestamp create_time = 5; // 创建时间（服务端生成）
-  bool is_pinned = 6;      // 是否置顶（置顶动态不参与时间线排序）
+  bool is_pinned = 5;      // 是否置顶（置顶动态不参与时间线排序）
 }
 
 // 点赞/取消点赞操作
@@ -66,8 +63,7 @@ message Notification {
   string trigger_user_id = 3;   // 触发通知的用户ID
   string post_id = 4;            // 关联的动态ID
   string comment_id = 5;        // 关联的评论ID（仅REPLY类型有效）
-  google.protobuf.Timestamp time = 6; // 通知生成时间
-  bool is_read = 7;              // 是否已读（新增字段）
+  bool is_read = 6;              // 是否已读（新增字段）
 }
 
 // 分页请求结构[1](@ref)
@@ -88,19 +84,19 @@ service dynamics {
   rpc CreatePost (CreatePostRequest) returns (Post);
 
   // 删除动态（仅创建者可操作）
-  rpc DeletePost (DeletePostRequest) returns (google.protobuf.Empty);
+  rpc DeletePost (DeletePostRequest) returns (Empty);
 
   // 点赞/取消点赞
-  rpc ToggleLike (LikeAction) returns (google.protobuf.Empty);
+  rpc ToggleLike (LikeAction) returns (Empty);
 
   // 置顶/取消置顶动态
-  rpc PinPost (PinPostRequest) returns (google.protobuf.Empty);
+  rpc PinPost (PinPostRequest) returns (Empty);
 
   // 获取用户所有动态（按置顶状态+时间倒序）
   rpc ListUserPosts (ListUserPostsRequest) returns (PostListResponse);
 
   // 设置个人动态封面（用于个人主页）
-  rpc SetCover (SetCoverRequest) returns (google.protobuf.Empty);
+  rpc SetCover (SetCoverRequest) returns (Empty);
 
   // 浏览可见动态流（根据权限过滤+分页）
   rpc ListVisiblePosts (ListVisiblePostsRequest) returns (PostListResponse);
