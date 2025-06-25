@@ -25,6 +25,6 @@ func NewDeletePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 
 // 删除动态（仅创建者可操作）
 func (l *DeletePostLogic) DeletePost(in *dynamics.DeletePostRequest) (*dynamics.Empty, error) {
-
+	
 	return &dynamics.Empty{}, nil
 }

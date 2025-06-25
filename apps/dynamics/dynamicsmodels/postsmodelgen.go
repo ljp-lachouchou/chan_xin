@@ -16,6 +16,7 @@ type postsModel interface {
 	Insert(ctx context.Context, data *Posts) error
 	FindOne(ctx context.Context, id string) (*Posts, error)
 	Update(ctx context.Context, data *Posts) (*mongo.UpdateResult, error)
+	FindByUserId(ctx context.Context, userId string) ([]*Posts, error)
 	Delete(ctx context.Context, id string) (int64, error)
 }
 
@@ -51,12 +52,23 @@ func (m *defaultPostsModel) FindOne(ctx context.Context, id string) (*Posts, err
 	case nil:
 		return &data, nil
 	case mon.ErrNotFound:
-		return nil, ErrNotFound
+		return nil, MongoErrNotFound
 	default:
 		return nil, err
 	}
 }
-
+func (m *defaultPostsModel) FindByUserId(ctx context.Context, userId string) ([]*Posts, error) {
+	var data []*Posts
+	err := m.conn.Find(ctx,&data,bson.M{"userId": userId})
+	switch err {
+	case nil:
+		return data, nil
+	case mon.ErrNotFound:
+		return nil, MongoErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultPostsModel) Update(ctx context.Context, data *Posts) (*mongo.UpdateResult, error) {
 	data.UpdateAt = time.Now()
 
