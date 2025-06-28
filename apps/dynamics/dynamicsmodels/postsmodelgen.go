@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var DefaultChatLogCount int64 = 20
+var DefaultPostCount int64 = 20
 type postsModel interface {
 	Insert(ctx context.Context, data *Posts) error
 	FindOne(ctx context.Context, id string) (*Posts, error)
@@ -21,6 +21,8 @@ type postsModel interface {
 	FindByUserId(ctx context.Context, userId string) ([]*Posts, error)
 	Delete(ctx context.Context, id string) (int64, error)
 	FindPostsByUserId(ctx context.Context, userId string,offset,limit int64,isPin bool) ([]*Posts, error)
+	//in表示存在元素在目标集合之中
+	FindCanVisiablePosts(ctx context.Context,userId string,offset,limit int64) ([]*Posts, error)
 }
 
 type defaultPostsModel struct {
@@ -41,9 +43,41 @@ func (m *defaultPostsModel) Insert(ctx context.Context, data *Posts) error {
 	_, err := m.conn.InsertOne(ctx, data)
 	return err
 }
+func (m *defaultPostsModel) FindCanVisiablePosts(ctx context.Context,userId string,offset,limit int64) ([]*Posts, error) {
+	opt := options.FindOptions{Limit: &DefaultPostCount,Sort: bson.M{"createAt": -1}}
+	opt.SetSkip(offset)
+	filiter := bson.M{
+		"$or":bson.A{
+			bson.M{
+				"visibility":0,//公开
+			},
+			bson.M{//自己是作者
+				"userId":userId,
+			},
+			bson.M{ //自定义下，visiableTo与我传进来的userId有交集
+				"visibility":2,
+				"$or": bson.A{
+					bson.M{"visibleTo": bson.M{"$size": 0}}, // 空数组（所有人可见）
+					bson.M{"visibleTo": bson.M{"$in": []string{userId}}}, // 包含当前用户
+				},
+			},
+		},
+	}
+	var data []*Posts
+	err := m.conn.Find(ctx, &data, filiter, &opt)
+	switch err {
+	case nil:
+		return data, nil
+	case mon.ErrNotFound:
+		return nil, MongoErrNotFound
+	default:
+		return nil, err
+	}
+
+}
 func (m *defaultPostsModel) FindPostsByUserId(ctx context.Context, userId string,offset,limit int64,isPin bool) ([]*Posts, error) {
 	opt := options.FindOptions{
-		Limit:               &DefaultChatLogCount,
+		Limit:               &DefaultPostCount,
 		Sort:                bson.M{"createAt": -1},
 	}
 	opt.SetSkip(offset)

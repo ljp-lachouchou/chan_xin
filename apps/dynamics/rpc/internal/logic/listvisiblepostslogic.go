@@ -25,7 +25,6 @@ func NewListVisiblePostsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 // 浏览可见动态流（根据权限过滤+分页）
 func (l *ListVisiblePostsLogic) ListVisiblePosts(in *dynamics.ListVisiblePostsRequest) (*dynamics.PostListResponse, error) {
-	// todo: add your logic here and delete this line
 
 	return &dynamics.PostListResponse{}, nil
 }
