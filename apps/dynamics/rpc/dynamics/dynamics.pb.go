@@ -832,8 +832,9 @@ func (x *PinPostRequest) GetPin() bool {
 
 type ListUserPostsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // 目标用户ID
-	Pagination    *Pagination            `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`       // 分页参数
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`     // 目标用户ID
+	IsPin         *bool                  `protobuf:"varint,2,opt,name=is_pin,json=isPin,proto3,oneof" json:"is_pin,omitempty"` //可选择
+	Pagination    *Pagination            `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`           // 分页参数
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -873,6 +874,13 @@ func (x *ListUserPostsRequest) GetUserId() string {
 		return x.UserId
 	}
 	return ""
+}
+
+func (x *ListUserPostsRequest) GetIsPin() bool {
+	if x != nil && x.IsPin != nil {
+		return *x.IsPin
+	}
+	return false
 }
 
 func (x *ListUserPostsRequest) GetPagination() *Pagination {
@@ -1232,12 +1240,14 @@ const file_apps_dynamics_rpc_dynamics_proto_rawDesc = "" +
 	"\x0ePinPostRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x17\n" +
 	"\apost_id\x18\x02 \x01(\tR\x06postId\x12\x10\n" +
-	"\x03pin\x18\x03 \x01(\bR\x03pin\"e\n" +
+	"\x03pin\x18\x03 \x01(\bR\x03pin\"\x8c\x01\n" +
 	"\x14ListUserPostsRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x124\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1a\n" +
+	"\x06is_pin\x18\x02 \x01(\bH\x00R\x05isPin\x88\x01\x01\x124\n" +
 	"\n" +
-	"pagination\x18\x02 \x01(\v2\x14.dynamics.PaginationR\n" +
-	"pagination\"G\n" +
+	"pagination\x18\x03 \x01(\v2\x14.dynamics.PaginationR\n" +
+	"paginationB\t\n" +
+	"\a_is_pin\"G\n" +
 	"\x0fSetCoverRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
 	"\tcover_url\x18\x02 \x01(\tR\bcoverUrl\"l\n" +
@@ -1364,6 +1374,7 @@ func file_apps_dynamics_rpc_dynamics_proto_init() {
 	if File_apps_dynamics_rpc_dynamics_proto != nil {
 		return
 	}
+	file_apps_dynamics_rpc_dynamics_proto_msgTypes[11].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -26,6 +26,6 @@ func NewSetCoverLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetCover
 // 设置个人动态封面（用于个人主页）
 func (l *SetCoverLogic) SetCover(in *dynamics.SetCoverRequest) (*dynamics.Empty, error) {
 	// todo: add your logic here and delete this line
-
+	
 	return &dynamics.Empty{}, nil
 }

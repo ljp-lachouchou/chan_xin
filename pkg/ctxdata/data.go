@@ -8,3 +8,9 @@ func GetUId(ctx context.Context) string {
 	}
 	return ""
 }
+func GetParams(ctx context.Context, identify string) any {
+	if value := ctx.Value(identify); value != nil {
+		return value
+	}
+	return nil
+}

@@ -13,3 +13,6 @@ Cache:
     pass: chan-xin
 Mysql:
   DataSource: root:chan-xin@tcp(192.168.142.101:13306)/chan-xin?charset=utf8mb4&parseTime=True&loc=Local
+JwtAuth:
+  AccessSecret: github.com/ljp-lachouchou/chan_xin/page_token
+  AccessExpire: 864000

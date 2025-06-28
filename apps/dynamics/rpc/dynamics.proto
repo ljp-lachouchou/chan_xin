@@ -128,7 +128,8 @@ message PinPostRequest {
 
 message ListUserPostsRequest {
   string user_id = 1;          // 目标用户ID
-  Pagination pagination = 2;   // 分页参数
+  optional bool is_pin = 2; //可选择
+  Pagination pagination = 3;   // 分页参数
 }
 
 message SetCoverRequest {

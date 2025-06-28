@@ -4,6 +4,7 @@
 package dynamicsmodels
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/mon"
@@ -12,12 +13,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+var DefaultChatLogCount int64 = 20
 type postsModel interface {
 	Insert(ctx context.Context, data *Posts) error
 	FindOne(ctx context.Context, id string) (*Posts, error)
 	Update(ctx context.Context, data *Posts) (*mongo.UpdateResult, error)
 	FindByUserId(ctx context.Context, userId string) ([]*Posts, error)
 	Delete(ctx context.Context, id string) (int64, error)
+	FindPostsByUserId(ctx context.Context, userId string,offset,limit int64,isPin bool) ([]*Posts, error)
 }
 
 type defaultPostsModel struct {
@@ -38,7 +41,30 @@ func (m *defaultPostsModel) Insert(ctx context.Context, data *Posts) error {
 	_, err := m.conn.InsertOne(ctx, data)
 	return err
 }
-
+func (m *defaultPostsModel) FindPostsByUserId(ctx context.Context, userId string,offset,limit int64,isPin bool) ([]*Posts, error) {
+	opt := options.FindOptions{
+		Limit:               &DefaultChatLogCount,
+		Sort:                bson.M{"createAt": -1},
+	}
+	opt.SetSkip(offset)
+	filiter := bson.M{
+		"userId":userId,
+		"isPinned":isPin,
+	}
+	if limit > 0 {
+		opt.Limit = &limit
+	}
+	var data []*Posts
+	err := m.conn.Find(ctx, &data, filiter, &opt)
+	switch err {
+	case nil:
+		return data, nil
+	case mon.ErrNotFound:
+		return nil, MongoErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultPostsModel) FindOne(ctx context.Context, id string) (*Posts, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
