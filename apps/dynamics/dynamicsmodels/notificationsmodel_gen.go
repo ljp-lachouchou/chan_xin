@@ -25,6 +25,7 @@ var (
 	notificationsRowsWithPlaceHolder = strings.Join(stringx.Remove(notificationsFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheNotificationsIdPrefix = "cache:notifications:id:"
+	cacheNotificationsUserIdCountPrefix = "cache:notifications:user_id:count:"
 )
 
 type (
@@ -32,7 +33,10 @@ type (
 		Insert(ctx context.Context, data *Notifications) (sql.Result, error)
 		FindOne(ctx context.Context, id string) (*Notifications, error)
 		Update(ctx context.Context, data *Notifications) error
+		UpdateByUserId(ctx context.Context, userId string) error
 		Delete(ctx context.Context, id string) error
+		FindByUserIdWithPage(ctx context.Context, userId string,limit,offset int32) ([]*Notifications, error)
+		FindByUserIdAndIsNotRead(ctx context.Context, userId string) (int32, error)
 	}
 
 	defaultNotificationsModel struct {
@@ -67,7 +71,32 @@ func (m *defaultNotificationsModel) Delete(ctx context.Context, id string) error
 	}, notificationsIdKey)
 	return err
 }
-
+func (m *defaultNotificationsModel) FindByUserIdWithPage(ctx context.Context, userId string,limit,offset int32) ([]*Notifications, error) {
+	var resp []*Notifications
+	query := fmt.Sprintf("SELECT %s FROM %s WHERE `user_id` = ? ORDER BY `created_at` DESC LIMIT ? OFFSET ?", notificationsRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx,&resp,query,userId,limit,offset)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+func (m *defaultNotificationsModel) FindByUserIdAndIsNotRead(ctx context.Context, userId string) (int32, error) {
+	var resp int32
+	query := fmt.Sprintf("select COUNT(1) from %s where `user_id` = ? and `is_read` = false", m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, userId)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return 0, ErrNotFound
+	default:
+		return 0, err
+	}
+}
 func (m *defaultNotificationsModel) FindOne(ctx context.Context, id string) (*Notifications, error) {
 	notificationsIdKey := fmt.Sprintf("%s%v", cacheNotificationsIdPrefix, id)
 	var resp Notifications
@@ -93,7 +122,13 @@ func (m *defaultNotificationsModel) Insert(ctx context.Context, data *Notificati
 	}, notificationsIdKey)
 	return ret, err
 }
-
+func (m *defaultNotificationsModel) UpdateByUserId(ctx context.Context, userId string) error {
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set `is_read` = true where `user_id` = ? and `is_read` = false", m.table)
+		return conn.ExecCtx(ctx,query,userId)
+	})
+	return err
+}
 func (m *defaultNotificationsModel) Update(ctx context.Context, data *Notifications) error {
 	notificationsIdKey := fmt.Sprintf("%s%v", cacheNotificationsIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

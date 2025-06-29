@@ -111,8 +111,7 @@ message UpdateCommentReplayReq {
   string commentReplayId = 2;
 }
 message UpdateNotificationReq {
-  bool isRead = 1;
-  string notificationId = 2;
+  string userId = 1;
 }
 // ================== 服务接口 ==================
 service dynamics {

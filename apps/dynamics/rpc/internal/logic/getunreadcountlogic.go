@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/internal/svc"
@@ -25,6 +26,11 @@ func NewGetUnreadCountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 // 新增：获取未读通知数量
 func (l *GetUnreadCountLogic) GetUnreadCount(in *dynamics.GetUnreadCountRequest) (*dynamics.GetUnreadCountResponse, error) {
-
-	return &dynamics.GetUnreadCountResponse{}, nil
+	notRead, err := l.svcCtx.NotificationsModel.FindByUserIdAndIsNotRead(l.ctx, in.UserId)
+	if err != nil {
+		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "dynamics-rpc GetUnreadCount ", in.UserId)
+	}
+	return &dynamics.GetUnreadCountResponse{
+		UnreadCount: notRead,
+	}, nil
 }

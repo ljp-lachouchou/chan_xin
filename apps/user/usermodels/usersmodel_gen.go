@@ -35,6 +35,7 @@ type (
 		GetNicknameByUid(ctx context.Context, uid string) (string, error)
 		Update(ctx context.Context, data *Users) error
 		Delete(ctx context.Context, id string) error
+		Transx(ctx context.Context,fn func(context.Context, sqlx.Session) error) error
 	}
 
 	defaultUsersModel struct {
@@ -54,7 +55,11 @@ type (
 		UpdatedAt sql.NullTime   `db:"updated_at"`
 	}
 )
-
+func (m *defaultUsersModel) Transx(ctx context.Context,fn func(context.Context, sqlx.Session) error) error {
+	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
+		return fn(ctx,session)
+	})
+}
 func newUsersModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultUsersModel {
 	return &defaultUsersModel{
 		CachedConn: sqlc.NewConn(conn, c, opts...),

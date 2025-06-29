@@ -1054,11 +1054,10 @@ func (x *UpdateCommentReplayReq) GetCommentReplayId() string {
 }
 
 type UpdateNotificationReq struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	IsRead         bool                   `protobuf:"varint,1,opt,name=isRead,proto3" json:"isRead,omitempty"`
-	NotificationId string                 `protobuf:"bytes,2,opt,name=notificationId,proto3" json:"notificationId,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateNotificationReq) Reset() {
@@ -1091,16 +1090,9 @@ func (*UpdateNotificationReq) Descriptor() ([]byte, []int) {
 	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{15}
 }
 
-func (x *UpdateNotificationReq) GetIsRead() bool {
+func (x *UpdateNotificationReq) GetUserId() string {
 	if x != nil {
-		return x.IsRead
-	}
-	return false
-}
-
-func (x *UpdateNotificationReq) GetNotificationId() string {
-	if x != nil {
-		return x.NotificationId
+		return x.UserId
 	}
 	return ""
 }
@@ -1702,10 +1694,9 @@ const file_apps_dynamics_rpc_dynamics_proto_rawDesc = "" +
 	"\tcommentId\x18\x02 \x01(\tR\tcommentId\"`\n" +
 	"\x16UpdateCommentReplayReq\x12\x1c\n" +
 	"\tisDeleted\x18\x01 \x01(\bR\tisDeleted\x12(\n" +
-	"\x0fcommentReplayId\x18\x02 \x01(\tR\x0fcommentReplayId\"W\n" +
+	"\x0fcommentReplayId\x18\x02 \x01(\tR\x0fcommentReplayId\"/\n" +
 	"\x15UpdateNotificationReq\x12\x16\n" +
-	"\x06isRead\x18\x01 \x01(\bR\x06isRead\x12&\n" +
-	"\x0enotificationId\x18\x02 \x01(\tR\x0enotificationId\"\x85\x01\n" +
+	"\x06userId\x18\x01 \x01(\tR\x06userId\"\x85\x01\n" +
 	"\x11CreatePostRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12/\n" +
 	"\acontent\x18\x02 \x01(\v2\x15.dynamics.PostContentR\acontent\x12&\n" +

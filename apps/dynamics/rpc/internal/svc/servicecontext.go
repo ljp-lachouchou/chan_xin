@@ -13,6 +13,7 @@ type ServiceContext struct {
 	dynamicsmodels.PostLikesModel
 	dynamicsmodels.NotificationsModel
 	dynamicsmodels.PostsModel
+	dynamicsmodels.SocialCircleModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -24,5 +25,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		PostLikesModel:      dynamicsmodels.NewPostLikesModel(conn, c.Cache),
 		NotificationsModel:  dynamicsmodels.NewNotificationsModel(conn, c.Cache),
 		PostsModel:          dynamicsmodels.MustNewPostsModel(c.Mongo.Url, c.Mongo.Db),
+		SocialCircleModel:   dynamicsmodels.NewSocialCircleModel(conn, c.Cache),
 	}
 }

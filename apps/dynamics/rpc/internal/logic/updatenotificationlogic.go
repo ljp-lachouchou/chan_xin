@@ -26,14 +26,9 @@ func NewUpdateNotificationLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 
 // 更新通知
 func (l *UpdateNotificationLogic) UpdateNotification(in *dynamics.UpdateNotificationReq) (*dynamics.Empty, error) {
-	findOne, err := l.svcCtx.NotificationsModel.FindOne(l.ctx, in.NotificationId)
+	err := l.svcCtx.NotificationsModel.UpdateByUserId(l.ctx, in.UserId)
 	if err != nil {
-		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "dynamics-rpc UpdateNotification", in.NotificationId)
-	}
-	findOne.IsRead = in.IsRead
-	err = l.svcCtx.NotificationsModel.Update(l.ctx, findOne)
-	if err != nil {
-		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "dynamics-rpc UpdateNotification", findOne)
+		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "dynamics-rpc UpdateNotification", in.UserId)
 	}
 	return &dynamics.Empty{}, nil
 }
