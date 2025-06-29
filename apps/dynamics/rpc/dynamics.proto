@@ -77,7 +77,43 @@ message PostListResponse {
   repeated Post posts = 1;         // 动态列表
   string next_page_token = 2;      // 下一页令牌（无更多数据时为空）
 }
+message CreateNotificationReq {
+  string userId = 1;//接收用户id
+  NotificationType type = 2;//通知类型
+  string triggerUserId = 3; // 发送通知id
+  string postId = 4; //动态的id
+  string commentId = 5; //评论的id
+}
+message CreateCommentReq {
+  string postId = 1;
+  string userId = 2; //评论用户id
+  string content = 3;
 
+}
+message CreateCommentReplayReq {
+  string commentId = 1;
+  string userId = 2;//发送这
+  string targetUserId = 3;//接受者id
+  string content = 4;
+}
+message DeleteCommentReq {
+  string commentId = 1;
+}
+message DeleteCommentReplayReq{
+  string commentReplayId = 1;
+}
+message UpdateCommentReq {
+  bool isDeleted = 1;
+  string commentId = 2;
+}
+message UpdateCommentReplayReq {
+  bool isDeleted = 1;
+  string commentReplayId = 2;
+}
+message UpdateNotificationReq {
+  bool isRead = 1;
+  string notificationId = 2;
+}
 // ================== 服务接口 ==================
 service dynamics {
   // 创建动态（需提供内容和隐私设置）
@@ -100,6 +136,23 @@ service dynamics {
 
   // 浏览可见动态流（根据权限过滤+分页）
   rpc ListVisiblePosts (ListVisiblePostsRequest) returns (PostListResponse);
+
+  //创建评论
+  rpc CreateComment(CreateCommentReq) returns(Empty);
+  //创建评论回复
+  rpc CreateCommentReplay(CreateCommentReplayReq) returns(Empty);
+  //更新评论
+  rpc UpdateComment(UpdateCommentReq) returns(Empty);
+  //更新评论回复
+  rpc UpdateCommentReplay(UpdateCommentReplayReq) returns(Empty);
+  //更新通知
+  rpc UpdateNotification(UpdateNotificationReq) returns(Empty);
+  //删除评论
+  rpc DeleteComment(DeleteCommentReq) returns(Empty);
+  //删除评论回复
+  rpc DeleteCommentReplay(DeleteCommentReplayReq) returns(Empty);
+  //创建通知
+  rpc CreateNotification(CreateNotificationReq) returns(Empty);
 
   // 获取通知列表（分页）
   rpc ListNotifications (ListNotificationsRequest) returns (ListNotificationsResponse);

@@ -19,15 +19,23 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Dynamics_CreatePost_FullMethodName        = "/dynamics.dynamics/CreatePost"
-	Dynamics_DeletePost_FullMethodName        = "/dynamics.dynamics/DeletePost"
-	Dynamics_ToggleLike_FullMethodName        = "/dynamics.dynamics/ToggleLike"
-	Dynamics_PinPost_FullMethodName           = "/dynamics.dynamics/PinPost"
-	Dynamics_ListUserPosts_FullMethodName     = "/dynamics.dynamics/ListUserPosts"
-	Dynamics_SetCover_FullMethodName          = "/dynamics.dynamics/SetCover"
-	Dynamics_ListVisiblePosts_FullMethodName  = "/dynamics.dynamics/ListVisiblePosts"
-	Dynamics_ListNotifications_FullMethodName = "/dynamics.dynamics/ListNotifications"
-	Dynamics_GetUnreadCount_FullMethodName    = "/dynamics.dynamics/GetUnreadCount"
+	Dynamics_CreatePost_FullMethodName          = "/dynamics.dynamics/CreatePost"
+	Dynamics_DeletePost_FullMethodName          = "/dynamics.dynamics/DeletePost"
+	Dynamics_ToggleLike_FullMethodName          = "/dynamics.dynamics/ToggleLike"
+	Dynamics_PinPost_FullMethodName             = "/dynamics.dynamics/PinPost"
+	Dynamics_ListUserPosts_FullMethodName       = "/dynamics.dynamics/ListUserPosts"
+	Dynamics_SetCover_FullMethodName            = "/dynamics.dynamics/SetCover"
+	Dynamics_ListVisiblePosts_FullMethodName    = "/dynamics.dynamics/ListVisiblePosts"
+	Dynamics_CreateComment_FullMethodName       = "/dynamics.dynamics/CreateComment"
+	Dynamics_CreateCommentReplay_FullMethodName = "/dynamics.dynamics/CreateCommentReplay"
+	Dynamics_UpdateComment_FullMethodName       = "/dynamics.dynamics/UpdateComment"
+	Dynamics_UpdateCommentReplay_FullMethodName = "/dynamics.dynamics/UpdateCommentReplay"
+	Dynamics_UpdateNotification_FullMethodName  = "/dynamics.dynamics/UpdateNotification"
+	Dynamics_DeleteComment_FullMethodName       = "/dynamics.dynamics/DeleteComment"
+	Dynamics_DeleteCommentReplay_FullMethodName = "/dynamics.dynamics/DeleteCommentReplay"
+	Dynamics_CreateNotification_FullMethodName  = "/dynamics.dynamics/CreateNotification"
+	Dynamics_ListNotifications_FullMethodName   = "/dynamics.dynamics/ListNotifications"
+	Dynamics_GetUnreadCount_FullMethodName      = "/dynamics.dynamics/GetUnreadCount"
 )
 
 // DynamicsClient is the client API for Dynamics service.
@@ -50,6 +58,22 @@ type DynamicsClient interface {
 	SetCover(ctx context.Context, in *SetCoverRequest, opts ...grpc.CallOption) (*Empty, error)
 	// 浏览可见动态流（根据权限过滤+分页）
 	ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
+	// 创建评论
+	CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*Empty, error)
+	// 创建评论回复
+	CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error)
+	// 更新评论
+	UpdateComment(ctx context.Context, in *UpdateCommentReq, opts ...grpc.CallOption) (*Empty, error)
+	// 更新评论回复
+	UpdateCommentReplay(ctx context.Context, in *UpdateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error)
+	// 更新通知
+	UpdateNotification(ctx context.Context, in *UpdateNotificationReq, opts ...grpc.CallOption) (*Empty, error)
+	// 删除评论
+	DeleteComment(ctx context.Context, in *DeleteCommentReq, opts ...grpc.CallOption) (*Empty, error)
+	// 删除评论回复
+	DeleteCommentReplay(ctx context.Context, in *DeleteCommentReplayReq, opts ...grpc.CallOption) (*Empty, error)
+	// 创建通知
+	CreateNotification(ctx context.Context, in *CreateNotificationReq, opts ...grpc.CallOption) (*Empty, error)
 	// 获取通知列表（分页）
 	ListNotifications(ctx context.Context, in *ListNotificationsRequest, opts ...grpc.CallOption) (*ListNotificationsResponse, error)
 	// 新增：获取未读通知数量
@@ -134,6 +158,86 @@ func (c *dynamicsClient) ListVisiblePosts(ctx context.Context, in *ListVisiblePo
 	return out, nil
 }
 
+func (c *dynamicsClient) CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Dynamics_CreateComment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Dynamics_CreateCommentReplay_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) UpdateComment(ctx context.Context, in *UpdateCommentReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Dynamics_UpdateComment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) UpdateCommentReplay(ctx context.Context, in *UpdateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Dynamics_UpdateCommentReplay_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) UpdateNotification(ctx context.Context, in *UpdateNotificationReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Dynamics_UpdateNotification_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) DeleteComment(ctx context.Context, in *DeleteCommentReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Dynamics_DeleteComment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) DeleteCommentReplay(ctx context.Context, in *DeleteCommentReplayReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Dynamics_DeleteCommentReplay_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) CreateNotification(ctx context.Context, in *CreateNotificationReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Dynamics_CreateNotification_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *dynamicsClient) ListNotifications(ctx context.Context, in *ListNotificationsRequest, opts ...grpc.CallOption) (*ListNotificationsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListNotificationsResponse)
@@ -174,6 +278,22 @@ type DynamicsServer interface {
 	SetCover(context.Context, *SetCoverRequest) (*Empty, error)
 	// 浏览可见动态流（根据权限过滤+分页）
 	ListVisiblePosts(context.Context, *ListVisiblePostsRequest) (*PostListResponse, error)
+	// 创建评论
+	CreateComment(context.Context, *CreateCommentReq) (*Empty, error)
+	// 创建评论回复
+	CreateCommentReplay(context.Context, *CreateCommentReplayReq) (*Empty, error)
+	// 更新评论
+	UpdateComment(context.Context, *UpdateCommentReq) (*Empty, error)
+	// 更新评论回复
+	UpdateCommentReplay(context.Context, *UpdateCommentReplayReq) (*Empty, error)
+	// 更新通知
+	UpdateNotification(context.Context, *UpdateNotificationReq) (*Empty, error)
+	// 删除评论
+	DeleteComment(context.Context, *DeleteCommentReq) (*Empty, error)
+	// 删除评论回复
+	DeleteCommentReplay(context.Context, *DeleteCommentReplayReq) (*Empty, error)
+	// 创建通知
+	CreateNotification(context.Context, *CreateNotificationReq) (*Empty, error)
 	// 获取通知列表（分页）
 	ListNotifications(context.Context, *ListNotificationsRequest) (*ListNotificationsResponse, error)
 	// 新增：获取未读通知数量
@@ -208,6 +328,30 @@ func (UnimplementedDynamicsServer) SetCover(context.Context, *SetCoverRequest) (
 }
 func (UnimplementedDynamicsServer) ListVisiblePosts(context.Context, *ListVisiblePostsRequest) (*PostListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListVisiblePosts not implemented")
+}
+func (UnimplementedDynamicsServer) CreateComment(context.Context, *CreateCommentReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateComment not implemented")
+}
+func (UnimplementedDynamicsServer) CreateCommentReplay(context.Context, *CreateCommentReplayReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCommentReplay not implemented")
+}
+func (UnimplementedDynamicsServer) UpdateComment(context.Context, *UpdateCommentReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateComment not implemented")
+}
+func (UnimplementedDynamicsServer) UpdateCommentReplay(context.Context, *UpdateCommentReplayReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCommentReplay not implemented")
+}
+func (UnimplementedDynamicsServer) UpdateNotification(context.Context, *UpdateNotificationReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateNotification not implemented")
+}
+func (UnimplementedDynamicsServer) DeleteComment(context.Context, *DeleteCommentReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteComment not implemented")
+}
+func (UnimplementedDynamicsServer) DeleteCommentReplay(context.Context, *DeleteCommentReplayReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteCommentReplay not implemented")
+}
+func (UnimplementedDynamicsServer) CreateNotification(context.Context, *CreateNotificationReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateNotification not implemented")
 }
 func (UnimplementedDynamicsServer) ListNotifications(context.Context, *ListNotificationsRequest) (*ListNotificationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListNotifications not implemented")
@@ -362,6 +506,150 @@ func _Dynamics_ListVisiblePosts_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Dynamics_CreateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCommentReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).CreateComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_CreateComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).CreateComment(ctx, req.(*CreateCommentReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_CreateCommentReplay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCommentReplayReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).CreateCommentReplay(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_CreateCommentReplay_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).CreateCommentReplay(ctx, req.(*CreateCommentReplayReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_UpdateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCommentReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).UpdateComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_UpdateComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).UpdateComment(ctx, req.(*UpdateCommentReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_UpdateCommentReplay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCommentReplayReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).UpdateCommentReplay(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_UpdateCommentReplay_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).UpdateCommentReplay(ctx, req.(*UpdateCommentReplayReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_UpdateNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateNotificationReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).UpdateNotification(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_UpdateNotification_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).UpdateNotification(ctx, req.(*UpdateNotificationReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_DeleteComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCommentReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).DeleteComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_DeleteComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).DeleteComment(ctx, req.(*DeleteCommentReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_DeleteCommentReplay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCommentReplayReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).DeleteCommentReplay(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_DeleteCommentReplay_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).DeleteCommentReplay(ctx, req.(*DeleteCommentReplayReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_CreateNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateNotificationReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).CreateNotification(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_CreateNotification_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).CreateNotification(ctx, req.(*CreateNotificationReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Dynamics_ListNotifications_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListNotificationsRequest)
 	if err := dec(in); err != nil {
@@ -432,6 +720,38 @@ var Dynamics_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListVisiblePosts",
 			Handler:    _Dynamics_ListVisiblePosts_Handler,
+		},
+		{
+			MethodName: "CreateComment",
+			Handler:    _Dynamics_CreateComment_Handler,
+		},
+		{
+			MethodName: "CreateCommentReplay",
+			Handler:    _Dynamics_CreateCommentReplay_Handler,
+		},
+		{
+			MethodName: "UpdateComment",
+			Handler:    _Dynamics_UpdateComment_Handler,
+		},
+		{
+			MethodName: "UpdateCommentReplay",
+			Handler:    _Dynamics_UpdateCommentReplay_Handler,
+		},
+		{
+			MethodName: "UpdateNotification",
+			Handler:    _Dynamics_UpdateNotification_Handler,
+		},
+		{
+			MethodName: "DeleteComment",
+			Handler:    _Dynamics_DeleteComment_Handler,
+		},
+		{
+			MethodName: "DeleteCommentReplay",
+			Handler:    _Dynamics_DeleteCommentReplay_Handler,
+		},
+		{
+			MethodName: "CreateNotification",
+			Handler:    _Dynamics_CreateNotification_Handler,
 		},
 		{
 			MethodName: "ListNotifications",

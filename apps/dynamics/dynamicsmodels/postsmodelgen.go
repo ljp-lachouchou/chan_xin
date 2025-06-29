@@ -50,6 +50,10 @@ func (m *defaultPostsModel) FindCanVisiablePosts(ctx context.Context,userId stri
 		"$or":bson.A{
 			bson.M{
 				"visibility":0,//公开
+				"$or": bson.A{
+					bson.M{"visibleTo": bson.M{"$size": 0}}, // 空数组（所有人可见）
+					bson.M{"visibleTo": bson.M{"$in": []string{userId}}}, // 包含当前用户
+				},
 			},
 			bson.M{//自己是作者
 				"userId":userId,

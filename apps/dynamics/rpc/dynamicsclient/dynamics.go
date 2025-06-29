@@ -14,7 +14,12 @@ import (
 )
 
 type (
+	CreateCommentReplayReq    = dynamics.CreateCommentReplayReq
+	CreateCommentReq          = dynamics.CreateCommentReq
+	CreateNotificationReq     = dynamics.CreateNotificationReq
 	CreatePostRequest         = dynamics.CreatePostRequest
+	DeleteCommentReplayReq    = dynamics.DeleteCommentReplayReq
+	DeleteCommentReq          = dynamics.DeleteCommentReq
 	DeletePostRequest         = dynamics.DeletePostRequest
 	Empty                     = dynamics.Empty
 	GetUnreadCountRequest     = dynamics.GetUnreadCountRequest
@@ -32,6 +37,9 @@ type (
 	PostListResponse          = dynamics.PostListResponse
 	PostMeta                  = dynamics.PostMeta
 	SetCoverRequest           = dynamics.SetCoverRequest
+	UpdateCommentReplayReq    = dynamics.UpdateCommentReplayReq
+	UpdateCommentReq          = dynamics.UpdateCommentReq
+	UpdateNotificationReq     = dynamics.UpdateNotificationReq
 
 	Dynamics interface {
 		// 创建动态（需提供内容和隐私设置）
@@ -48,6 +56,22 @@ type (
 		SetCover(ctx context.Context, in *SetCoverRequest, opts ...grpc.CallOption) (*Empty, error)
 		// 浏览可见动态流（根据权限过滤+分页）
 		ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
+		// 创建评论
+		CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*Empty, error)
+		// 创建评论回复
+		CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error)
+		// 更新评论
+		UpdateComment(ctx context.Context, in *UpdateCommentReq, opts ...grpc.CallOption) (*Empty, error)
+		// 更新评论回复
+		UpdateCommentReplay(ctx context.Context, in *UpdateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error)
+		// 更新通知
+		UpdateNotification(ctx context.Context, in *UpdateNotificationReq, opts ...grpc.CallOption) (*Empty, error)
+		// 删除评论
+		DeleteComment(ctx context.Context, in *DeleteCommentReq, opts ...grpc.CallOption) (*Empty, error)
+		// 删除评论回复
+		DeleteCommentReplay(ctx context.Context, in *DeleteCommentReplayReq, opts ...grpc.CallOption) (*Empty, error)
+		// 创建通知
+		CreateNotification(ctx context.Context, in *CreateNotificationReq, opts ...grpc.CallOption) (*Empty, error)
 		// 获取通知列表（分页）
 		ListNotifications(ctx context.Context, in *ListNotificationsRequest, opts ...grpc.CallOption) (*ListNotificationsResponse, error)
 		// 新增：获取未读通知数量
@@ -105,6 +129,54 @@ func (m *defaultDynamics) SetCover(ctx context.Context, in *SetCoverRequest, opt
 func (m *defaultDynamics) ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error) {
 	client := dynamics.NewDynamicsClient(m.cli.Conn())
 	return client.ListVisiblePosts(ctx, in, opts...)
+}
+
+// 创建评论
+func (m *defaultDynamics) CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.CreateComment(ctx, in, opts...)
+}
+
+// 创建评论回复
+func (m *defaultDynamics) CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.CreateCommentReplay(ctx, in, opts...)
+}
+
+// 更新评论
+func (m *defaultDynamics) UpdateComment(ctx context.Context, in *UpdateCommentReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.UpdateComment(ctx, in, opts...)
+}
+
+// 更新评论回复
+func (m *defaultDynamics) UpdateCommentReplay(ctx context.Context, in *UpdateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.UpdateCommentReplay(ctx, in, opts...)
+}
+
+// 更新通知
+func (m *defaultDynamics) UpdateNotification(ctx context.Context, in *UpdateNotificationReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.UpdateNotification(ctx, in, opts...)
+}
+
+// 删除评论
+func (m *defaultDynamics) DeleteComment(ctx context.Context, in *DeleteCommentReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.DeleteComment(ctx, in, opts...)
+}
+
+// 删除评论回复
+func (m *defaultDynamics) DeleteCommentReplay(ctx context.Context, in *DeleteCommentReplayReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.DeleteCommentReplay(ctx, in, opts...)
+}
+
+// 创建通知
+func (m *defaultDynamics) CreateNotification(ctx context.Context, in *CreateNotificationReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.CreateNotification(ctx, in, opts...)
 }
 
 // 获取通知列表（分页）

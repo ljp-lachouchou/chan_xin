@@ -65,6 +65,54 @@ func (s *DynamicsServer) ListVisiblePosts(ctx context.Context, in *dynamics.List
 	return l.ListVisiblePosts(in)
 }
 
+// 创建评论
+func (s *DynamicsServer) CreateComment(ctx context.Context, in *dynamics.CreateCommentReq) (*dynamics.Empty, error) {
+	l := logic.NewCreateCommentLogic(ctx, s.svcCtx)
+	return l.CreateComment(in)
+}
+
+// 创建评论回复
+func (s *DynamicsServer) CreateCommentReplay(ctx context.Context, in *dynamics.CreateCommentReplayReq) (*dynamics.Empty, error) {
+	l := logic.NewCreateCommentReplayLogic(ctx, s.svcCtx)
+	return l.CreateCommentReplay(in)
+}
+
+// 更新评论
+func (s *DynamicsServer) UpdateComment(ctx context.Context, in *dynamics.UpdateCommentReq) (*dynamics.Empty, error) {
+	l := logic.NewUpdateCommentLogic(ctx, s.svcCtx)
+	return l.UpdateComment(in)
+}
+
+// 更新评论回复
+func (s *DynamicsServer) UpdateCommentReplay(ctx context.Context, in *dynamics.UpdateCommentReplayReq) (*dynamics.Empty, error) {
+	l := logic.NewUpdateCommentReplayLogic(ctx, s.svcCtx)
+	return l.UpdateCommentReplay(in)
+}
+
+// 更新通知
+func (s *DynamicsServer) UpdateNotification(ctx context.Context, in *dynamics.UpdateNotificationReq) (*dynamics.Empty, error) {
+	l := logic.NewUpdateNotificationLogic(ctx, s.svcCtx)
+	return l.UpdateNotification(in)
+}
+
+// 删除评论
+func (s *DynamicsServer) DeleteComment(ctx context.Context, in *dynamics.DeleteCommentReq) (*dynamics.Empty, error) {
+	l := logic.NewDeleteCommentLogic(ctx, s.svcCtx)
+	return l.DeleteComment(in)
+}
+
+// 删除评论回复
+func (s *DynamicsServer) DeleteCommentReplay(ctx context.Context, in *dynamics.DeleteCommentReplayReq) (*dynamics.Empty, error) {
+	l := logic.NewDeleteCommentReplayLogic(ctx, s.svcCtx)
+	return l.DeleteCommentReplay(in)
+}
+
+// 创建通知
+func (s *DynamicsServer) CreateNotification(ctx context.Context, in *dynamics.CreateNotificationReq) (*dynamics.Empty, error) {
+	l := logic.NewCreateNotificationLogic(ctx, s.svcCtx)
+	return l.CreateNotification(in)
+}
+
 // 获取通知列表（分页）
 func (s *DynamicsServer) ListNotifications(ctx context.Context, in *dynamics.ListNotificationsRequest) (*dynamics.ListNotificationsResponse, error) {
 	l := logic.NewListNotificationsLogic(ctx, s.svcCtx)

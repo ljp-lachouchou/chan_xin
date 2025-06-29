@@ -24,7 +24,7 @@ func NewCreatePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Create
 	}
 }
 
-// 创建动态（需提供内容和隐私设置）
+// 创建动态（需提供内容和隐私设置） 在api层添加好友的权限过滤
 func (l *CreatePostLogic) CreatePost(in *dynamics.CreatePostRequest) (*dynamics.Post, error) {
 	data := dynamicsmodels.Posts{
 		UserId:       in.UserId,

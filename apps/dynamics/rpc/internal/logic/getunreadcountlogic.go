@@ -25,7 +25,6 @@ func NewGetUnreadCountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 // 新增：获取未读通知数量
 func (l *GetUnreadCountLogic) GetUnreadCount(in *dynamics.GetUnreadCountRequest) (*dynamics.GetUnreadCountResponse, error) {
-	// todo: add your logic here and delete this line
 
 	return &dynamics.GetUnreadCountResponse{}, nil
 }
