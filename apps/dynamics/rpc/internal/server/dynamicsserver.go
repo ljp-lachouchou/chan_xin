@@ -119,6 +119,18 @@ func (s *DynamicsServer) ListNotifications(ctx context.Context, in *dynamics.Lis
 	return l.ListNotifications(in)
 }
 
+// 单个post信息
+func (s *DynamicsServer) GetPostInfo(ctx context.Context, in *dynamics.GetPostInfoReq) (*dynamics.Post, error) {
+	l := logic.NewGetPostInfoLogic(ctx, s.svcCtx)
+	return l.GetPostInfo(in)
+}
+
+// 根据type和userid查找
+func (s *DynamicsServer) ListNotificationsByUserIdAndType(ctx context.Context, in *dynamics.ListNotificationsByUserIdAndTypeReq) (*dynamics.ListNotificationsByUserIdAndTypeReqResponse, error) {
+	l := logic.NewListNotificationsByUserIdAndTypeLogic(ctx, s.svcCtx)
+	return l.ListNotificationsByUserIdAndType(in)
+}
+
 // 新增：获取未读通知数量
 func (s *DynamicsServer) GetUnreadCount(ctx context.Context, in *dynamics.GetUnreadCountRequest) (*dynamics.GetUnreadCountResponse, error) {
 	l := logic.NewGetUnreadCountLogic(ctx, s.svcCtx)

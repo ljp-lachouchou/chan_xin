@@ -113,53 +113,6 @@ message UpdateCommentReplayReq {
 message UpdateNotificationReq {
   string userId = 1;
 }
-// ================== 服务接口 ==================
-service dynamics {
-  // 创建动态（需提供内容和隐私设置）
-  rpc CreatePost (CreatePostRequest) returns (Post);
-
-  // 删除动态（仅创建者可操作）
-  rpc DeletePost (DeletePostRequest) returns (Empty);
-
-  // 点赞/取消点赞
-  rpc ToggleLike (LikeAction) returns (Empty);
-
-  // 置顶/取消置顶动态
-  rpc PinPost (PinPostRequest) returns (Empty);
-
-  // 获取用户所有动态（按置顶状态+时间倒序）
-  rpc ListUserPosts (ListUserPostsRequest) returns (PostListResponse);
-
-  // 设置个人动态封面（用于个人主页）
-  rpc SetCover (SetCoverRequest) returns (Empty);
-
-  // 浏览可见动态流（根据权限过滤+分页）
-  rpc ListVisiblePosts (ListVisiblePostsRequest) returns (PostListResponse);
-
-  //创建评论
-  rpc CreateComment(CreateCommentReq) returns(Empty);
-  //创建评论回复
-  rpc CreateCommentReplay(CreateCommentReplayReq) returns(Empty);
-  //更新评论
-  rpc UpdateComment(UpdateCommentReq) returns(Empty);
-  //更新评论回复
-  rpc UpdateCommentReplay(UpdateCommentReplayReq) returns(Empty);
-  //更新通知
-  rpc UpdateNotification(UpdateNotificationReq) returns(Empty);
-  //删除评论
-  rpc DeleteComment(DeleteCommentReq) returns(Empty);
-  //删除评论回复
-  rpc DeleteCommentReplay(DeleteCommentReplayReq) returns(Empty);
-  //创建通知
-  rpc CreateNotification(CreateNotificationReq) returns(Empty);
-
-  // 获取通知列表（分页）
-  rpc ListNotifications (ListNotificationsRequest) returns (ListNotificationsResponse);
-
-  // 新增：获取未读通知数量
-  rpc GetUnreadCount (GetUnreadCountRequest) returns (GetUnreadCountResponse);
-}
-
 // ================== 请求/响应结构 ==================
 message CreatePostRequest {
   string user_id = 1;      // 发布者ID
@@ -203,7 +156,16 @@ message ListNotificationsResponse {
   repeated Notification notifications = 1; // 通知列表
   string next_page_token = 2;              // 下一页令牌
 }
-
+message ListNotificationsByUserIdAndTypeReq {
+  string userId = 1;
+  NotificationType type = 2;
+}
+message GetPostInfoReq {
+  string postId = 1;
+}
+message ListNotificationsByUserIdAndTypeReqResponse {
+  repeated Notification notifications = 1; // 通知列表
+}
 // 新增：未读通知计数请求
 message GetUnreadCountRequest {
   string user_id = 1;  // 用户ID
@@ -213,3 +175,62 @@ message GetUnreadCountRequest {
 message GetUnreadCountResponse {
   int32 unread_count = 1;  // 未读通知总数
 }
+// ================== 服务接口 ==================
+service dynamics {
+  // 创建动态（需提供内容和隐私设置）
+  rpc CreatePost (CreatePostRequest) returns (Post);
+
+  // 删除动态（仅创建者可操作）
+  rpc DeletePost (DeletePostRequest) returns (Empty);
+
+  // 点赞/取消点赞
+  rpc ToggleLike (LikeAction) returns (Empty);
+
+  // 置顶/取消置顶动态
+  rpc PinPost (PinPostRequest) returns (Empty);
+
+  // 获取用户所有动态（按置顶状态+时间倒序）
+  rpc ListUserPosts (ListUserPostsRequest) returns (PostListResponse);
+
+  // 设置个人动态封面（用于个人主页）
+  rpc SetCover (SetCoverRequest) returns (Empty);
+
+  // 浏览可见动态流（根据权限过滤+分页）
+  rpc ListVisiblePosts (ListVisiblePostsRequest) returns (PostListResponse);
+
+  //创建评论
+  rpc CreateComment(CreateCommentReq) returns(Empty);
+  //创建评论回复
+  rpc CreateCommentReplay(CreateCommentReplayReq) returns(Empty);
+  //更新评论
+  rpc UpdateComment(UpdateCommentReq) returns(Empty);
+  //更新评论回复
+  rpc UpdateCommentReplay(UpdateCommentReplayReq) returns(Empty);
+  //更新通知
+  rpc UpdateNotification(UpdateNotificationReq) returns(Empty);
+  //删除评论
+  rpc DeleteComment(DeleteCommentReq) returns(Empty);
+  //删除评论回复
+  rpc DeleteCommentReplay(DeleteCommentReplayReq) returns(Empty);
+  //创建通知
+  rpc CreateNotification(CreateNotificationReq) returns(Empty);
+
+  // 获取通知列表（分页）
+  rpc ListNotifications (ListNotificationsRequest) returns (ListNotificationsResponse);
+  //单个post信息
+  rpc GetPostInfo(GetPostInfoReq) returns(Post);
+  //点赞列表
+  rpc ListLikeByPostId(GetPostInfoReq) returns();
+
+  //评论列表
+  rpc ListCommentByPostId(GetPostInfoReq) returns();
+
+  //根据type和userid查找
+  rpc ListNotificationsByUserIdAndType(ListNotificationsByUserIdAndTypeReq) returns(ListNotificationsByUserIdAndTypeReqResponse);
+  // 新增：获取未读通知数量
+  rpc GetUnreadCount (GetUnreadCountRequest) returns (GetUnreadCountResponse);
+}
+message Ids {
+  repeated string ids = 1;
+}
+

@@ -14,32 +14,35 @@ import (
 )
 
 type (
-	CreateCommentReplayReq    = dynamics.CreateCommentReplayReq
-	CreateCommentReq          = dynamics.CreateCommentReq
-	CreateNotificationReq     = dynamics.CreateNotificationReq
-	CreatePostRequest         = dynamics.CreatePostRequest
-	DeleteCommentReplayReq    = dynamics.DeleteCommentReplayReq
-	DeleteCommentReq          = dynamics.DeleteCommentReq
-	DeletePostRequest         = dynamics.DeletePostRequest
-	Empty                     = dynamics.Empty
-	GetUnreadCountRequest     = dynamics.GetUnreadCountRequest
-	GetUnreadCountResponse    = dynamics.GetUnreadCountResponse
-	LikeAction                = dynamics.LikeAction
-	ListNotificationsRequest  = dynamics.ListNotificationsRequest
-	ListNotificationsResponse = dynamics.ListNotificationsResponse
-	ListUserPostsRequest      = dynamics.ListUserPostsRequest
-	ListVisiblePostsRequest   = dynamics.ListVisiblePostsRequest
-	Notification              = dynamics.Notification
-	Pagination                = dynamics.Pagination
-	PinPostRequest            = dynamics.PinPostRequest
-	Post                      = dynamics.Post
-	PostContent               = dynamics.PostContent
-	PostListResponse          = dynamics.PostListResponse
-	PostMeta                  = dynamics.PostMeta
-	SetCoverRequest           = dynamics.SetCoverRequest
-	UpdateCommentReplayReq    = dynamics.UpdateCommentReplayReq
-	UpdateCommentReq          = dynamics.UpdateCommentReq
-	UpdateNotificationReq     = dynamics.UpdateNotificationReq
+	CreateCommentReplayReq                      = dynamics.CreateCommentReplayReq
+	CreateCommentReq                            = dynamics.CreateCommentReq
+	CreateNotificationReq                       = dynamics.CreateNotificationReq
+	CreatePostRequest                           = dynamics.CreatePostRequest
+	DeleteCommentReplayReq                      = dynamics.DeleteCommentReplayReq
+	DeleteCommentReq                            = dynamics.DeleteCommentReq
+	DeletePostRequest                           = dynamics.DeletePostRequest
+	Empty                                       = dynamics.Empty
+	GetPostInfoReq                              = dynamics.GetPostInfoReq
+	GetUnreadCountRequest                       = dynamics.GetUnreadCountRequest
+	GetUnreadCountResponse                      = dynamics.GetUnreadCountResponse
+	LikeAction                                  = dynamics.LikeAction
+	ListNotificationsByUserIdAndTypeReq         = dynamics.ListNotificationsByUserIdAndTypeReq
+	ListNotificationsByUserIdAndTypeReqResponse = dynamics.ListNotificationsByUserIdAndTypeReqResponse
+	ListNotificationsRequest                    = dynamics.ListNotificationsRequest
+	ListNotificationsResponse                   = dynamics.ListNotificationsResponse
+	ListUserPostsRequest                        = dynamics.ListUserPostsRequest
+	ListVisiblePostsRequest                     = dynamics.ListVisiblePostsRequest
+	Notification                                = dynamics.Notification
+	Pagination                                  = dynamics.Pagination
+	PinPostRequest                              = dynamics.PinPostRequest
+	Post                                        = dynamics.Post
+	PostContent                                 = dynamics.PostContent
+	PostListResponse                            = dynamics.PostListResponse
+	PostMeta                                    = dynamics.PostMeta
+	SetCoverRequest                             = dynamics.SetCoverRequest
+	UpdateCommentReplayReq                      = dynamics.UpdateCommentReplayReq
+	UpdateCommentReq                            = dynamics.UpdateCommentReq
+	UpdateNotificationReq                       = dynamics.UpdateNotificationReq
 
 	Dynamics interface {
 		// 创建动态（需提供内容和隐私设置）
@@ -74,6 +77,10 @@ type (
 		CreateNotification(ctx context.Context, in *CreateNotificationReq, opts ...grpc.CallOption) (*Empty, error)
 		// 获取通知列表（分页）
 		ListNotifications(ctx context.Context, in *ListNotificationsRequest, opts ...grpc.CallOption) (*ListNotificationsResponse, error)
+		// 单个post信息
+		GetPostInfo(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Post, error)
+		// 根据type和userid查找
+		ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 		// 新增：获取未读通知数量
 		GetUnreadCount(ctx context.Context, in *GetUnreadCountRequest, opts ...grpc.CallOption) (*GetUnreadCountResponse, error)
 	}
@@ -183,6 +190,18 @@ func (m *defaultDynamics) CreateNotification(ctx context.Context, in *CreateNoti
 func (m *defaultDynamics) ListNotifications(ctx context.Context, in *ListNotificationsRequest, opts ...grpc.CallOption) (*ListNotificationsResponse, error) {
 	client := dynamics.NewDynamicsClient(m.cli.Conn())
 	return client.ListNotifications(ctx, in, opts...)
+}
+
+// 单个post信息
+func (m *defaultDynamics) GetPostInfo(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Post, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.GetPostInfo(ctx, in, opts...)
+}
+
+// 根据type和userid查找
+func (m *defaultDynamics) ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.ListNotificationsByUserIdAndType(ctx, in, opts...)
 }
 
 // 新增：获取未读通知数量

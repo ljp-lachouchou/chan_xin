@@ -19,23 +19,25 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Dynamics_CreatePost_FullMethodName          = "/dynamics.dynamics/CreatePost"
-	Dynamics_DeletePost_FullMethodName          = "/dynamics.dynamics/DeletePost"
-	Dynamics_ToggleLike_FullMethodName          = "/dynamics.dynamics/ToggleLike"
-	Dynamics_PinPost_FullMethodName             = "/dynamics.dynamics/PinPost"
-	Dynamics_ListUserPosts_FullMethodName       = "/dynamics.dynamics/ListUserPosts"
-	Dynamics_SetCover_FullMethodName            = "/dynamics.dynamics/SetCover"
-	Dynamics_ListVisiblePosts_FullMethodName    = "/dynamics.dynamics/ListVisiblePosts"
-	Dynamics_CreateComment_FullMethodName       = "/dynamics.dynamics/CreateComment"
-	Dynamics_CreateCommentReplay_FullMethodName = "/dynamics.dynamics/CreateCommentReplay"
-	Dynamics_UpdateComment_FullMethodName       = "/dynamics.dynamics/UpdateComment"
-	Dynamics_UpdateCommentReplay_FullMethodName = "/dynamics.dynamics/UpdateCommentReplay"
-	Dynamics_UpdateNotification_FullMethodName  = "/dynamics.dynamics/UpdateNotification"
-	Dynamics_DeleteComment_FullMethodName       = "/dynamics.dynamics/DeleteComment"
-	Dynamics_DeleteCommentReplay_FullMethodName = "/dynamics.dynamics/DeleteCommentReplay"
-	Dynamics_CreateNotification_FullMethodName  = "/dynamics.dynamics/CreateNotification"
-	Dynamics_ListNotifications_FullMethodName   = "/dynamics.dynamics/ListNotifications"
-	Dynamics_GetUnreadCount_FullMethodName      = "/dynamics.dynamics/GetUnreadCount"
+	Dynamics_CreatePost_FullMethodName                       = "/dynamics.dynamics/CreatePost"
+	Dynamics_DeletePost_FullMethodName                       = "/dynamics.dynamics/DeletePost"
+	Dynamics_ToggleLike_FullMethodName                       = "/dynamics.dynamics/ToggleLike"
+	Dynamics_PinPost_FullMethodName                          = "/dynamics.dynamics/PinPost"
+	Dynamics_ListUserPosts_FullMethodName                    = "/dynamics.dynamics/ListUserPosts"
+	Dynamics_SetCover_FullMethodName                         = "/dynamics.dynamics/SetCover"
+	Dynamics_ListVisiblePosts_FullMethodName                 = "/dynamics.dynamics/ListVisiblePosts"
+	Dynamics_CreateComment_FullMethodName                    = "/dynamics.dynamics/CreateComment"
+	Dynamics_CreateCommentReplay_FullMethodName              = "/dynamics.dynamics/CreateCommentReplay"
+	Dynamics_UpdateComment_FullMethodName                    = "/dynamics.dynamics/UpdateComment"
+	Dynamics_UpdateCommentReplay_FullMethodName              = "/dynamics.dynamics/UpdateCommentReplay"
+	Dynamics_UpdateNotification_FullMethodName               = "/dynamics.dynamics/UpdateNotification"
+	Dynamics_DeleteComment_FullMethodName                    = "/dynamics.dynamics/DeleteComment"
+	Dynamics_DeleteCommentReplay_FullMethodName              = "/dynamics.dynamics/DeleteCommentReplay"
+	Dynamics_CreateNotification_FullMethodName               = "/dynamics.dynamics/CreateNotification"
+	Dynamics_ListNotifications_FullMethodName                = "/dynamics.dynamics/ListNotifications"
+	Dynamics_GetPostInfo_FullMethodName                      = "/dynamics.dynamics/GetPostInfo"
+	Dynamics_ListNotificationsByUserIdAndType_FullMethodName = "/dynamics.dynamics/ListNotificationsByUserIdAndType"
+	Dynamics_GetUnreadCount_FullMethodName                   = "/dynamics.dynamics/GetUnreadCount"
 )
 
 // DynamicsClient is the client API for Dynamics service.
@@ -76,6 +78,10 @@ type DynamicsClient interface {
 	CreateNotification(ctx context.Context, in *CreateNotificationReq, opts ...grpc.CallOption) (*Empty, error)
 	// 获取通知列表（分页）
 	ListNotifications(ctx context.Context, in *ListNotificationsRequest, opts ...grpc.CallOption) (*ListNotificationsResponse, error)
+	// 单个post信息
+	GetPostInfo(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Post, error)
+	// 根据type和userid查找
+	ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 	// 新增：获取未读通知数量
 	GetUnreadCount(ctx context.Context, in *GetUnreadCountRequest, opts ...grpc.CallOption) (*GetUnreadCountResponse, error)
 }
@@ -248,6 +254,26 @@ func (c *dynamicsClient) ListNotifications(ctx context.Context, in *ListNotifica
 	return out, nil
 }
 
+func (c *dynamicsClient) GetPostInfo(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Post, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Post)
+	err := c.cc.Invoke(ctx, Dynamics_GetPostInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListNotificationsByUserIdAndTypeReqResponse)
+	err := c.cc.Invoke(ctx, Dynamics_ListNotificationsByUserIdAndType_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *dynamicsClient) GetUnreadCount(ctx context.Context, in *GetUnreadCountRequest, opts ...grpc.CallOption) (*GetUnreadCountResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetUnreadCountResponse)
@@ -296,6 +322,10 @@ type DynamicsServer interface {
 	CreateNotification(context.Context, *CreateNotificationReq) (*Empty, error)
 	// 获取通知列表（分页）
 	ListNotifications(context.Context, *ListNotificationsRequest) (*ListNotificationsResponse, error)
+	// 单个post信息
+	GetPostInfo(context.Context, *GetPostInfoReq) (*Post, error)
+	// 根据type和userid查找
+	ListNotificationsByUserIdAndType(context.Context, *ListNotificationsByUserIdAndTypeReq) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 	// 新增：获取未读通知数量
 	GetUnreadCount(context.Context, *GetUnreadCountRequest) (*GetUnreadCountResponse, error)
 	mustEmbedUnimplementedDynamicsServer()
@@ -355,6 +385,12 @@ func (UnimplementedDynamicsServer) CreateNotification(context.Context, *CreateNo
 }
 func (UnimplementedDynamicsServer) ListNotifications(context.Context, *ListNotificationsRequest) (*ListNotificationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListNotifications not implemented")
+}
+func (UnimplementedDynamicsServer) GetPostInfo(context.Context, *GetPostInfoReq) (*Post, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPostInfo not implemented")
+}
+func (UnimplementedDynamicsServer) ListNotificationsByUserIdAndType(context.Context, *ListNotificationsByUserIdAndTypeReq) (*ListNotificationsByUserIdAndTypeReqResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListNotificationsByUserIdAndType not implemented")
 }
 func (UnimplementedDynamicsServer) GetUnreadCount(context.Context, *GetUnreadCountRequest) (*GetUnreadCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUnreadCount not implemented")
@@ -668,6 +704,42 @@ func _Dynamics_ListNotifications_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Dynamics_GetPostInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPostInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).GetPostInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_GetPostInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).GetPostInfo(ctx, req.(*GetPostInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_ListNotificationsByUserIdAndType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListNotificationsByUserIdAndTypeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).ListNotificationsByUserIdAndType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_ListNotificationsByUserIdAndType_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).ListNotificationsByUserIdAndType(ctx, req.(*ListNotificationsByUserIdAndTypeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Dynamics_GetUnreadCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUnreadCountRequest)
 	if err := dec(in); err != nil {
@@ -756,6 +828,14 @@ var Dynamics_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListNotifications",
 			Handler:    _Dynamics_ListNotifications_Handler,
+		},
+		{
+			MethodName: "GetPostInfo",
+			Handler:    _Dynamics_GetPostInfo_Handler,
+		},
+		{
+			MethodName: "ListNotificationsByUserIdAndType",
+			Handler:    _Dynamics_ListNotificationsByUserIdAndType_Handler,
 		},
 		{
 			MethodName: "GetUnreadCount",

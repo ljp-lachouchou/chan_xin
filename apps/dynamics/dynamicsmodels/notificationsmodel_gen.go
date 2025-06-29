@@ -36,7 +36,9 @@ type (
 		UpdateByUserId(ctx context.Context, userId string) error
 		Delete(ctx context.Context, id string) error
 		FindByUserIdWithPage(ctx context.Context, userId string,limit,offset int32) ([]*Notifications, error)
+		FindByUserIdAndPostId(ctx context.Context, userId string, postId string) (*Notifications, error)
 		FindByUserIdAndIsNotRead(ctx context.Context, userId string) (int32, error)
+		FindByUserIdAndType(ctx context.Context, userId,userType string) ([]*Notifications, error)
 	}
 
 	defaultNotificationsModel struct {
@@ -70,6 +72,32 @@ func (m *defaultNotificationsModel) Delete(ctx context.Context, id string) error
 		return conn.ExecCtx(ctx, query, id)
 	}, notificationsIdKey)
 	return err
+}
+func (m *defaultNotificationsModel) FindByUserIdAndPostId(ctx context.Context, userId string, postId string) (*Notifications, error) {
+	var resp Notifications
+	query := fmt.Sprintf("SELECT %s FROM %s WHERE `user_id` = ? and `post_id` = ?", notificationsRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx,&resp,query,userId,postId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+func (m *defaultNotificationsModel) FindByUserIdAndType(ctx context.Context, userId,userType string) ([]*Notifications, error) {
+	var resp []*Notifications
+	query := fmt.Sprintf("SELECT %s FROM %s WHERE `user_id` = ? AND `type` = ?", notificationsRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId, userType)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 func (m *defaultNotificationsModel) FindByUserIdWithPage(ctx context.Context, userId string,limit,offset int32) ([]*Notifications, error) {
 	var resp []*Notifications
