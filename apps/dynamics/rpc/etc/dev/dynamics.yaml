@@ -1,0 +1,18 @@
+Name: dynamics.rpc
+ListenOn: 0.0.0.0:10003
+Etcd:
+  Hosts:
+    - 114.215.194.88:3379
+  Key: dynamics.rpc
+Mongo:
+  Url: "mongodb://root:chan-xin@114.215.194.88:47017"
+  Db: chan-xin
+Cache:
+  - Host: 114.215.194.88:16379
+    Type: node
+    pass: chan-xin
+Mysql:
+  DataSource: root:chan-xin@tcp(114.215.194.88:13306)/chan-xin?charset=utf8mb4&parseTime=True&loc=Local
+JwtAuth:
+  AccessSecret: github.com/ljp-lachouchou/chan_xin/page_token
+  AccessExpire: 864000

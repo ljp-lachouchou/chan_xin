@@ -1,0 +1,17 @@
+Name: im.ws
+ListenOn: 0.0.0.0:10086
+Mongo:
+  Url: "mongodb://root:chan-xin@114.215.194.88:47017"
+  Db: chan-xin
+MsgChatTransfer: #消费者配置信息
+  Topic: msgChatTransfer #会话
+  Addrs:  #kafka连接地址
+    - 114.215.194.88:9092
+Jwt:
+  AccessSecret: github.com/ljp-lachouchou/chan_xin
+  AccessExpire: 864000
+SocialRpc:
+  Etcd:
+    Hosts:
+      - 114.215.194.88:3379
+    Key: social.rpc

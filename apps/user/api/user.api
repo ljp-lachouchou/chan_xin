@@ -1,0 +1,86 @@
+syntax = "v1"
+
+info (
+	title:  "用户api"
+	author: "ljp"
+)
+
+type (
+	User {
+		Id       string `json:"id"`
+		Phone    string `json:"phone""`
+		Nickname string `json:"nickname"`
+		Sex      byte   `json:"sex"`
+		Avatar   string `json:"avatar"`
+	}
+	RegisterReq {
+		Phone    string `json:"phone"`
+		Password string `json:"password"`
+		Nickname string `json:"nickname"`
+		Sex      byte   `json:"sex"`
+		Avatar   string `json:"avatar"`
+	}
+	RegisterResp {
+		token  string `json:"token"`
+		expire int64  `json:"expire"`
+	}
+	LoginReq {
+		phone    string `json:"phone"`
+		password string `json:"password"`
+	}
+	LoginResp {
+		id     string `json:"id"`
+		token  string `json:"token"`
+		expire int64  `json:"expire"`
+	}
+	UserInfoReq {
+		id string `json:"id"`
+	}
+	UserInfoResp {
+		Info User `json:"info"`
+	}
+	UpdateReq {
+		nickname *string `json:"nickname,optional"`
+		avatar   *string `json:"avatar,optional"`
+		sex      *int32  `json:"sex,optional"`
+	}
+	UpdateResp {
+		Info User `json:"info"`
+	}
+)
+
+@server (
+	prefix: v1/user
+	group:  user
+)
+service user {
+	@doc "用户注册"
+	@handler register
+	post /register (RegisterReq) returns (RegisterResp)
+
+	@doc "用户登入"
+	@handler login
+	post /login (LoginReq) returns (LoginResp)
+
+	@doc "保持与etcd的连接"
+	@handler pingRpc
+	get /ping
+}
+
+@server (
+	prefix:     v1/user
+	group:      user
+	middleware: WriteTokenToHeader
+	middleware: TokenRevokeCheck
+	jwt:        JwtAuth
+)
+service user {
+	@doc "单个用户查询"
+	@handler userInfo
+	get /userinfo (UserInfoReq) returns (UserInfoResp)
+
+	@doc "更新用户"
+	@handler update
+	patch /update (UpdateReq) returns (UpdateResp)
+}
+

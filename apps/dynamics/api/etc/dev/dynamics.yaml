@@ -1,0 +1,8 @@
+Name: dynamics
+Host: 0.0.0.0
+Port: 20003
+DynamicsRpc:
+  Etcd:
+    Hosts:
+      - 114.215.194.88:3379
+    Key: dynamics.rpc
