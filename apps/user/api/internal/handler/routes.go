@@ -4,7 +4,6 @@
 package handler
 
 import (
-	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/middleware"
 	"net/http"
 
 	user "github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/handler/user"
@@ -15,32 +14,35 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				// 用户登入
-				Method:  http.MethodPost,
-				Path:    "/login",
-				Handler: user.LoginHandler(serverCtx),
-			},
-			{
-				// 保持与etcd的连接
-				Method:  http.MethodGet,
-				Path:    "/ping",
-				Handler: user.PingRpcHandler(serverCtx),
-			},
-			{
-				// 用户注册
-				Method:  http.MethodPost,
-				Path:    "/register",
-				Handler: user.RegisterHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.LimitMiddleware},
+			[]rest.Route{
+				{
+					// 用户登入
+					Method:  http.MethodPost,
+					Path:    "/login",
+					Handler: user.LoginHandler(serverCtx),
+				},
+				{
+					// 保持与etcd的连接
+					Method:  http.MethodGet,
+					Path:    "/ping",
+					Handler: user.PingRpcHandler(serverCtx),
+				},
+				{
+					// 用户注册
+					Method:  http.MethodPost,
+					Path:    "/register",
+					Handler: user.RegisterHandler(serverCtx),
+				},
+			}...,
+		),
 		rest.WithPrefix("/v1/user"),
 	)
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{middleware.NewTokenRevokeCheckMiddleware().Handle(serverCtx)},
+			[]rest.Middleware{serverCtx.TokenRevokeCheck},
 			[]rest.Route{
 				{
 					// 更新用户

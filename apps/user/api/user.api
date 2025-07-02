@@ -50,8 +50,9 @@ type (
 )
 
 @server (
-	prefix: v1/user
-	group:  user
+	prefix:     v1/user
+	group:      user
+	middleware: LimitMiddleware
 )
 service user {
 	@doc "用户注册"

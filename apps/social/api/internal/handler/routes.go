@@ -27,134 +27,140 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				// 申请好友
-				Method:  http.MethodPost,
-				Path:    "/applyFriend",
-				Handler: friend.ApplyFriendHandler(serverCtx),
-			},
-			{
-				// 删除好友
-				Method:  http.MethodDelete,
-				Path:    "/deleteFriend",
-				Handler: friend.DeleteFriendHandler(serverCtx),
-			},
-			{
-				// 获取你请求添加的好友列表
-				Method:  http.MethodGet,
-				Path:    "/getFriendApplyList",
-				Handler: friend.GetFriendApplyListHandler(serverCtx),
-			},
-			{
-				// 获取好友信息
-				Method:  http.MethodGet,
-				Path:    "/getFriendInfo",
-				Handler: friend.GetFriendInfoHandler(serverCtx),
-			},
-			{
-				// 获取用户好友列表
-				Method:  http.MethodGet,
-				Path:    "/getFriendList",
-				Handler: friend.GetFriendListHandler(serverCtx),
-			},
-			{
-				// 目标方处理申请
-				Method:  http.MethodPost,
-				Path:    "/handleFriendApply",
-				Handler: friend.HandleFriendApplyHandler(serverCtx),
-			},
-			{
-				// 更新我对此好友的状态
-				Method:  http.MethodPut,
-				Path:    "/updateFriendStatus",
-				Handler: friend.UpdateFriendStatusHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.LimitMiddleware},
+			[]rest.Route{
+				{
+					// 申请好友
+					Method:  http.MethodPost,
+					Path:    "/applyFriend",
+					Handler: friend.ApplyFriendHandler(serverCtx),
+				},
+				{
+					// 删除好友
+					Method:  http.MethodDelete,
+					Path:    "/deleteFriend",
+					Handler: friend.DeleteFriendHandler(serverCtx),
+				},
+				{
+					// 获取你请求添加的好友列表
+					Method:  http.MethodGet,
+					Path:    "/getFriendApplyList",
+					Handler: friend.GetFriendApplyListHandler(serverCtx),
+				},
+				{
+					// 获取好友信息
+					Method:  http.MethodGet,
+					Path:    "/getFriendInfo",
+					Handler: friend.GetFriendInfoHandler(serverCtx),
+				},
+				{
+					// 获取用户好友列表
+					Method:  http.MethodGet,
+					Path:    "/getFriendList",
+					Handler: friend.GetFriendListHandler(serverCtx),
+				},
+				{
+					// 目标方处理申请
+					Method:  http.MethodPost,
+					Path:    "/handleFriendApply",
+					Handler: friend.HandleFriendApplyHandler(serverCtx),
+				},
+				{
+					// 更新我对此好友的状态
+					Method:  http.MethodPut,
+					Path:    "/updateFriendStatus",
+					Handler: friend.UpdateFriendStatusHandler(serverCtx),
+				},
+			}...,
+		),
 		rest.WithPrefix("/v1/social/firend"),
 	)
 
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				// 某人申请入群
-				Method:  http.MethodPost,
-				Path:    "/applyGroup",
-				Handler: group.ApplyGroupHandler(serverCtx),
-			},
-			{
-				// 创建群
-				Method:  http.MethodPost,
-				Path:    "/createGroup",
-				Handler: group.CreateGroupHandler(serverCtx),
-			},
-			{
-				// 获取管理员
-				Method:  http.MethodGet,
-				Path:    "/getGroupAdmins",
-				Handler: group.GetGroupAdminsHandler(serverCtx),
-			},
-			{
-				// 获取群信息
-				Method:  http.MethodGet,
-				Path:    "/getGroupInfo",
-				Handler: group.GetGroupInfoHandler(serverCtx),
-			},
-			{
-				// 获取群里成员
-				Method:  http.MethodGet,
-				Path:    "/getGroupMembers",
-				Handler: group.GetGroupMembersHandler(serverCtx),
-			},
-			{
-				// 群处理申请
-				Method:  http.MethodPost,
-				Path:    "/handleGroupApply",
-				Handler: group.HandleGroupApplyHandler(serverCtx),
-			},
-			{
-				// 被邀请者处理群申请
-				Method:  http.MethodPost,
-				Path:    "/handleGroupInvite",
-				Handler: group.HandleGroupInviteHandler(serverCtx),
-			},
-			{
-				// 邀请某人入群
-				Method:  http.MethodPost,
-				Path:    "/inviteToGroup",
-				Handler: group.InviteToGroupHandler(serverCtx),
-			},
-			{
-				// 设置管理员
-				Method:  http.MethodPost,
-				Path:    "/manageGroupMember",
-				Handler: group.ManageGroupMemberHandler(serverCtx),
-			},
-			{
-				// 退出群/踢出群成员
-				Method:  http.MethodDelete,
-				Path:    "/quitGroup",
-				Handler: group.QuitGroupHandler(serverCtx),
-			},
-			{
-				// 移除管理员
-				Method:  http.MethodDelete,
-				Path:    "/removeAdmin",
-				Handler: group.RemoveAdminHandler(serverCtx),
-			},
-			{
-				// 群员的个性化设置
-				Method:  http.MethodPut,
-				Path:    "/setGroupMemberSetting",
-				Handler: group.SetGroupMemberSettingHandler(serverCtx),
-			},
-			{
-				// 更新某人对此群的状态
-				Method:  http.MethodPut,
-				Path:    "/updateGroupStatus",
-				Handler: group.UpdateGroupStatusHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.LimitMiddleware},
+			[]rest.Route{
+				{
+					// 某人申请入群
+					Method:  http.MethodPost,
+					Path:    "/applyGroup",
+					Handler: group.ApplyGroupHandler(serverCtx),
+				},
+				{
+					// 创建群
+					Method:  http.MethodPost,
+					Path:    "/createGroup",
+					Handler: group.CreateGroupHandler(serverCtx),
+				},
+				{
+					// 获取管理员
+					Method:  http.MethodGet,
+					Path:    "/getGroupAdmins",
+					Handler: group.GetGroupAdminsHandler(serverCtx),
+				},
+				{
+					// 获取群信息
+					Method:  http.MethodGet,
+					Path:    "/getGroupInfo",
+					Handler: group.GetGroupInfoHandler(serverCtx),
+				},
+				{
+					// 获取群里成员
+					Method:  http.MethodGet,
+					Path:    "/getGroupMembers",
+					Handler: group.GetGroupMembersHandler(serverCtx),
+				},
+				{
+					// 群处理申请
+					Method:  http.MethodPost,
+					Path:    "/handleGroupApply",
+					Handler: group.HandleGroupApplyHandler(serverCtx),
+				},
+				{
+					// 被邀请者处理群申请
+					Method:  http.MethodPost,
+					Path:    "/handleGroupInvite",
+					Handler: group.HandleGroupInviteHandler(serverCtx),
+				},
+				{
+					// 邀请某人入群
+					Method:  http.MethodPost,
+					Path:    "/inviteToGroup",
+					Handler: group.InviteToGroupHandler(serverCtx),
+				},
+				{
+					// 设置管理员
+					Method:  http.MethodPost,
+					Path:    "/manageGroupMember",
+					Handler: group.ManageGroupMemberHandler(serverCtx),
+				},
+				{
+					// 退出群/踢出群成员
+					Method:  http.MethodDelete,
+					Path:    "/quitGroup",
+					Handler: group.QuitGroupHandler(serverCtx),
+				},
+				{
+					// 移除管理员
+					Method:  http.MethodDelete,
+					Path:    "/removeAdminremoveAdmin",
+					Handler: group.RemoveAdminHandler(serverCtx),
+				},
+				{
+					// 群员的个性化设置
+					Method:  http.MethodPut,
+					Path:    "/setGroupMemberSetting",
+					Handler: group.SetGroupMemberSettingHandler(serverCtx),
+				},
+				{
+					// 更新某人对此群的状态
+					Method:  http.MethodPut,
+					Path:    "/updateGroupStatus",
+					Handler: group.UpdateGroupStatusHandler(serverCtx),
+				},
+			}...,
+		),
 		rest.WithPrefix("/v1/social/group"),
 	)
 }

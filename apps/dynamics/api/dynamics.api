@@ -76,7 +76,8 @@ type (
 
 // ================== 服务路由定义 ==================
 @server (
-	prefix: /v1/dynamics // 全局路由前缀
+	prefix:     /v1/dynamics // 全局路由前缀
+	middleware: LimitMiddleware
 )
 service dynamics {
 	@doc "单个post信息"

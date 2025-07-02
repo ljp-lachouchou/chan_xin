@@ -167,8 +167,9 @@ type (
 )
 
 @server (
-	prefix: v1/social/firend
-	group:  friend
+	prefix:     v1/social/firend
+	group:      friend
+	middleware: LimitMiddleware
 )
 service social {
 	@doc "申请好友"
@@ -201,8 +202,9 @@ service social {
 }
 
 @server (
-	prefix: v1/social/group
-	group:  group
+	prefix:     v1/social/group
+	group:      group
+	middleware: LimitMiddleware
 )
 service social {
 	@doc "创建群"

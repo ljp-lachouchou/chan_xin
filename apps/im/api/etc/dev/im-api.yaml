@@ -6,3 +6,7 @@ ImRpc:
     Hosts:
       - 114.215.194.88:3379
     Key: im.rpc
+Redisx:
+  Host: 114.215.194.88:16379
+  Type: node
+  pass: chan-xin

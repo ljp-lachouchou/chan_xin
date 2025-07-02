@@ -83,8 +83,9 @@ type CreateGroupConversationResp {
 
 // ------------ 服务路由定义 ---------------
 @server (
-	prefix: /v1/im // 统一路由前缀
-	group:  chat
+	prefix:     /v1/im // 统一路由前缀
+	group:      chat
+	middleware: LimitMiddleware
 )
 service im-api {
 	// 获取聊天记录

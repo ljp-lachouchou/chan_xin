@@ -14,33 +14,36 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/createGroupConversation",
-				Handler: chat.CreateGroupConversationHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/getChatLog",
-				Handler: chat.GetChatLogHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/getConversations",
-				Handler: chat.GetConversationsHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/putConversations",
-				Handler: chat.PutConversationsHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/setUpUserConversation",
-				Handler: chat.SetUpUserConversationHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.LimitMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/createGroupConversation",
+					Handler: chat.CreateGroupConversationHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/getChatLog",
+					Handler: chat.GetChatLogHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/getConversations",
+					Handler: chat.GetConversationsHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/putConversations",
+					Handler: chat.PutConversationsHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/setUpUserConversation",
+					Handler: chat.SetUpUserConversationHandler(serverCtx),
+				},
+			}...,
+		),
 		rest.WithPrefix("/v1/im"),
 	)
 }

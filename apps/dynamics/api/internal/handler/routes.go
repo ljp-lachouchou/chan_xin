@@ -13,128 +13,131 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				// 创建评论
-				Method:  http.MethodPost,
-				Path:    "/createComment",
-				Handler: createCommentHandler(serverCtx),
-			},
-			{
-				// 创建评论回复
-				Method:  http.MethodPost,
-				Path:    "/createCommentReplay",
-				Handler: createCommentReplayHandler(serverCtx),
-			},
-			{
-				// 创建通知
-				Method:  http.MethodPost,
-				Path:    "/createNotification",
-				Handler: createNotificationHandler(serverCtx),
-			},
-			{
-				// 创建动态
-				Method:  http.MethodPost,
-				Path:    "/createPost",
-				Handler: createPostHandler(serverCtx),
-			},
-			{
-				// 删除评论
-				Method:  http.MethodDelete,
-				Path:    "/deleteComment",
-				Handler: deleteCommentHandler(serverCtx),
-			},
-			{
-				// 删除评论回复
-				Method:  http.MethodDelete,
-				Path:    "/deleteCommentReplay",
-				Handler: deleteCommentReplayHandler(serverCtx),
-			},
-			{
-				// 删除动态
-				Method:  http.MethodDelete,
-				Path:    "/deletePost",
-				Handler: deletePostHandler(serverCtx),
-			},
-			{
-				// 单个post信息
-				Method:  http.MethodGet,
-				Path:    "/getPostInfo",
-				Handler: getPostInfoHandler(serverCtx),
-			},
-			{
-				// 获取未读数
-				Method:  http.MethodGet,
-				Path:    "/getUnreadCount",
-				Handler: getUnreadCountHandler(serverCtx),
-			},
-			{
-				// 评论列表
-				Method:  http.MethodGet,
-				Path:    "/listCommentByPostId",
-				Handler: listCommentByPostIdHandler(serverCtx),
-			},
-			{
-				// 点赞列表
-				Method:  http.MethodGet,
-				Path:    "/listLikeByPostId",
-				Handler: listLikeByPostIdHandler(serverCtx),
-			},
-			{
-				// 获取通知列表
-				Method:  http.MethodGet,
-				Path:    "/listNotifications",
-				Handler: listNotificationsHandler(serverCtx),
-			},
-			{
-				// 获取用户动态列表
-				Method:  http.MethodGet,
-				Path:    "/listUserPosts",
-				Handler: listUserPostsHandler(serverCtx),
-			},
-			{
-				// 浏览动态流
-				Method:  http.MethodGet,
-				Path:    "/listVisiblePosts",
-				Handler: listVisiblePostsHandler(serverCtx),
-			},
-			{
-				// 置顶/取消置顶
-				Method:  http.MethodPut,
-				Path:    "/pinPost",
-				Handler: pinPostHandler(serverCtx),
-			},
-			{
-				// 设置个人封面
-				Method:  http.MethodPut,
-				Path:    "/setCover",
-				Handler: setCoverHandler(serverCtx),
-			},
-			{
-				// 点赞/取消点赞
-				Method:  http.MethodPost,
-				Path:    "/toggleLike",
-				Handler: toggleLikeHandler(serverCtx),
-			},
-			{
-				// 更新评论状态
-				Method:  http.MethodPut,
-				Path:    "/updateComment",
-				Handler: updateCommentHandler(serverCtx),
-			},
-			{
-				// 更新回复状态
-				Method:  http.MethodPut,
-				Path:    "/updateCommentReplay",
-				Handler: updateCommentReplayHandler(serverCtx),
-			},
-			{
-				// 更新通知状态
-				Method:  http.MethodPut,
-				Path:    "/updateNotification",
-				Handler: updateNotificationHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.LimitMiddleware},
+			[]rest.Route{
+				{
+					// 创建评论
+					Method:  http.MethodPost,
+					Path:    "/createComment",
+					Handler: createCommentHandler(serverCtx),
+				},
+				{
+					// 创建评论回复
+					Method:  http.MethodPost,
+					Path:    "/createCommentReplay",
+					Handler: createCommentReplayHandler(serverCtx),
+				},
+				{
+					// 创建通知
+					Method:  http.MethodPost,
+					Path:    "/createNotification",
+					Handler: createNotificationHandler(serverCtx),
+				},
+				{
+					// 创建动态
+					Method:  http.MethodPost,
+					Path:    "/createPost",
+					Handler: createPostHandler(serverCtx),
+				},
+				{
+					// 删除评论
+					Method:  http.MethodDelete,
+					Path:    "/deleteComment",
+					Handler: deleteCommentHandler(serverCtx),
+				},
+				{
+					// 删除评论回复
+					Method:  http.MethodDelete,
+					Path:    "/deleteCommentReplay",
+					Handler: deleteCommentReplayHandler(serverCtx),
+				},
+				{
+					// 删除动态
+					Method:  http.MethodDelete,
+					Path:    "/deletePost",
+					Handler: deletePostHandler(serverCtx),
+				},
+				{
+					// 单个post信息
+					Method:  http.MethodGet,
+					Path:    "/getPostInfo",
+					Handler: getPostInfoHandler(serverCtx),
+				},
+				{
+					// 获取未读数
+					Method:  http.MethodGet,
+					Path:    "/getUnreadCount",
+					Handler: getUnreadCountHandler(serverCtx),
+				},
+				{
+					// 评论列表
+					Method:  http.MethodGet,
+					Path:    "/listCommentByPostId",
+					Handler: listCommentByPostIdHandler(serverCtx),
+				},
+				{
+					// 点赞列表
+					Method:  http.MethodGet,
+					Path:    "/listLikeByPostId",
+					Handler: listLikeByPostIdHandler(serverCtx),
+				},
+				{
+					// 获取通知列表
+					Method:  http.MethodGet,
+					Path:    "/listNotifications",
+					Handler: listNotificationsHandler(serverCtx),
+				},
+				{
+					// 获取用户动态列表
+					Method:  http.MethodGet,
+					Path:    "/listUserPosts",
+					Handler: listUserPostsHandler(serverCtx),
+				},
+				{
+					// 浏览动态流
+					Method:  http.MethodGet,
+					Path:    "/listVisiblePosts",
+					Handler: listVisiblePostsHandler(serverCtx),
+				},
+				{
+					// 置顶/取消置顶
+					Method:  http.MethodPut,
+					Path:    "/pinPost",
+					Handler: pinPostHandler(serverCtx),
+				},
+				{
+					// 设置个人封面
+					Method:  http.MethodPut,
+					Path:    "/setCover",
+					Handler: setCoverHandler(serverCtx),
+				},
+				{
+					// 点赞/取消点赞
+					Method:  http.MethodPost,
+					Path:    "/toggleLike",
+					Handler: toggleLikeHandler(serverCtx),
+				},
+				{
+					// 更新评论状态
+					Method:  http.MethodPut,
+					Path:    "/updateComment",
+					Handler: updateCommentHandler(serverCtx),
+				},
+				{
+					// 更新回复状态
+					Method:  http.MethodPut,
+					Path:    "/updateCommentReplay",
+					Handler: updateCommentReplayHandler(serverCtx),
+				},
+				{
+					// 更新通知状态
+					Method:  http.MethodPut,
+					Path:    "/updateNotification",
+					Handler: updateNotificationHandler(serverCtx),
+				},
+			}...,
+		),
 		rest.WithPrefix("/v1/dynamics"),
 	)
 }
