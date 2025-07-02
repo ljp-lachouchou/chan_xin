@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
@@ -24,8 +25,14 @@ func NewPinPostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PinPostLo
 	}
 }
 
-func (l *PinPostLogic) PinPost(req *types.PinPostRequest) (resp *types.Empty, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *PinPostLogic) PinPost(req *types.PinPostRequest) (*types.Empty, error) {
+	_, err := l.svcCtx.Dynamics.PinPost(l.ctx, &dynamics.PinPostRequest{
+		UserId: req.UserId,
+		PostId: req.PostId,
+		Pin:    req.Pin,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.Empty{}, nil
 }

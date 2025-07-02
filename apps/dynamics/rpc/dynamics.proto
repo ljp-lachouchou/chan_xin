@@ -90,11 +90,18 @@ message CreateCommentReq {
   string content = 3;
 
 }
+message CreateCommentResp {
+  string commentId = 1;
+}
 message CreateCommentReplayReq {
   string commentId = 1;
   string userId = 2;//发送这
-  string targetUserId = 3;//接受者id
-  string content = 4;
+  string content = 3;
+
+}
+message CreateCommentReplayResp {
+  string commentReplyId = 1;
+  string postId = 2;
 }
 message DeleteCommentReq {
   string commentId = 1;
@@ -199,9 +206,9 @@ service dynamics {
   rpc ListVisiblePosts (ListVisiblePostsRequest) returns (PostListResponse);
 
   //创建评论
-  rpc CreateComment(CreateCommentReq) returns(Empty);
+  rpc CreateComment(CreateCommentReq) returns(CreateCommentResp);
   //创建评论回复
-  rpc CreateCommentReplay(CreateCommentReplayReq) returns(Empty);
+  rpc CreateCommentReplay(CreateCommentReplayReq) returns(CreateCommentReplayResp);
   //更新评论
   rpc UpdateComment(UpdateCommentReq) returns(Empty);
   //更新评论回复
@@ -217,13 +224,14 @@ service dynamics {
 
   // 获取通知列表（分页）
   rpc ListNotifications (ListNotificationsRequest) returns (ListNotificationsResponse);
+
   //单个post信息
   rpc GetPostInfo(GetPostInfoReq) returns(Post);
   //点赞列表
-  rpc ListLikeByPostId(GetPostInfoReq) returns();
+  rpc ListLikeByPostId(GetPostInfoReq) returns(Ids);
 
   //评论列表
-  rpc ListCommentByPostId(GetPostInfoReq) returns();
+  rpc ListCommentByPostId(GetPostInfoReq) returns(ListCommentResp);
 
   //根据type和userid查找
   rpc ListNotificationsByUserIdAndType(ListNotificationsByUserIdAndTypeReq) returns(ListNotificationsByUserIdAndTypeReqResponse);
@@ -232,5 +240,16 @@ service dynamics {
 }
 message Ids {
   repeated string ids = 1;
+}
+message IdsMap {
+  map<string,string> IdsMap = 1;
+}
+message ListCommentRespStruct {
+  string user_id = 1; //发送方
+  string target_user_id = 2; //接收方
+  string content = 3;//内容
+}
+message ListCommentResp {
+  repeated ListCommentRespStruct list = 1;
 }
 

@@ -10,10 +10,9 @@ type ContentType struct {
 }
 
 type CreateCommentReplayReq struct {
-	CommentId    string `json:"commentId"`
-	UserId       string `json:"userId"`       // 回复者ID
-	TargetUserId string `json:"targetUserId"` // 目标用户ID
-	Content      string `json:"content"`      // 回复内容
+	CommentId string `json:"commentId"`
+	UserId    string `json:"userId"`  // 回复者ID
+	Content   string `json:"content"` // 回复内容
 }
 
 type CreateCommentReq struct {
@@ -46,10 +45,14 @@ type DeleteCommentReq struct {
 
 type DeletePostRequest struct {
 	UserId string `json:"userId"` // 操作者ID
-	PostId string `path:"postId"` // 路径参数
+	PostId string `json:"postId"` // 路径参数
 }
 
 type Empty struct {
+}
+
+type GetPostInfoReq struct {
+	PostId string `json:"postId"`
 }
 
 type GetUnreadCountRequest struct {
@@ -60,10 +63,24 @@ type GetUnreadCountResponse struct {
 	UnreadCount int `json:"unreadCount"` // 未读数
 }
 
+type Ids struct {
+	Ids []string `json:"ids"`
+}
+
 type LikeAction struct {
 	PostId   string `json:"postId"`   // 目标动态ID
 	LikerId  string `json:"likerId"`  // 操作者ID
 	IsCancel bool   `json:"isCancel"` // 取消点赞标识
+}
+
+type ListCommentResp struct {
+	List []ListCommentRespStruct `json:"list"`
+}
+
+type ListCommentRespStruct struct {
+	UserId       string `json:"userId"`
+	TargetUserId string `json:"targetUserId"`
+	Content      string `json:"content"`
 }
 
 type ListNotificationsRequest struct {
@@ -77,7 +94,7 @@ type ListNotificationsResponse struct {
 }
 
 type ListUserPostsRequest struct {
-	UserId     string     `path:"userId"`     // 目标用户ID
+	UserId     string     `json:"userId"`     // 目标用户ID
 	IsPin      bool       `json:"isPin"`      // 置顶过滤
 	Pagination Pagination `json:"pagination"` // 分页参数
 }

@@ -31,6 +31,7 @@ type (
 	commentRepliesModel interface {
 		Insert(ctx context.Context, data *CommentReplies) (sql.Result, error)
 		FindOne(ctx context.Context, commentReplieId string) (*CommentReplies, error)
+		FindByCommentIds(ctx context.Context, commentIds ...string) ([]*CommentReplies, error)
 		Update(ctx context.Context, data *CommentReplies) error
 		Delete(ctx context.Context, commentReplieId string) error
 	}
@@ -66,7 +67,28 @@ func (m *defaultCommentRepliesModel) Delete(ctx context.Context, commentReplieId
 	}, commentRepliesCommentReplieIdKey)
 	return err
 }
-
+func (m *defaultCommentRepliesModel) FindByCommentIds(ctx context.Context, commentIds ...string) ([]*CommentReplies, error) {
+	var list []*CommentReplies
+	if len(commentIds) == 0 {
+		return nil,nil
+	}
+	var holder string
+	holder = strings.Repeat("?,", len(commentIds)-1) + "?"
+	query := fmt.Sprintf("select %s from %s where `comment_id` in (%s) and `is_deleted` = 0 order by `created_at`",commentRepliesRows,m.table,holder)
+	args := make([]interface{}, len(commentIds))
+	for i, id := range commentIds {
+		args[i] = id
+	}
+	err := m.QueryRowsNoCacheCtx(ctx, &list, query, args...)
+	switch err {
+	case nil:
+		return list, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultCommentRepliesModel) FindOne(ctx context.Context, commentReplieId string) (*CommentReplies, error) {
 	commentRepliesCommentReplieIdKey := fmt.Sprintf("%s%v", cacheCommentRepliesCommentReplieIdPrefix, commentReplieId)
 	var resp CommentReplies

@@ -10,28 +10,29 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type DeletePostLogic struct {
+type ListLikeByPostIdLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-// 删除动态
-func NewDeletePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeletePostLogic {
-	return &DeletePostLogic{
+// 点赞列表
+func NewListLikeByPostIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLikeByPostIdLogic {
+	return &ListLikeByPostIdLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *DeletePostLogic) DeletePost(req *types.DeletePostRequest) (*types.Empty, error) {
-	_, err := l.svcCtx.Dynamics.DeletePost(l.ctx, &dynamics.DeletePostRequest{
-		UserId: req.UserId,
+func (l *ListLikeByPostIdLogic) ListLikeByPostId(req *types.GetPostInfoReq) (*types.Ids, error) {
+	id, err := l.svcCtx.Dynamics.ListLikeByPostId(l.ctx, &dynamics.GetPostInfoReq{
 		PostId: req.PostId,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &types.Empty{}, nil
+	return &types.Ids{
+		Ids: id.Ids,
+	}, nil
 }

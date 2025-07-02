@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
-
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,8 +24,14 @@ func NewUpdateCommentReplayLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
-func (l *UpdateCommentReplayLogic) UpdateCommentReplay(req *types.UpdateCommentReplayReq) (resp *types.Empty, err error) {
-	// todo: add your logic here and delete this line
+func (l *UpdateCommentReplayLogic) UpdateCommentReplay(req *types.UpdateCommentReplayReq) (*types.Empty, error) {
 
-	return
+	_, err := l.svcCtx.Dynamics.UpdateCommentReplay(l.ctx, &dynamics.UpdateCommentReplayReq{
+		IsDeleted:       req.IsDeleted,
+		CommentReplayId: req.CommentReplayId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.Empty{}, nil
 }

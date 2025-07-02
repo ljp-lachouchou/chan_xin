@@ -66,13 +66,13 @@ func (s *DynamicsServer) ListVisiblePosts(ctx context.Context, in *dynamics.List
 }
 
 // 创建评论
-func (s *DynamicsServer) CreateComment(ctx context.Context, in *dynamics.CreateCommentReq) (*dynamics.Empty, error) {
+func (s *DynamicsServer) CreateComment(ctx context.Context, in *dynamics.CreateCommentReq) (*dynamics.CreateCommentResp, error) {
 	l := logic.NewCreateCommentLogic(ctx, s.svcCtx)
 	return l.CreateComment(in)
 }
 
 // 创建评论回复
-func (s *DynamicsServer) CreateCommentReplay(ctx context.Context, in *dynamics.CreateCommentReplayReq) (*dynamics.Empty, error) {
+func (s *DynamicsServer) CreateCommentReplay(ctx context.Context, in *dynamics.CreateCommentReplayReq) (*dynamics.CreateCommentReplayResp, error) {
 	l := logic.NewCreateCommentReplayLogic(ctx, s.svcCtx)
 	return l.CreateCommentReplay(in)
 }
@@ -123,6 +123,18 @@ func (s *DynamicsServer) ListNotifications(ctx context.Context, in *dynamics.Lis
 func (s *DynamicsServer) GetPostInfo(ctx context.Context, in *dynamics.GetPostInfoReq) (*dynamics.Post, error) {
 	l := logic.NewGetPostInfoLogic(ctx, s.svcCtx)
 	return l.GetPostInfo(in)
+}
+
+// 点赞列表
+func (s *DynamicsServer) ListLikeByPostId(ctx context.Context, in *dynamics.GetPostInfoReq) (*dynamics.Ids, error) {
+	l := logic.NewListLikeByPostIdLogic(ctx, s.svcCtx)
+	return l.ListLikeByPostId(in)
+}
+
+// 评论列表
+func (s *DynamicsServer) ListCommentByPostId(ctx context.Context, in *dynamics.GetPostInfoReq) (*dynamics.ListCommentResp, error) {
+	l := logic.NewListCommentByPostIdLogic(ctx, s.svcCtx)
+	return l.ListCommentByPostId(in)
 }
 
 // 根据type和userid查找

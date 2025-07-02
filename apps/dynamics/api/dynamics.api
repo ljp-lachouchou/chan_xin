@@ -61,6 +61,17 @@ type (
 		PageSize  int    `json:"pageSize"` // 每页数量（默认10）
 		PageToken string `json:"pageToken"` // 翻页令牌
 	}
+	Ids {
+		ids []string `json:"ids"`
+	}
+	ListCommentRespStruct {
+		userId       string `json:"userId"`
+		targetUserId string `json:"targetUserId"`
+		content      string `json:"content"`
+	}
+	ListCommentResp {
+		list []ListCommentRespStruct `json:"list"`
+	}
 )
 
 // ================== 服务路由定义 ==================
@@ -68,6 +79,18 @@ type (
 	prefix: /v1/dynamics // 全局路由前缀
 )
 service dynamics {
+	@doc "单个post信息"
+	@handler getPostInfo
+	get /getPostInfo (GetPostInfoReq) returns (Post)
+
+	@doc "点赞列表"
+	@handler listLikeByPostId
+	get /listLikeByPostId (GetPostInfoReq) returns (Ids)
+
+	@doc "评论列表"
+	@handler listCommentByPostId
+	get /listCommentByPostId (GetPostInfoReq) returns (ListCommentResp)
+
 	// 动态管理接口组[1,5](@ref)
 	@doc "创建动态"
 	@handler createPost
@@ -144,6 +167,9 @@ type Empty {} // 空响应体
 
 // ================== 请求/响应结构 ==================
 type (
+	GetPostInfoReq {
+		postId string `json:"postId"`
+	}
 	CreatePostRequest {
 		UserId  string      `json:"userId"`
 		Content PostContent `json:"content"`
@@ -151,7 +177,7 @@ type (
 	}
 	DeletePostRequest {
 		UserId string `json:"userId"` // 操作者ID
-		PostId string `path:"postId"` // 路径参数
+		PostId string `json:"postId"` // 路径参数
 	}
 	PinPostRequest {
 		UserId string `json:"userId"`
@@ -163,7 +189,7 @@ type (
 		CoverUrl string `json:"coverUrl"` // 封面URL
 	}
 	ListUserPostsRequest {
-		UserId     string     `path:"userId"` // 目标用户ID
+		UserId     string     `json:"userId"` // 目标用户ID
 		IsPin      bool       `json:"isPin"` // 置顶过滤
 		pagination Pagination `json:"pagination"` // 分页参数
 	}
@@ -188,10 +214,9 @@ type (
 		Content string `json:"content"` // 评论内容
 	}
 	CreateCommentReplayReq {
-		CommentId    string `json:"commentId"`
-		UserId       string `json:"userId"` // 回复者ID
-		TargetUserId string `json:"targetUserId"` // 目标用户ID
-		Content      string `json:"content"` // 回复内容
+		CommentId string `json:"commentId"`
+		UserId    string `json:"userId"` // 回复者ID
+		Content   string `json:"content"` // 回复内容
 	}
 	UpdateCommentReq {
 		IsDeleted bool   `json:"isDeleted"` // 删除状态

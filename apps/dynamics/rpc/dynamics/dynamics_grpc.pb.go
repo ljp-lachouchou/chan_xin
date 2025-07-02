@@ -36,6 +36,8 @@ const (
 	Dynamics_CreateNotification_FullMethodName               = "/dynamics.dynamics/CreateNotification"
 	Dynamics_ListNotifications_FullMethodName                = "/dynamics.dynamics/ListNotifications"
 	Dynamics_GetPostInfo_FullMethodName                      = "/dynamics.dynamics/GetPostInfo"
+	Dynamics_ListLikeByPostId_FullMethodName                 = "/dynamics.dynamics/ListLikeByPostId"
+	Dynamics_ListCommentByPostId_FullMethodName              = "/dynamics.dynamics/ListCommentByPostId"
 	Dynamics_ListNotificationsByUserIdAndType_FullMethodName = "/dynamics.dynamics/ListNotificationsByUserIdAndType"
 	Dynamics_GetUnreadCount_FullMethodName                   = "/dynamics.dynamics/GetUnreadCount"
 )
@@ -61,9 +63,9 @@ type DynamicsClient interface {
 	// 浏览可见动态流（根据权限过滤+分页）
 	ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
 	// 创建评论
-	CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*Empty, error)
+	CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*CreateCommentResp, error)
 	// 创建评论回复
-	CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error)
+	CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*CreateCommentReplayResp, error)
 	// 更新评论
 	UpdateComment(ctx context.Context, in *UpdateCommentReq, opts ...grpc.CallOption) (*Empty, error)
 	// 更新评论回复
@@ -80,6 +82,10 @@ type DynamicsClient interface {
 	ListNotifications(ctx context.Context, in *ListNotificationsRequest, opts ...grpc.CallOption) (*ListNotificationsResponse, error)
 	// 单个post信息
 	GetPostInfo(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Post, error)
+	// 点赞列表
+	ListLikeByPostId(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Ids, error)
+	// 评论列表
+	ListCommentByPostId(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*ListCommentResp, error)
 	// 根据type和userid查找
 	ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 	// 新增：获取未读通知数量
@@ -164,9 +170,9 @@ func (c *dynamicsClient) ListVisiblePosts(ctx context.Context, in *ListVisiblePo
 	return out, nil
 }
 
-func (c *dynamicsClient) CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*Empty, error) {
+func (c *dynamicsClient) CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*CreateCommentResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Empty)
+	out := new(CreateCommentResp)
 	err := c.cc.Invoke(ctx, Dynamics_CreateComment_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -174,9 +180,9 @@ func (c *dynamicsClient) CreateComment(ctx context.Context, in *CreateCommentReq
 	return out, nil
 }
 
-func (c *dynamicsClient) CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error) {
+func (c *dynamicsClient) CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*CreateCommentReplayResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Empty)
+	out := new(CreateCommentReplayResp)
 	err := c.cc.Invoke(ctx, Dynamics_CreateCommentReplay_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -264,6 +270,26 @@ func (c *dynamicsClient) GetPostInfo(ctx context.Context, in *GetPostInfoReq, op
 	return out, nil
 }
 
+func (c *dynamicsClient) ListLikeByPostId(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Ids, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Ids)
+	err := c.cc.Invoke(ctx, Dynamics_ListLikeByPostId_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) ListCommentByPostId(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*ListCommentResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListCommentResp)
+	err := c.cc.Invoke(ctx, Dynamics_ListCommentByPostId_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *dynamicsClient) ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListNotificationsByUserIdAndTypeReqResponse)
@@ -305,9 +331,9 @@ type DynamicsServer interface {
 	// 浏览可见动态流（根据权限过滤+分页）
 	ListVisiblePosts(context.Context, *ListVisiblePostsRequest) (*PostListResponse, error)
 	// 创建评论
-	CreateComment(context.Context, *CreateCommentReq) (*Empty, error)
+	CreateComment(context.Context, *CreateCommentReq) (*CreateCommentResp, error)
 	// 创建评论回复
-	CreateCommentReplay(context.Context, *CreateCommentReplayReq) (*Empty, error)
+	CreateCommentReplay(context.Context, *CreateCommentReplayReq) (*CreateCommentReplayResp, error)
 	// 更新评论
 	UpdateComment(context.Context, *UpdateCommentReq) (*Empty, error)
 	// 更新评论回复
@@ -324,6 +350,10 @@ type DynamicsServer interface {
 	ListNotifications(context.Context, *ListNotificationsRequest) (*ListNotificationsResponse, error)
 	// 单个post信息
 	GetPostInfo(context.Context, *GetPostInfoReq) (*Post, error)
+	// 点赞列表
+	ListLikeByPostId(context.Context, *GetPostInfoReq) (*Ids, error)
+	// 评论列表
+	ListCommentByPostId(context.Context, *GetPostInfoReq) (*ListCommentResp, error)
 	// 根据type和userid查找
 	ListNotificationsByUserIdAndType(context.Context, *ListNotificationsByUserIdAndTypeReq) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 	// 新增：获取未读通知数量
@@ -359,10 +389,10 @@ func (UnimplementedDynamicsServer) SetCover(context.Context, *SetCoverRequest) (
 func (UnimplementedDynamicsServer) ListVisiblePosts(context.Context, *ListVisiblePostsRequest) (*PostListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListVisiblePosts not implemented")
 }
-func (UnimplementedDynamicsServer) CreateComment(context.Context, *CreateCommentReq) (*Empty, error) {
+func (UnimplementedDynamicsServer) CreateComment(context.Context, *CreateCommentReq) (*CreateCommentResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateComment not implemented")
 }
-func (UnimplementedDynamicsServer) CreateCommentReplay(context.Context, *CreateCommentReplayReq) (*Empty, error) {
+func (UnimplementedDynamicsServer) CreateCommentReplay(context.Context, *CreateCommentReplayReq) (*CreateCommentReplayResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCommentReplay not implemented")
 }
 func (UnimplementedDynamicsServer) UpdateComment(context.Context, *UpdateCommentReq) (*Empty, error) {
@@ -388,6 +418,12 @@ func (UnimplementedDynamicsServer) ListNotifications(context.Context, *ListNotif
 }
 func (UnimplementedDynamicsServer) GetPostInfo(context.Context, *GetPostInfoReq) (*Post, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPostInfo not implemented")
+}
+func (UnimplementedDynamicsServer) ListLikeByPostId(context.Context, *GetPostInfoReq) (*Ids, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListLikeByPostId not implemented")
+}
+func (UnimplementedDynamicsServer) ListCommentByPostId(context.Context, *GetPostInfoReq) (*ListCommentResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCommentByPostId not implemented")
 }
 func (UnimplementedDynamicsServer) ListNotificationsByUserIdAndType(context.Context, *ListNotificationsByUserIdAndTypeReq) (*ListNotificationsByUserIdAndTypeReqResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListNotificationsByUserIdAndType not implemented")
@@ -722,6 +758,42 @@ func _Dynamics_GetPostInfo_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Dynamics_ListLikeByPostId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPostInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).ListLikeByPostId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_ListLikeByPostId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).ListLikeByPostId(ctx, req.(*GetPostInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_ListCommentByPostId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPostInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).ListCommentByPostId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_ListCommentByPostId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).ListCommentByPostId(ctx, req.(*GetPostInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Dynamics_ListNotificationsByUserIdAndType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListNotificationsByUserIdAndTypeReq)
 	if err := dec(in); err != nil {
@@ -832,6 +904,14 @@ var Dynamics_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPostInfo",
 			Handler:    _Dynamics_GetPostInfo_Handler,
+		},
+		{
+			MethodName: "ListLikeByPostId",
+			Handler:    _Dynamics_ListLikeByPostId_Handler,
+		},
+		{
+			MethodName: "ListCommentByPostId",
+			Handler:    _Dynamics_ListCommentByPostId_Handler,
 		},
 		{
 			MethodName: "ListNotificationsByUserIdAndType",

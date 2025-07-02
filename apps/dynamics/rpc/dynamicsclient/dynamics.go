@@ -15,7 +15,9 @@ import (
 
 type (
 	CreateCommentReplayReq                      = dynamics.CreateCommentReplayReq
+	CreateCommentReplayResp                     = dynamics.CreateCommentReplayResp
 	CreateCommentReq                            = dynamics.CreateCommentReq
+	CreateCommentResp                           = dynamics.CreateCommentResp
 	CreateNotificationReq                       = dynamics.CreateNotificationReq
 	CreatePostRequest                           = dynamics.CreatePostRequest
 	DeleteCommentReplayReq                      = dynamics.DeleteCommentReplayReq
@@ -25,7 +27,11 @@ type (
 	GetPostInfoReq                              = dynamics.GetPostInfoReq
 	GetUnreadCountRequest                       = dynamics.GetUnreadCountRequest
 	GetUnreadCountResponse                      = dynamics.GetUnreadCountResponse
+	Ids                                         = dynamics.Ids
+	IdsMap                                      = dynamics.IdsMap
 	LikeAction                                  = dynamics.LikeAction
+	ListCommentResp                             = dynamics.ListCommentResp
+	ListCommentRespStruct                       = dynamics.ListCommentRespStruct
 	ListNotificationsByUserIdAndTypeReq         = dynamics.ListNotificationsByUserIdAndTypeReq
 	ListNotificationsByUserIdAndTypeReqResponse = dynamics.ListNotificationsByUserIdAndTypeReqResponse
 	ListNotificationsRequest                    = dynamics.ListNotificationsRequest
@@ -60,9 +66,9 @@ type (
 		// 浏览可见动态流（根据权限过滤+分页）
 		ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
 		// 创建评论
-		CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*Empty, error)
+		CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*CreateCommentResp, error)
 		// 创建评论回复
-		CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error)
+		CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*CreateCommentReplayResp, error)
 		// 更新评论
 		UpdateComment(ctx context.Context, in *UpdateCommentReq, opts ...grpc.CallOption) (*Empty, error)
 		// 更新评论回复
@@ -79,6 +85,10 @@ type (
 		ListNotifications(ctx context.Context, in *ListNotificationsRequest, opts ...grpc.CallOption) (*ListNotificationsResponse, error)
 		// 单个post信息
 		GetPostInfo(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Post, error)
+		// 点赞列表
+		ListLikeByPostId(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Ids, error)
+		// 评论列表
+		ListCommentByPostId(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*ListCommentResp, error)
 		// 根据type和userid查找
 		ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 		// 新增：获取未读通知数量
@@ -139,13 +149,13 @@ func (m *defaultDynamics) ListVisiblePosts(ctx context.Context, in *ListVisibleP
 }
 
 // 创建评论
-func (m *defaultDynamics) CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultDynamics) CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*CreateCommentResp, error) {
 	client := dynamics.NewDynamicsClient(m.cli.Conn())
 	return client.CreateComment(ctx, in, opts...)
 }
 
 // 创建评论回复
-func (m *defaultDynamics) CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultDynamics) CreateCommentReplay(ctx context.Context, in *CreateCommentReplayReq, opts ...grpc.CallOption) (*CreateCommentReplayResp, error) {
 	client := dynamics.NewDynamicsClient(m.cli.Conn())
 	return client.CreateCommentReplay(ctx, in, opts...)
 }
@@ -196,6 +206,18 @@ func (m *defaultDynamics) ListNotifications(ctx context.Context, in *ListNotific
 func (m *defaultDynamics) GetPostInfo(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Post, error) {
 	client := dynamics.NewDynamicsClient(m.cli.Conn())
 	return client.GetPostInfo(ctx, in, opts...)
+}
+
+// 点赞列表
+func (m *defaultDynamics) ListLikeByPostId(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*Ids, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.ListLikeByPostId(ctx, in, opts...)
+}
+
+// 评论列表
+func (m *defaultDynamics) ListCommentByPostId(ctx context.Context, in *GetPostInfoReq, opts ...grpc.CallOption) (*ListCommentResp, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.ListCommentByPostId(ctx, in, opts...)
 }
 
 // 根据type和userid查找

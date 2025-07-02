@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
@@ -24,8 +25,12 @@ func NewDeleteCommentReplayLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
-func (l *DeleteCommentReplayLogic) DeleteCommentReplay(req *types.DeleteCommentReplayReq) (resp *types.Empty, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *DeleteCommentReplayLogic) DeleteCommentReplay(req *types.DeleteCommentReplayReq) (*types.Empty, error) {
+	_, err := l.svcCtx.Dynamics.DeleteCommentReplay(l.ctx, &dynamics.DeleteCommentReplayReq{
+		CommentReplayId: req.CommentReplayId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.Empty{}, nil
 }

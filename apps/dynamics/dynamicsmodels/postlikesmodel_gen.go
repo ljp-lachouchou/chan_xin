@@ -26,12 +26,14 @@ var (
 
 	cachePostLikesIdPrefix           = "cache:postLikes:id:"
 	cachePostLikesPostIdUserIdPrefix = "cache:postLikes:postId:userId:"
+	cachePostLikesPostIdPrefix = "cache:postLikes:postId:"
 )
 
 type (
 	postLikesModel interface {
 		Insert(ctx context.Context, data *PostLikes) (sql.Result, error)
 		FindOne(ctx context.Context, id string) (*PostLikes, error)
+		FindByPostId(ctx context.Context, postId string) ([]*PostLikes, error)
 		FindOneByPostIdUserId(ctx context.Context, postId string, userId string) (*PostLikes, error)
 		Update(ctx context.Context, data *PostLikes) error
 		Delete(ctx context.Context, id string) error
@@ -72,7 +74,19 @@ func (m *defaultPostLikesModel) Delete(ctx context.Context, id string) error {
 	}, postLikesIdKey, postLikesPostIdUserIdKey)
 	return err
 }
-
+func (m *defaultPostLikesModel) FindByPostId(ctx context.Context, postId string) ([]*PostLikes, error) {
+	var list []*PostLikes
+	query := fmt.Sprintf("select %s from %s where `post_id` = ? and `is_deleted` = 0 order by created_at", postLikesRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx,&list,query,postId)
+	switch err {
+	case nil:
+		return list, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultPostLikesModel) FindOne(ctx context.Context, id string) (*PostLikes, error) {
 	postLikesIdKey := fmt.Sprintf("%s%v", cachePostLikesIdPrefix, id)
 	var resp PostLikes

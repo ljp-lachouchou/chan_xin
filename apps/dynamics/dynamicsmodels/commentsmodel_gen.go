@@ -33,6 +33,7 @@ type (
 		FindOne(ctx context.Context, commentId string) (*Comments, error)
 		Update(ctx context.Context, data *Comments) error
 		Delete(ctx context.Context, commentId string) error
+		FindByPostId(ctx context.Context, postId string) ([]*Comments, error)
 	}
 
 	defaultCommentsModel struct {
@@ -66,7 +67,19 @@ func (m *defaultCommentsModel) Delete(ctx context.Context, commentId string) err
 	}, commentsCommentIdKey)
 	return err
 }
-
+func (m *defaultCommentsModel) FindByPostId(ctx context.Context, postId string) ([]*Comments, error) {
+	var list []*Comments
+	query := fmt.Sprintf("select %s from %s where `post_id` = ? and `is_deleted` = 0 order by `created_at`",commentsRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &list, query, postId)
+	switch err {
+	case nil:
+		return list, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultCommentsModel) FindOne(ctx context.Context, commentId string) (*Comments, error) {
 	commentsCommentIdKey := fmt.Sprintf("%s%v", cacheCommentsCommentIdPrefix, commentId)
 	var resp Comments

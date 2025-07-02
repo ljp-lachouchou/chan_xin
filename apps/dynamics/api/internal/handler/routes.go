@@ -57,10 +57,28 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: deletePostHandler(serverCtx),
 			},
 			{
+				// 单个post信息
+				Method:  http.MethodGet,
+				Path:    "/getPostInfo",
+				Handler: getPostInfoHandler(serverCtx),
+			},
+			{
 				// 获取未读数
 				Method:  http.MethodGet,
 				Path:    "/getUnreadCount",
 				Handler: getUnreadCountHandler(serverCtx),
+			},
+			{
+				// 评论列表
+				Method:  http.MethodGet,
+				Path:    "/listCommentByPostId",
+				Handler: listCommentByPostIdHandler(serverCtx),
+			},
+			{
+				// 点赞列表
+				Method:  http.MethodGet,
+				Path:    "/listLikeByPostId",
+				Handler: listLikeByPostIdHandler(serverCtx),
 			},
 			{
 				// 获取通知列表

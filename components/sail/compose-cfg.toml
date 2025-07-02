@@ -9,13 +9,13 @@ refreshDuration = "168h"
 connMaxLifeTime = "3m"
 maxIdleConn = 30
 maxOpenConn = 60
-addr = "192.168.142.101:13306"
+addr = "114.215.194.88:13306"
 name = "sail"
 pass = "chan-xin"
 user = "root"
 
 [etcd]
-endpoints = ["192.168.142.101:3379"]
+endpoints = ["114.215.194.88:3379"]
 username = ""
 password = ""
 dialTimeout = "10s"

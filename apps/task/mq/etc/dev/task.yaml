@@ -3,17 +3,17 @@ ListenOn: 0.0.0.0:10091
 MsgChatTransfer: #消费者配置信息
   Name: MsgChatTransfer
   Brokers:  #kafka连接地址
-    - 192.168.142.101:9092
+    - 114.215.194.88:9092
   Group: kafka # 分组
   Topic: msgChatTransfer #会话
   Offset: first # 从分区早消息开始消费 last 最新开始
   Consumers: 1 #消费者数量
 Mongo:
-  Url: "mongodb://root:chan-xin@192.168.142.101:47017"
+  Url: "mongodb://root:chan-xin@114.215.194.88:47017"
   Db: chan-xin
 Ws:
   Host: 10.7.87.249:10086
 Redisx:
-  Host: 192.168.142.101:16379
+  Host: 114.215.194.88:16379
   Type: node
   pass: chan-xin

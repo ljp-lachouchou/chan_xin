@@ -24,7 +24,7 @@ func main() {
 
 	var c config.Config
 	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "192.168.142.101:3379",
+		ETCDEndpoints:  "114.215.194.88:3379",
 		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
 		Namespace:      "im",
 		Configs:        "im-rpc.yaml",

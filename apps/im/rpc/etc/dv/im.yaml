@@ -2,8 +2,8 @@ Name: im.rpc
 ListenOn: 0.0.0.0:10002
 Etcd:
   Hosts:
-  - 192.168.142.101:3379
+  - 114.215.194.88:3379
   Key: im.rpc
 Mongo:
-  Url: "mongodb://root:chan-xin@192.168.142.101:47017"
+  Url: "mongodb://root:chan-xin@114.215.194.88:47017"
   Db: chan-xin

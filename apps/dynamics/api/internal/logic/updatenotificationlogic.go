@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
@@ -24,8 +25,13 @@ func NewUpdateNotificationLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 	}
 }
 
-func (l *UpdateNotificationLogic) UpdateNotification(req *types.UpdateNotificationReq) (resp *types.Empty, err error) {
-	// todo: add your logic here and delete this line
+func (l *UpdateNotificationLogic) UpdateNotification(req *types.UpdateNotificationReq) (*types.Empty, error) {
 
-	return
+	_, err := l.svcCtx.UpdateNotification(l.ctx, &dynamics.UpdateNotificationReq{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.Empty{}, nil
 }

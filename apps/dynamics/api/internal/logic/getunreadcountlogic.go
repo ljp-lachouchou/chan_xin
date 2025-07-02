@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
@@ -24,8 +25,15 @@ func NewGetUnreadCountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 	}
 }
 
-func (l *GetUnreadCountLogic) GetUnreadCount(req *types.GetUnreadCountRequest) (resp *types.GetUnreadCountResponse, err error) {
-	// todo: add your logic here and delete this line
+func (l *GetUnreadCountLogic) GetUnreadCount(req *types.GetUnreadCountRequest) (*types.GetUnreadCountResponse, error) {
+	response, err := l.svcCtx.Dynamics.GetUnreadCount(l.ctx, &dynamics.GetUnreadCountRequest{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	return &types.GetUnreadCountResponse{
+		UnreadCount: int(response.UnreadCount),
+	}, nil
 }

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
@@ -24,8 +25,37 @@ func NewListVisiblePostsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *ListVisiblePostsLogic) ListVisiblePosts(req *types.ListVisiblePostsRequest) (resp *types.PostListResponse, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *ListVisiblePostsLogic) ListVisiblePosts(req *types.ListVisiblePostsRequest) (*types.PostListResponse, error) {
+	posts, err := l.svcCtx.ListVisiblePosts(l.ctx, &dynamics.ListVisiblePostsRequest{
+		ViewerId: req.ViewerId,
+		Pagination: &dynamics.Pagination{
+			PageSize:  int32(req.Pagination.PageSize),
+			PageToken: req.Pagination.PageToken,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	var postList []types.Post
+	for _, v := range posts.Posts {
+		postList = append(postList, types.Post{
+			PostId: v.PostId,
+			UserId: v.UserId,
+			Content: types.PostContent{
+				Text:      v.Content.Text,
+				ImageUrls: v.Content.ImageUrls,
+				Emoji:     v.Content.Emoji,
+			},
+			Meta: types.PostMeta{
+				Location:       v.Meta.Location,
+				Scope:          int(v.Meta.Scope),
+				VisibleUserIds: v.Meta.VisibleUserIds,
+			},
+			IsPinned: v.IsPinned,
+		})
+	}
+	return &types.PostListResponse{
+		Posts:         postList,
+		NextPageToken: posts.NextPageToken,
+	}, nil
 }

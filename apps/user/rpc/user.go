@@ -3,21 +3,19 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/ljp-lachouchou/chan_xin/deploy/configserver"
-	"github.com/ljp-lachouchou/chan_xin/pkg/interceptor/rpcserver"
-
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/internal/config"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/internal/server"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/user"
-
+	"github.com/ljp-lachouchou/chan_xin/deploy/configserver"
+	"github.com/ljp-lachouchou/chan_xin/pkg/interceptor/rpcserver"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/dev/user.yaml", "the config file")
+var configFile = flag.String("f", "E:\\go_proj\\fvx_proj\\chan_xin\\apps\\user\\rpc\\etc\\dev\\user.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -25,7 +23,7 @@ func main() {
 	var c config.Config
 	//conf.MustLoad(*configFile, &c)
 	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "192.168.142.101:3379",
+		ETCDEndpoints:  "114.215.194.88:3379",
 		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
 		Namespace:      "user",
 		Configs:        "user-rpc.yaml",

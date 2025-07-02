@@ -1,8 +1,0 @@
-dynamicsrpc:
-    etcd:
-        hosts:
-            - 192.168.142.101:3379
-        key: dynamics.rpc
-host: 0.0.0.0
-name: dynamics
-port: 20003

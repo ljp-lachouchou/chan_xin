@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
@@ -24,8 +25,12 @@ func NewDeleteCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 	}
 }
 
-func (l *DeleteCommentLogic) DeleteComment(req *types.DeleteCommentReq) (resp *types.Empty, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *DeleteCommentLogic) DeleteComment(req *types.DeleteCommentReq) (*types.Empty, error) {
+	_, err := l.svcCtx.Dynamics.DeleteComment(l.ctx, &dynamics.DeleteCommentReq{
+		CommentId: req.CommentId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.Empty{}, nil
 }

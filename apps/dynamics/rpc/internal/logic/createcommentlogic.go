@@ -3,10 +3,11 @@ package logic
 import (
 	"context"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/dynamicsmodels"
-	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
-	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
 	"github.com/ljp-lachouchou/chan_xin/pkg/wuid"
+
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,9 +27,10 @@ func NewCreateCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 }
 
 // 创建评论
-func (l *CreateCommentLogic) CreateComment(in *dynamics.CreateCommentReq) (*dynamics.Empty, error) {
+func (l *CreateCommentLogic) CreateComment(in *dynamics.CreateCommentReq) (*dynamics.CreateCommentResp, error) {
+	commentId := wuid.GenUid(l.svcCtx.Config.Mysql.DataSource)
 	_, err := l.svcCtx.CommentsModel.Insert(l.ctx, &dynamicsmodels.Comments{
-		CommentId: wuid.GenUid(l.svcCtx.Config.Mysql.DataSource),
+		CommentId: commentId,
 		PostId:    in.PostId,
 		UserId:    in.UserId,
 		Content:   in.Content,
@@ -37,5 +39,7 @@ func (l *CreateCommentLogic) CreateComment(in *dynamics.CreateCommentReq) (*dyna
 	if err != nil {
 		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "dynamics-rpc CreateComment")
 	}
-	return &dynamics.Empty{}, nil
+	return &dynamics.CreateCommentResp{
+		CommentId: commentId,
+	}, nil
 }

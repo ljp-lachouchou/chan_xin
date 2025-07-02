@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
@@ -24,8 +25,14 @@ func NewSetCoverLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SetCover
 	}
 }
 
-func (l *SetCoverLogic) SetCover(req *types.SetCoverRequest) (resp *types.Empty, err error) {
-	// todo: add your logic here and delete this line
+func (l *SetCoverLogic) SetCover(req *types.SetCoverRequest) (*types.Empty, error) {
 
-	return
+	_, err := l.svcCtx.Dynamics.SetCover(l.ctx, &dynamics.SetCoverRequest{
+		UserId:   req.UserId,
+		CoverUrl: req.CoverUrl,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.Empty{}, nil
 }

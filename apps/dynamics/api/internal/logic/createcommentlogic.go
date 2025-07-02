@@ -26,20 +26,29 @@ func NewCreateCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 }
 
 func (l *CreateCommentLogic) CreateComment(req *types.CreateCommentReq) (*types.Empty, error) {
-
-	_, err := l.svcCtx.Dynamics.CreateComment(l.ctx, &dynamicsclient.CreateCommentReq{
+	postInfo, err2 := l.svcCtx.Dynamics.GetPostInfo(l.ctx, &dynamicsclient.GetPostInfoReq{
+		PostId: req.PostId,
+	})
+	if err2 != nil {
+		return nil, err2
+	}
+	resp, err := l.svcCtx.Dynamics.CreateComment(l.ctx, &dynamicsclient.CreateCommentReq{
 		PostId:  req.PostId,
 		UserId:  req.UserId,
 		Content: req.Content,
 	})
-	l.svcCtx.Dynamics.CreateNotification(l.ctx, &dynamicsclient.CreateNotificationReq{
-		UserId:        "",
+	if err != nil {
+		return nil, err
+	}
+	_, err2 = l.svcCtx.Dynamics.CreateNotification(l.ctx, &dynamicsclient.CreateNotificationReq{
+		UserId:        postInfo.UserId,
 		Type:          1,
 		TriggerUserId: req.UserId,
 		PostId:        req.PostId,
+		CommentId:     resp.CommentId,
 	})
-	if err != nil {
-		return nil, err
+	if err2 != nil {
+		return nil, err2
 	}
 	return &types.Empty{}, nil
 }
