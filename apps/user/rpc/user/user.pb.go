@@ -540,6 +540,110 @@ func (x *UpdateUserRequest) GetSex() int32 {
 	return 0
 }
 
+type FindUserReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Phone         string                 `protobuf:"bytes,2,opt,name=phone,proto3" json:"phone,omitempty"`
+	Ids           []string               `protobuf:"bytes,3,rep,name=ids,proto3" json:"ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindUserReq) Reset() {
+	*x = FindUserReq{}
+	mi := &file_apps_user_rpc_user_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindUserReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindUserReq) ProtoMessage() {}
+
+func (x *FindUserReq) ProtoReflect() protoreflect.Message {
+	mi := &file_apps_user_rpc_user_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindUserReq.ProtoReflect.Descriptor instead.
+func (*FindUserReq) Descriptor() ([]byte, []int) {
+	return file_apps_user_rpc_user_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *FindUserReq) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *FindUserReq) GetPhone() string {
+	if x != nil {
+		return x.Phone
+	}
+	return ""
+}
+
+func (x *FindUserReq) GetIds() []string {
+	if x != nil {
+		return x.Ids
+	}
+	return nil
+}
+
+type FindUserResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          []*User                `protobuf:"bytes,1,rep,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindUserResp) Reset() {
+	*x = FindUserResp{}
+	mi := &file_apps_user_rpc_user_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindUserResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindUserResp) ProtoMessage() {}
+
+func (x *FindUserResp) ProtoReflect() protoreflect.Message {
+	mi := &file_apps_user_rpc_user_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindUserResp.ProtoReflect.Descriptor instead.
+func (*FindUserResp) Descriptor() ([]byte, []int) {
+	return file_apps_user_rpc_user_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *FindUserResp) GetUser() []*User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 var File_apps_user_rpc_user_proto protoreflect.FileDescriptor
 
 const file_apps_user_rpc_user_proto_rawDesc = "" +
@@ -582,7 +686,14 @@ const file_apps_user_rpc_user_proto_rawDesc = "" +
 	"\x03sex\x18\x04 \x01(\x05H\x02R\x03sex\x88\x01\x01B\v\n" +
 	"\t_nicknameB\t\n" +
 	"\a_avatarB\x06\n" +
-	"\x04_sex2\xf9\x01\n" +
+	"\x04_sex\"I\n" +
+	"\vFindUserReq\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
+	"\x05phone\x18\x02 \x01(\tR\x05phone\x12\x10\n" +
+	"\x03ids\x18\x03 \x03(\tR\x03ids\".\n" +
+	"\fFindUserResp\x12\x1e\n" +
+	"\x04user\x18\x01 \x03(\v2\n" +
+	".user.UserR\x04user2\xac\x02\n" +
 	"\vUserService\x120\n" +
 	"\x05Login\x12\x12.user.LoginRequest\x1a\x13.user.LoginResponse\x12%\n" +
 	"\x04Ping\x12\r.user.PingReq\x1a\x0e.user.PingResp\x12+\n" +
@@ -591,7 +702,8 @@ const file_apps_user_rpc_user_proto_rawDesc = "" +
 	"\n" +
 	"UpdateUser\x12\x17.user.UpdateUserRequest\x1a\n" +
 	".user.User\x121\n" +
-	"\bRegister\x12\x11.user.RegisterReq\x1a\x12.user.RegisterRespB\bZ\x06./userb\x06proto3"
+	"\bRegister\x12\x11.user.RegisterReq\x1a\x12.user.RegisterResp\x121\n" +
+	"\bFindUser\x12\x11.user.FindUserReq\x1a\x12.user.FindUserRespB\bZ\x06./userb\x06proto3"
 
 var (
 	file_apps_user_rpc_user_proto_rawDescOnce sync.Once
@@ -605,7 +717,7 @@ func file_apps_user_rpc_user_proto_rawDescGZIP() []byte {
 	return file_apps_user_rpc_user_proto_rawDescData
 }
 
-var file_apps_user_rpc_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_apps_user_rpc_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_apps_user_rpc_user_proto_goTypes = []any{
 	(*User)(nil),              // 0: user.User
 	(*PingReq)(nil),           // 1: user.PingReq
@@ -616,23 +728,28 @@ var file_apps_user_rpc_user_proto_goTypes = []any{
 	(*RegisterResp)(nil),      // 6: user.RegisterResp
 	(*GetUserRequest)(nil),    // 7: user.GetUserRequest
 	(*UpdateUserRequest)(nil), // 8: user.UpdateUserRequest
+	(*FindUserReq)(nil),       // 9: user.FindUserReq
+	(*FindUserResp)(nil),      // 10: user.FindUserResp
 }
 var file_apps_user_rpc_user_proto_depIdxs = []int32{
-	3, // 0: user.UserService.Login:input_type -> user.LoginRequest
-	1, // 1: user.UserService.Ping:input_type -> user.PingReq
-	7, // 2: user.UserService.GetUser:input_type -> user.GetUserRequest
-	8, // 3: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
-	5, // 4: user.UserService.Register:input_type -> user.RegisterReq
-	4, // 5: user.UserService.Login:output_type -> user.LoginResponse
-	2, // 6: user.UserService.Ping:output_type -> user.PingResp
-	0, // 7: user.UserService.GetUser:output_type -> user.User
-	0, // 8: user.UserService.UpdateUser:output_type -> user.User
-	6, // 9: user.UserService.Register:output_type -> user.RegisterResp
-	5, // [5:10] is the sub-list for method output_type
-	0, // [0:5] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0,  // 0: user.FindUserResp.user:type_name -> user.User
+	3,  // 1: user.UserService.Login:input_type -> user.LoginRequest
+	1,  // 2: user.UserService.Ping:input_type -> user.PingReq
+	7,  // 3: user.UserService.GetUser:input_type -> user.GetUserRequest
+	8,  // 4: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
+	5,  // 5: user.UserService.Register:input_type -> user.RegisterReq
+	9,  // 6: user.UserService.FindUser:input_type -> user.FindUserReq
+	4,  // 7: user.UserService.Login:output_type -> user.LoginResponse
+	2,  // 8: user.UserService.Ping:output_type -> user.PingResp
+	0,  // 9: user.UserService.GetUser:output_type -> user.User
+	0,  // 10: user.UserService.UpdateUser:output_type -> user.User
+	6,  // 11: user.UserService.Register:output_type -> user.RegisterResp
+	10, // 12: user.UserService.FindUser:output_type -> user.FindUserResp
+	7,  // [7:13] is the sub-list for method output_type
+	1,  // [1:7] is the sub-list for method input_type
+	1,  // [1:1] is the sub-list for extension type_name
+	1,  // [1:1] is the sub-list for extension extendee
+	0,  // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_apps_user_rpc_user_proto_init() }
@@ -647,7 +764,7 @@ func file_apps_user_rpc_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_apps_user_rpc_user_proto_rawDesc), len(file_apps_user_rpc_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -21,31 +21,39 @@ type (
 		Avatar   string `json:"avatar"`
 	}
 	RegisterResp {
-		token  string `json:"token"`
-		expire int64  `json:"expire"`
+		token  string `json:"token"` //token
+		expire int64  `json:"expire"` //token有效时长
 	}
 	LoginReq {
 		phone    string `json:"phone"`
 		password string `json:"password"`
 	}
 	LoginResp {
-		id     string `json:"id"`
-		token  string `json:"token"`
-		expire int64  `json:"expire"`
+		id     string `json:"id"` //用户id
+		token  string `json:"token"` //用户登录token
+		expire int64  `json:"expire"` //token有效时长
 	}
 	UserInfoReq {
-		id string `json:"id"`
+		id string `json:"id"` //用户id
 	}
 	UserInfoResp {
-		Info User `json:"info"`
+		Info User `json:"info"` //用户信息
 	}
 	UpdateReq {
-		nickname *string `json:"nickname,optional"`
-		avatar   *string `json:"avatar,optional"`
-		sex      *int32  `json:"sex,optional"`
+		nickname *string `json:"nickname,optional"` //昵称
+		avatar   *string `json:"avatar,optional"` // 头像
+		sex      *int32  `json:"sex,optional"` //性别
 	}
 	UpdateResp {
 		Info User `json:"info"`
+	}
+	FindUserReq {
+		name  string   `json:"name"`//昵称
+		phone string   `json:"phone"`//电话
+		ids   []string `json:"ids"`//id
+	}
+	FindUserResp {
+		Infos []User `json:"infos"`
 	}
 )
 
@@ -62,6 +70,10 @@ service user {
 	@doc "用户登入"
 	@handler login
 	post /login (LoginReq) returns (LoginResp)
+
+	@doc "获取用户"
+	@handler findUser
+	get /findUser (FindUserReq) returns (FindUserResp)
 
 	@doc "保持与etcd的连接"
 	@handler pingRpc

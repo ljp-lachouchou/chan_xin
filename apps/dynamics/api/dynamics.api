@@ -59,18 +59,18 @@ type (
 	}
 	Pagination {
 		PageSize  int    `json:"pageSize"` // 每页数量（默认10）
-		PageToken string `json:"pageToken"` // 翻页令牌
+		PageToken string `json:"pageToken"` // 翻页令牌，若为"",则是无偏移
 	}
 	Ids {
-		ids []string `json:"ids"`
+		ids []string `json:"ids"`//点赞post的用户id
 	}
 	ListCommentRespStruct {
-		userId       string `json:"userId"`
-		targetUserId string `json:"targetUserId"`
-		content      string `json:"content"`
+		userId       string `json:"userId"` //评论用户id
+		targetUserId string `json:"targetUserId"` //被评论的用户iD,根评论此字段为""
+		content      string `json:"content"` //内容
 	}
 	ListCommentResp {
-		list []ListCommentRespStruct `json:"list"`
+		list []ListCommentRespStruct `json:"list"` //评论列表
 	}
 )
 
@@ -172,20 +172,20 @@ type Empty {} // 空响应体
 // ================== 请求/响应结构 ==================
 type (
 	GetPostInfoReq {
-		postId string `json:"postId"`
+		postId string `json:"postId"`//动态id
 	}
 	CreatePostRequest {
-		UserId  string      `json:"userId"`
-		Content PostContent `json:"content"`
-		Meta    PostMeta    `json:"meta"`
+		UserId  string      `json:"userId"`//用户id
+		Content PostContent `json:"content"` //内容
+		Meta    PostMeta    `json:"meta"`//元数据
 	}
 	DeletePostRequest {
 		UserId string `json:"userId"` // 操作者ID
 		PostId string `json:"postId"` // 路径参数
 	}
 	PinPostRequest {
-		UserId string `json:"userId"`
-		PostId string `json:"postId"`
+		UserId string `json:"userId"` //操作者iD
+		PostId string `json:"postId"` //动态
 		Pin    bool   `json:"pin"` // true=置顶
 	}
 	SetCoverRequest {
@@ -202,8 +202,8 @@ type (
 		pagination Pagination `json:"pagination"`
 	}
 	PostListResponse {
-		Posts         []Post `json:"posts"`
-		NextPageToken string `json:"nextPageToken"`
+		Posts         []Post `json:"posts"` //post列表
+		NextPageToken string `json:"nextPageToken"` //下一页的token，携带偏移量
 	}
 	CreateNotificationReq {
 		UserId        string `json:"userId"` // 接收者ID

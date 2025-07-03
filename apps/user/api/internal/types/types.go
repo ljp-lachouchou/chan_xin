@@ -3,15 +3,25 @@
 
 package types
 
+type FindUserReq struct {
+	Name  string   `json:"name"`
+	Phone string   `json:"phone"`
+	Ids   []string `json:"ids"`
+}
+
+type FindUserResp struct {
+	Infos []User `json:"infos"`
+}
+
 type LoginReq struct {
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
 }
 
 type LoginResp struct {
-	Id     string `json:"id"`
-	Token  string `json:"token"`
-	Expire int64  `json:"expire"`
+	Id     string `json:"id"`     //用户id
+	Token  string `json:"token"`  //用户登录token
+	Expire int64  `json:"expire"` //token有效时长
 }
 
 type RegisterReq struct {
@@ -23,14 +33,14 @@ type RegisterReq struct {
 }
 
 type RegisterResp struct {
-	Token  string `json:"token"`
-	Expire int64  `json:"expire"`
+	Token  string `json:"token"`  //token
+	Expire int64  `json:"expire"` //token有效时长
 }
 
 type UpdateReq struct {
-	Nickname *string `json:"nickname,optional"`
-	Avatar   *string `json:"avatar,optional"`
-	Sex      *int32  `json:"sex,optional"`
+	Nickname *string `json:"nickname,optional"` //昵称
+	Avatar   *string `json:"avatar,optional"`   // 头像
+	Sex      *int32  `json:"sex,optional"`      //性别
 }
 
 type UpdateResp struct {
@@ -46,9 +56,9 @@ type User struct {
 }
 
 type UserInfoReq struct {
-	Id string `json:"id"`
+	Id string `json:"id"` //用户id
 }
 
 type UserInfoResp struct {
-	Info User `json:"info"`
+	Info User `json:"info"` //用户信息
 }

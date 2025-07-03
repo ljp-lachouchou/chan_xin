@@ -36,6 +36,8 @@ type (
 		Update(ctx context.Context, data *Users) error
 		Delete(ctx context.Context, id string) error
 		Transx(ctx context.Context,fn func(context.Context, sqlx.Session) error) error
+		ListByName(ctx context.Context,name string ) ([]*Users, error)
+		ListByIds(ctx context.Context,ids []string ) ([]*Users, error)
 	}
 
 	defaultUsersModel struct {
@@ -65,6 +67,30 @@ func newUsersModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *
 		CachedConn: sqlc.NewConn(conn, c, opts...),
 		table:      "`users`",
 	}
+}
+func (m *defaultUsersModel) ListByName(ctx context.Context,name string ) ([]*Users, error) {
+	query := fmt.Sprintf("select %s from %s where `nickname` like ?", usersRows, m.table)
+	var resp []*Users
+	err := m.QueryRowsNoCacheCtx(ctx,&resp,query,fmt.Sprint("%",name,"%"))
+	switch err {
+	case nil:
+		return resp,nil
+	default:
+		return nil, err
+	}
+
+}
+func (m *defaultUsersModel) ListByIds(ctx context.Context,ids []string ) ([]*Users, error) {
+	query := fmt.Sprintf("select %s from %s where `id` in ('%s')", usersRows, m.table,strings.Join(ids,"','"))
+	var resp []*Users
+	err := m.QueryRowsNoCacheCtx(ctx,&resp,query)
+	switch err {
+	case nil:
+		return resp,nil
+	default:
+		return nil, err
+	}
+
 }
 func (m *defaultUsersModel) GetNicknameByUid(ctx context.Context, uid string) (string, error) {
 	query := fmt.Sprintf("select %s from %s where `id` = ?",usersRows,m.table)

@@ -53,7 +53,15 @@ message UpdateUserRequest {
   optional string avatar = 3; // 可选更新头像
   optional int32   sex = 4;
 }
+message FindUserReq {
+  string name = 1;
+  string phone = 2;
+  repeated string ids = 3;
+}
 
+message FindUserResp {
+  repeated User user = 1;
+}
 // ===== 服务接口 =====
 service UserService {
   // 用户鉴权
@@ -63,4 +71,5 @@ service UserService {
   rpc GetUser(GetUserRequest) returns (User);
   rpc UpdateUser(UpdateUserRequest) returns (User);
   rpc Register(RegisterReq) returns (RegisterResp);
+  rpc FindUser(FindUserReq) returns (FindUserResp);
 }

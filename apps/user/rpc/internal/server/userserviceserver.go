@@ -49,3 +49,8 @@ func (s *UserServiceServer) Register(ctx context.Context, in *user.RegisterReq) 
 	l := logic.NewRegisterLogic(ctx, s.svcCtx)
 	return l.Register(in)
 }
+
+func (s *UserServiceServer) FindUser(ctx context.Context, in *user.FindUserReq) (*user.FindUserResp, error) {
+	l := logic.NewFindUserLogic(ctx, s.svcCtx)
+	return l.FindUser(in)
+}

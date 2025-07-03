@@ -1,15 +1,177 @@
 # chan_xin后端
-- **状态:** 开发中
+- **状态:** 已完成
 - **架构:** 微服务
-- **目标:** 仿照微信的功能实现后端，为开发android做准备
+- **技术选型:** go-zero (自带脚手架，加速开发；对grpc框架进行封装，上手简单；只需要编写逻辑，轻松开发)
+- **开发语言:** go (部署、启动迅速，无复杂设计模式，非常适用于客户端开发)
+- **目标:** 仿照微信的功能实现后端，为开发android客户端服务
+- **请求参数:** 为了加速开发，不论是post请求还是get请求都放在了请求体中
+  - 以测试工具apipost为例:![img.png](img/img.png)
+- **路径:** http://114.215.194.88
+- **完整路径:** 路径+前缀+每个功能后的/...
+  - 例子: http://114.215.194.88/v1/user/register
+- **声明:**
+  - 仅在开发环境使用——即单节点状况下运行
+  - 如果出现了没有注释的、不是基础的数据结构，可在对应的数据结构中发现
+  - 如无正确响应一栏，默认code200为正确响应
 
 ## 目前完成功能：
  - 用户功能
- - 社交功能（因im模块的添加，待完善）
-
-
-## 目前开发功能：
-- im模块业务
+ - 社交功能
+ - 即时通讯功能
+ - 动态功能
 
 ## api文档：
-- 待完善
+ - **用户功能**
+   - 路径前缀: v1/user
+   - 数据结构: ![img_9.png](img/img_9.png)
+   - 注册: post /register (请求方式+子路径)
+     - 请求参数:![img_5.png](img/img_5.png)
+     - 正确响应:![img_6.png](img/img_6.png)
+   - 登录: post /login
+     - 请求参数:![img_4.png](img/img_4.png)
+     - 正确响应:![img_3.png](img/img_3.png)
+   - 获取用户个人信息: get /userinfo
+     - 请求参数:![img_7.png](img/img_7.png)
+     - 正确响应:![img_8.png](img/img_8.png)
+   - 更新用户: patch /update
+     - 请求参数:![img_10.png](img/img_10.png)
+     - 正确响应:![img_11.png](img/img_11.png)
+   - 查询用户: get /findUser
+     - 请求参数: ![img_12.png](img/img_12.png)
+     - 正确响应: ![img_13.png](img/img_13.png)
+   - 注意！！！:更新用户、查询用户需在前端中的请求头中设置鉴权token——即登录后返回的token
+ - **社交功能:**
+   - 路径前缀: /v1/social
+   - 数据结构: ![img_14.png](img/img_14.png) ![img_28.png](img/img_28.png) ![img_35.png](img/img_35.png) ![img_38.png](img/img_38.png) ![img_43.png](img/img_43.png)
+   - 申请好友: post /applyFriend
+     - 请求参数:![img_15.png](img/img_15.png)
+     - 正确响应:![img_16.png](img/img_16.png)
+   - 目标方处理申请: post /handleFriendApply
+     - 请求参数: ![img_17.png](img/img_17.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 删除好友: delete /deleteFriend
+     - 请求参数: ![img_18.png](img/img_18.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 更新我对此好友的状态: put /updateFriendStatus
+     - 请求参数: ![img_19.png](img/img_19.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 获取好友信息: get /getFriendInfo
+     - 请求参数: ![img_20.png](img/img_20.png)
+     - 正确响应: ![img_21.png](img/img_21.png)
+   - 获取用户好友列表: get /getFriendList
+     - 请求参数: ![img_24.png](img/img_24.png)
+     - 正确响应: ![img_25.png](img/img_25.png)
+   - 获取你请求添加的好友列表: get /getFriendApplyList
+     - 请求参数: ![img_26.png](img/img_26.png)
+     - 正确响应: ![img_27.png](img/img_27.png)
+   - 创建群: post /createGroup
+     - 请求参数: ![img_29.png](img/img_29.png)
+     - 正确响应: ![img_30.png](img/img_30.png)
+   - 退出群/踢出群成员/解散群: delete /quitGroup (如果你是群主，调用此，群就会解散)
+     - 请求参数: ![img_31.png](img/img_31.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 邀请某人入群: post /inviteToGroup 
+     - 请求参数: ![img_33.png](img/img_33.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 被邀请者处理群申请: post /handleGroupInvite
+     - 请求参数: ![img_22.png](img/img_22.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 某人申请入群: post /applyGroup
+     - 请求参数: ![img_23.png](img/img_23.png)
+     - 正确响应: ![img_32.png](img/img_32.png)
+   - 群处理申请 post /handleGroupApply
+     - 请求参数: ![img_34.png](img/img_34.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 更新某人对此群的状态: put /updateGroupStatus
+     - 请求参数: ![img_36.png](img/img_36.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 设置管理员: post /manageGroupMember
+     - 请求参数: ![img_37.png](img/img_37.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 移除管理员: delete /removeAdminremoveAdmin
+     - 请求参数: ![img_38.png](img/img_38.png)
+     - 正确响应: 无返回数据，code为200即为成功
+   - 获取群信息: get /getGroupInfo
+     - 请求参数: ![img_39.png](img/img_39.png)
+     - 正确响应: ![img_40.png](img/img_40.png)
+   - 获取群里成员: get /getGroupMembers 
+     - 请求参数: ![img_41.png](img/img_41.png)
+     - 正确响应: ![img_42.png](img/img_42.png)
+   - 获取管理员: get /getGroupAdmins
+     - 请求参数: ![img_44.png](img/img_44.png)
+     - 正确响应: ![img_45.png](img/img_45.png)
+   - 群员的个性化设置: put /setGroupMemberSetting 
+     - 请求参数: ![img_46.png](img/img_46.png)
+     - 正确响应: ![img_47.png](img/img_47.png)
+ - **即时通讯功能**
+   - 前缀: /v1/im 
+   - 群聊/私聊功能: /ws (websocket协议)
+     - 请求参数(此处没有注释就是固定用法,你可以自己扩展): ![img_48.png](img/img_48.png) 
+     - 正确响应: 发送方发送出消息，接收方接收到消息 ![img_49.png](img/img_49.png) ![img_50.png](img/img_50.png) ![img_51.png](img/img_51.png)
+     - 响应中的conversationId为会话iD,根据发送方，接收方id自动生成
+   - 获取聊天记录: get /getChatLog 
+     - 请求参数: ![img_52.png](img/img_52.png)
+     - 正确响应: ![img_53.png](img/img_53.png)
+   - 获取会话列表 get /getConversations
+     - 请求参数: ![img_55.png](img/img_55.png)
+     - 正确响应: ![img_56.png](img/img_56.png)
+   - 更新会话信息 put /putConversations
+     - 请求参数: ![img_57.png](img/img_57.png)
+     - 正确响应: ![img_58.png](img/img_58.png)
+  - **动态功能**
+    - 前缀: /v1/dynamics
+    - 数据结构: ![img_61.png](img/img_61.png) ![img_65.png](img/img_65.png) ![img_67.png](img/img_67.png) ![img_68.png](img/img_68.png) ![img_74.png](img/img_74.png) ![img_88.png](img/img_88.png)
+    - 单个post信息 get /getPostInfo 
+      - 请求参数: ![img_59.png](img/img_59.png)
+      - 正确响应: ![img_60.png](img/img_60.png)
+    - 点赞列表 get /listLikeByPostId 
+      - 请求参数: ![img_62.png](img/img_62.png)
+      - 正确相应: ![img_63.png](img/img_63.png)
+    - 评论列表: get /listCommentByPostId
+      - 请求参数: ![img_62.png](img/img_62.png)
+      - 正确响应(a-b:content/a:content): ![img_64.png](img/img_64.png)
+    - 创建动态: post /createPost 
+      - 请求参数: ![img_66.png](img/img_66.png)
+      - 正确响应: ![img_69.png](img/img_69.png)
+    - 删除动态 delete /deletePost
+      - 请求参数(操作者id为post创建者才success): ![img_70.png](img/img_70.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 置顶/取消置顶 put /pinPost
+      - 请求参数(操作者id同删除动态): ![img_71.png](img/img_71.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 获取用户动态列表 get /listUserPosts 
+      - 请求参数: ![img_72.png](img/img_72.png)
+      - 正确响应: ![img_75.png](img/img_75.png)
+    - 设置个人朋友圈封面: put /setCover
+      - 请求参数: ![img_76.png](img/img_76.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 浏览朋友圈 get /listVisiblePosts
+      - 请求参数: ![img_77.png](img/img_77.png)
+      - 正确响应: ![img_78.png](img/img_78.png)
+    - 点赞/取消点赞: post /toggleLike
+      - 请求参数: ![img_79.png](img/img_79.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 创建评论: post /createComment
+      - 请求参数: ![img_80.png](img/img_80.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 创建评论回复: post /createCommentReplay
+      - 请求参数: ![img_81.png](img/img_81.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 更新评论状态 put /updateComment
+      - 请求参数: ![img_82.png](img/img_82.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 更新回复状态 put /updateCommentReplay
+      - 请求参数: ![img_83.png](img/img_83.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 创建通知 post /createNotification
+      - 请求参数: ![img_84.png](img/img_84.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 更新通知状态 put /updateNotification
+      - 请求参数: ![img_85.png](img/img_85.png)
+      - 正确响应: 无返回数据，code为200即为成功
+    - 获取通知列表 get /listNotifications
+      - 请求参数: ![img_86.png](img/img_86.png)
+      - 正确响应: ![img_87.png](img/img_87.png)
+    - 获取通知未读数 get /getUnreadCount
+      - 请求参数: ![img_89.png](img/img_89.png)
+      - 正确响应: ![img_90.png](img/img_90.png)

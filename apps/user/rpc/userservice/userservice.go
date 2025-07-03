@@ -14,6 +14,8 @@ import (
 )
 
 type (
+	FindUserReq       = user.FindUserReq
+	FindUserResp      = user.FindUserResp
 	GetUserRequest    = user.GetUserRequest
 	LoginRequest      = user.LoginRequest
 	LoginResponse     = user.LoginResponse
@@ -32,6 +34,7 @@ type (
 		GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error)
 		UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*User, error)
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
+		FindUser(ctx context.Context, in *FindUserReq, opts ...grpc.CallOption) (*FindUserResp, error)
 	}
 
 	defaultUserService struct {
@@ -70,4 +73,9 @@ func (m *defaultUserService) UpdateUser(ctx context.Context, in *UpdateUserReque
 func (m *defaultUserService) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
 	client := user.NewUserServiceClient(m.cli.Conn())
 	return client.Register(ctx, in, opts...)
+}
+
+func (m *defaultUserService) FindUser(ctx context.Context, in *FindUserReq, opts ...grpc.CallOption) (*FindUserResp, error) {
+	client := user.NewUserServiceClient(m.cli.Conn())
+	return client.FindUser(ctx, in, opts...)
 }

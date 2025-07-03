@@ -19,6 +19,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.LimitMiddleware},
 			[]rest.Route{
 				{
+					// 获取用户
+					Method:  http.MethodGet,
+					Path:    "/findUser",
+					Handler: user.FindUserHandler(serverCtx),
+				},
+				{
 					// 用户登入
 					Method:  http.MethodPost,
 					Path:    "/login",
