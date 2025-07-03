@@ -237,7 +237,11 @@ service dynamics {
   rpc ListNotificationsByUserIdAndType(ListNotificationsByUserIdAndTypeReq) returns(ListNotificationsByUserIdAndTypeReqResponse);
   // 新增：获取未读通知数量
   rpc GetUnreadCount (GetUnreadCountRequest) returns (GetUnreadCountResponse);
+
+  rpc Ping(PingRep) returns(PingResp);
 }
+message PingRep {}
+message PingResp {}
 message Ids {
   repeated string ids = 1;
 }

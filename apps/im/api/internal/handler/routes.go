@@ -33,6 +33,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: chat.GetConversationsHandler(serverCtx),
 				},
 				{
+					Method:  http.MethodGet,
+					Path:    "/ping",
+					Handler: chat.PingHandler(serverCtx),
+				},
+				{
 					Method:  http.MethodPut,
 					Path:    "/putConversations",
 					Handler: chat.PutConversationsHandler(serverCtx),

@@ -22,6 +22,8 @@ type (
 	GetChatLogResp              = im.GetChatLogResp
 	GetConversationsReq         = im.GetConversationsReq
 	GetConversationsResp        = im.GetConversationsResp
+	PingRep                     = im.PingRep
+	PingResp                    = im.PingResp
 	PutConversationsReq         = im.PutConversationsReq
 	PutConversationsResp        = im.PutConversationsResp
 	SetUpUserConversationReq    = im.SetUpUserConversationReq
@@ -37,6 +39,7 @@ type (
 		// 更新会话
 		PutConversations(ctx context.Context, in *PutConversationsReq, opts ...grpc.CallOption) (*PutConversationsResp, error)
 		CreateGroupConversation(ctx context.Context, in *CreateGroupConversationReq, opts ...grpc.CallOption) (*CreateGroupConversationResp, error)
+		Ping(ctx context.Context, in *PingRep, opts ...grpc.CallOption) (*PingResp, error)
 	}
 
 	defaultIm struct {
@@ -77,4 +80,9 @@ func (m *defaultIm) PutConversations(ctx context.Context, in *PutConversationsRe
 func (m *defaultIm) CreateGroupConversation(ctx context.Context, in *CreateGroupConversationReq, opts ...grpc.CallOption) (*CreateGroupConversationResp, error) {
 	client := im.NewImClient(m.cli.Conn())
 	return client.CreateGroupConversation(ctx, in, opts...)
+}
+
+func (m *defaultIm) Ping(ctx context.Context, in *PingRep, opts ...grpc.CallOption) (*PingResp, error) {
+	client := im.NewImClient(m.cli.Conn())
+	return client.Ping(ctx, in, opts...)
 }

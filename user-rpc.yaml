@@ -1,0 +1,23 @@
+cache:
+    - host: 114.215.194.88:16379
+      pass: chan-xin
+      type: node
+etcd:
+    hosts:
+        - 114.215.194.88:3379
+    key: user.rpc
+jwt:
+    accessexpire: 864000
+    accesssecret: github.com/ljp-lachouchou/chan_xin
+listenon: 0.0.0.0:10000
+mysql:
+    datasource: root:chan-xin@tcp(114.215.194.88:13306)/chan-xin?charset=utf8mb4&parseTime=True&loc=Local
+name: user.rpc
+redisx:
+    host: 114.215.194.88:16379
+    pass: chan-xin
+    type: node
+telemetry:
+    batcher: jaeger
+    endpoint: http://114.215.194.88:14268/api/traces
+    name: user.rpc

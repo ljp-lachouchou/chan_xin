@@ -4,6 +4,7 @@
 package handler
 
 import (
+	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/middleware"
 	"net/http"
 
 	user "github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/handler/user"
@@ -42,7 +43,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.TokenRevokeCheck},
+			[]rest.Middleware{middleware.NewTokenRevokeCheckMiddleware().Handle(serverCtx)},
 			[]rest.Route{
 				{
 					// 更新用户

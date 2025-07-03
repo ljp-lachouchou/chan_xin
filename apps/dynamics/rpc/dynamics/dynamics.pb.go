@@ -1856,6 +1856,78 @@ func (x *GetUnreadCountResponse) GetUnreadCount() int32 {
 	return 0
 }
 
+type PingRep struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PingRep) Reset() {
+	*x = PingRep{}
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingRep) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingRep) ProtoMessage() {}
+
+func (x *PingRep) ProtoReflect() protoreflect.Message {
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingRep.ProtoReflect.Descriptor instead.
+func (*PingRep) Descriptor() ([]byte, []int) {
+	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{31}
+}
+
+type PingResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PingResp) Reset() {
+	*x = PingResp{}
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingResp) ProtoMessage() {}
+
+func (x *PingResp) ProtoReflect() protoreflect.Message {
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingResp.ProtoReflect.Descriptor instead.
+func (*PingResp) Descriptor() ([]byte, []int) {
+	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{32}
+}
+
 type Ids struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ids           []string               `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
@@ -1865,7 +1937,7 @@ type Ids struct {
 
 func (x *Ids) Reset() {
 	*x = Ids{}
-	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[31]
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1877,7 +1949,7 @@ func (x *Ids) String() string {
 func (*Ids) ProtoMessage() {}
 
 func (x *Ids) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[31]
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1890,7 +1962,7 @@ func (x *Ids) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ids.ProtoReflect.Descriptor instead.
 func (*Ids) Descriptor() ([]byte, []int) {
-	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{31}
+	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *Ids) GetIds() []string {
@@ -1909,7 +1981,7 @@ type IdsMap struct {
 
 func (x *IdsMap) Reset() {
 	*x = IdsMap{}
-	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[32]
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1921,7 +1993,7 @@ func (x *IdsMap) String() string {
 func (*IdsMap) ProtoMessage() {}
 
 func (x *IdsMap) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[32]
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1934,7 +2006,7 @@ func (x *IdsMap) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdsMap.ProtoReflect.Descriptor instead.
 func (*IdsMap) Descriptor() ([]byte, []int) {
-	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{32}
+	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *IdsMap) GetIdsMap() map[string]string {
@@ -1955,7 +2027,7 @@ type ListCommentRespStruct struct {
 
 func (x *ListCommentRespStruct) Reset() {
 	*x = ListCommentRespStruct{}
-	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[33]
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1967,7 +2039,7 @@ func (x *ListCommentRespStruct) String() string {
 func (*ListCommentRespStruct) ProtoMessage() {}
 
 func (x *ListCommentRespStruct) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[33]
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1980,7 +2052,7 @@ func (x *ListCommentRespStruct) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCommentRespStruct.ProtoReflect.Descriptor instead.
 func (*ListCommentRespStruct) Descriptor() ([]byte, []int) {
-	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{33}
+	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *ListCommentRespStruct) GetUserId() string {
@@ -2013,7 +2085,7 @@ type ListCommentResp struct {
 
 func (x *ListCommentResp) Reset() {
 	*x = ListCommentResp{}
-	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[34]
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2025,7 +2097,7 @@ func (x *ListCommentResp) String() string {
 func (*ListCommentResp) ProtoMessage() {}
 
 func (x *ListCommentResp) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[34]
+	mi := &file_apps_dynamics_rpc_dynamics_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2038,7 +2110,7 @@ func (x *ListCommentResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCommentResp.ProtoReflect.Descriptor instead.
 func (*ListCommentResp) Descriptor() ([]byte, []int) {
-	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{34}
+	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *ListCommentResp) GetList() []*ListCommentRespStruct {
@@ -2165,7 +2237,10 @@ const file_apps_dynamics_rpc_dynamics_proto_rawDesc = "" +
 	"\x15GetUnreadCountRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\";\n" +
 	"\x16GetUnreadCountResponse\x12!\n" +
-	"\funread_count\x18\x01 \x01(\x05R\vunreadCount\"\x17\n" +
+	"\funread_count\x18\x01 \x01(\x05R\vunreadCount\"\t\n" +
+	"\aPingRep\"\n" +
+	"\n" +
+	"\bPingResp\"\x17\n" +
 	"\x03Ids\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\tR\x03ids\"y\n" +
 	"\x06IdsMap\x124\n" +
@@ -2190,7 +2265,7 @@ const file_apps_dynamics_rpc_dynamics_proto_rawDesc = "" +
 	"\x06CUSTOM\x10\x02*'\n" +
 	"\x10NotificationType\x12\b\n" +
 	"\x04LIKE\x10\x00\x12\t\n" +
-	"\x05REPLY\x10\x012\x8a\f\n" +
+	"\x05REPLY\x10\x012\xb9\f\n" +
 	"\bdynamics\x129\n" +
 	"\n" +
 	"CreatePost\x12\x1b.dynamics.CreatePostRequest\x1a\x0e.dynamics.Post\x12:\n" +
@@ -2215,7 +2290,8 @@ const file_apps_dynamics_rpc_dynamics_proto_rawDesc = "" +
 	"\x10ListLikeByPostId\x12\x18.dynamics.GetPostInfoReq\x1a\r.dynamics.Ids\x12J\n" +
 	"\x13ListCommentByPostId\x12\x18.dynamics.GetPostInfoReq\x1a\x19.dynamics.ListCommentResp\x12\x88\x01\n" +
 	" ListNotificationsByUserIdAndType\x12-.dynamics.ListNotificationsByUserIdAndTypeReq\x1a5.dynamics.ListNotificationsByUserIdAndTypeReqResponse\x12S\n" +
-	"\x0eGetUnreadCount\x12\x1f.dynamics.GetUnreadCountRequest\x1a .dynamics.GetUnreadCountResponseB\fZ\n" +
+	"\x0eGetUnreadCount\x12\x1f.dynamics.GetUnreadCountRequest\x1a .dynamics.GetUnreadCountResponse\x12-\n" +
+	"\x04Ping\x12\x11.dynamics.PingRep\x1a\x12.dynamics.PingRespB\fZ\n" +
 	"./dynamicsb\x06proto3"
 
 var (
@@ -2231,7 +2307,7 @@ func file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP() []byte {
 }
 
 var file_apps_dynamics_rpc_dynamics_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_apps_dynamics_rpc_dynamics_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
+var file_apps_dynamics_rpc_dynamics_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
 var file_apps_dynamics_rpc_dynamics_proto_goTypes = []any{
 	(ContentType)(0),                                    // 0: dynamics.ContentType
 	(VisibleScope)(0),                                   // 1: dynamics.VisibleScope
@@ -2267,11 +2343,13 @@ var file_apps_dynamics_rpc_dynamics_proto_goTypes = []any{
 	(*ListNotificationsByUserIdAndTypeReqResponse)(nil), // 31: dynamics.ListNotificationsByUserIdAndTypeReqResponse
 	(*GetUnreadCountRequest)(nil),                       // 32: dynamics.GetUnreadCountRequest
 	(*GetUnreadCountResponse)(nil),                      // 33: dynamics.GetUnreadCountResponse
-	(*Ids)(nil),                                         // 34: dynamics.Ids
-	(*IdsMap)(nil),                                      // 35: dynamics.IdsMap
-	(*ListCommentRespStruct)(nil),                       // 36: dynamics.ListCommentRespStruct
-	(*ListCommentResp)(nil),                             // 37: dynamics.ListCommentResp
-	nil,                                                 // 38: dynamics.IdsMap.IdsMapEntry
+	(*PingRep)(nil),                                     // 34: dynamics.PingRep
+	(*PingResp)(nil),                                    // 35: dynamics.PingResp
+	(*Ids)(nil),                                         // 36: dynamics.Ids
+	(*IdsMap)(nil),                                      // 37: dynamics.IdsMap
+	(*ListCommentRespStruct)(nil),                       // 38: dynamics.ListCommentRespStruct
+	(*ListCommentResp)(nil),                             // 39: dynamics.ListCommentResp
+	nil,                                                 // 40: dynamics.IdsMap.IdsMapEntry
 }
 var file_apps_dynamics_rpc_dynamics_proto_depIdxs = []int32{
 	1,  // 0: dynamics.PostMeta.scope:type_name -> dynamics.VisibleScope
@@ -2288,8 +2366,8 @@ var file_apps_dynamics_rpc_dynamics_proto_depIdxs = []int32{
 	8,  // 11: dynamics.ListNotificationsResponse.notifications:type_name -> dynamics.Notification
 	2,  // 12: dynamics.ListNotificationsByUserIdAndTypeReq.type:type_name -> dynamics.NotificationType
 	8,  // 13: dynamics.ListNotificationsByUserIdAndTypeReqResponse.notifications:type_name -> dynamics.Notification
-	38, // 14: dynamics.IdsMap.IdsMap:type_name -> dynamics.IdsMap.IdsMapEntry
-	36, // 15: dynamics.ListCommentResp.list:type_name -> dynamics.ListCommentRespStruct
+	40, // 14: dynamics.IdsMap.IdsMap:type_name -> dynamics.IdsMap.IdsMapEntry
+	38, // 15: dynamics.ListCommentResp.list:type_name -> dynamics.ListCommentRespStruct
 	21, // 16: dynamics.dynamics.CreatePost:input_type -> dynamics.CreatePostRequest
 	22, // 17: dynamics.dynamics.DeletePost:input_type -> dynamics.DeletePostRequest
 	7,  // 18: dynamics.dynamics.ToggleLike:input_type -> dynamics.LikeAction
@@ -2311,29 +2389,31 @@ var file_apps_dynamics_rpc_dynamics_proto_depIdxs = []int32{
 	30, // 34: dynamics.dynamics.ListCommentByPostId:input_type -> dynamics.GetPostInfoReq
 	29, // 35: dynamics.dynamics.ListNotificationsByUserIdAndType:input_type -> dynamics.ListNotificationsByUserIdAndTypeReq
 	32, // 36: dynamics.dynamics.GetUnreadCount:input_type -> dynamics.GetUnreadCountRequest
-	6,  // 37: dynamics.dynamics.CreatePost:output_type -> dynamics.Post
-	3,  // 38: dynamics.dynamics.DeletePost:output_type -> dynamics.Empty
-	3,  // 39: dynamics.dynamics.ToggleLike:output_type -> dynamics.Empty
-	3,  // 40: dynamics.dynamics.PinPost:output_type -> dynamics.Empty
-	10, // 41: dynamics.dynamics.ListUserPosts:output_type -> dynamics.PostListResponse
-	3,  // 42: dynamics.dynamics.SetCover:output_type -> dynamics.Empty
-	10, // 43: dynamics.dynamics.ListVisiblePosts:output_type -> dynamics.PostListResponse
-	13, // 44: dynamics.dynamics.CreateComment:output_type -> dynamics.CreateCommentResp
-	15, // 45: dynamics.dynamics.CreateCommentReplay:output_type -> dynamics.CreateCommentReplayResp
-	3,  // 46: dynamics.dynamics.UpdateComment:output_type -> dynamics.Empty
-	3,  // 47: dynamics.dynamics.UpdateCommentReplay:output_type -> dynamics.Empty
-	3,  // 48: dynamics.dynamics.UpdateNotification:output_type -> dynamics.Empty
-	3,  // 49: dynamics.dynamics.DeleteComment:output_type -> dynamics.Empty
-	3,  // 50: dynamics.dynamics.DeleteCommentReplay:output_type -> dynamics.Empty
-	3,  // 51: dynamics.dynamics.CreateNotification:output_type -> dynamics.Empty
-	28, // 52: dynamics.dynamics.ListNotifications:output_type -> dynamics.ListNotificationsResponse
-	6,  // 53: dynamics.dynamics.GetPostInfo:output_type -> dynamics.Post
-	34, // 54: dynamics.dynamics.ListLikeByPostId:output_type -> dynamics.Ids
-	37, // 55: dynamics.dynamics.ListCommentByPostId:output_type -> dynamics.ListCommentResp
-	31, // 56: dynamics.dynamics.ListNotificationsByUserIdAndType:output_type -> dynamics.ListNotificationsByUserIdAndTypeReqResponse
-	33, // 57: dynamics.dynamics.GetUnreadCount:output_type -> dynamics.GetUnreadCountResponse
-	37, // [37:58] is the sub-list for method output_type
-	16, // [16:37] is the sub-list for method input_type
+	34, // 37: dynamics.dynamics.Ping:input_type -> dynamics.PingRep
+	6,  // 38: dynamics.dynamics.CreatePost:output_type -> dynamics.Post
+	3,  // 39: dynamics.dynamics.DeletePost:output_type -> dynamics.Empty
+	3,  // 40: dynamics.dynamics.ToggleLike:output_type -> dynamics.Empty
+	3,  // 41: dynamics.dynamics.PinPost:output_type -> dynamics.Empty
+	10, // 42: dynamics.dynamics.ListUserPosts:output_type -> dynamics.PostListResponse
+	3,  // 43: dynamics.dynamics.SetCover:output_type -> dynamics.Empty
+	10, // 44: dynamics.dynamics.ListVisiblePosts:output_type -> dynamics.PostListResponse
+	13, // 45: dynamics.dynamics.CreateComment:output_type -> dynamics.CreateCommentResp
+	15, // 46: dynamics.dynamics.CreateCommentReplay:output_type -> dynamics.CreateCommentReplayResp
+	3,  // 47: dynamics.dynamics.UpdateComment:output_type -> dynamics.Empty
+	3,  // 48: dynamics.dynamics.UpdateCommentReplay:output_type -> dynamics.Empty
+	3,  // 49: dynamics.dynamics.UpdateNotification:output_type -> dynamics.Empty
+	3,  // 50: dynamics.dynamics.DeleteComment:output_type -> dynamics.Empty
+	3,  // 51: dynamics.dynamics.DeleteCommentReplay:output_type -> dynamics.Empty
+	3,  // 52: dynamics.dynamics.CreateNotification:output_type -> dynamics.Empty
+	28, // 53: dynamics.dynamics.ListNotifications:output_type -> dynamics.ListNotificationsResponse
+	6,  // 54: dynamics.dynamics.GetPostInfo:output_type -> dynamics.Post
+	36, // 55: dynamics.dynamics.ListLikeByPostId:output_type -> dynamics.Ids
+	39, // 56: dynamics.dynamics.ListCommentByPostId:output_type -> dynamics.ListCommentResp
+	31, // 57: dynamics.dynamics.ListNotificationsByUserIdAndType:output_type -> dynamics.ListNotificationsByUserIdAndTypeReqResponse
+	33, // 58: dynamics.dynamics.GetUnreadCount:output_type -> dynamics.GetUnreadCountResponse
+	35, // 59: dynamics.dynamics.Ping:output_type -> dynamics.PingResp
+	38, // [38:60] is the sub-list for method output_type
+	16, // [16:38] is the sub-list for method input_type
 	16, // [16:16] is the sub-list for extension type_name
 	16, // [16:16] is the sub-list for extension extendee
 	0,  // [0:16] is the sub-list for field type_name
@@ -2351,7 +2431,7 @@ func file_apps_dynamics_rpc_dynamics_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_apps_dynamics_rpc_dynamics_proto_rawDesc), len(file_apps_dynamics_rpc_dynamics_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   36,
+			NumMessages:   38,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

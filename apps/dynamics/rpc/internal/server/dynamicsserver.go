@@ -148,3 +148,8 @@ func (s *DynamicsServer) GetUnreadCount(ctx context.Context, in *dynamics.GetUnr
 	l := logic.NewGetUnreadCountLogic(ctx, s.svcCtx)
 	return l.GetUnreadCount(in)
 }
+
+func (s *DynamicsServer) Ping(ctx context.Context, in *dynamics.PingRep) (*dynamics.PingResp, error) {
+	l := logic.NewPingLogic(ctx, s.svcCtx)
+	return l.Ping(in)
+}

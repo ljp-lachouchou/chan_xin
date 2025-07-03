@@ -1,11 +1,10 @@
 package websocket
 
 import (
-	"syscall"
 	"time"
 )
 
 const (
-	defaultMaxConnIdle = time.Second * syscall.INFINITE
+	defaultMaxConnIdle = time.Hour * 9000
 	defaultAckTimeOut  = time.Second * 10
 )

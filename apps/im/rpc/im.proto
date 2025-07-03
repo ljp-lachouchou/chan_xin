@@ -40,7 +40,8 @@ message GetConversationsReq {
 message GetConversationsResp {
   map<string, Conversation> conversationList = 2;
 }
-
+message PingRep {}
+message PingResp {}
 message PutConversationsReq {
   string id = 1;
   string userId = 2;
@@ -84,4 +85,5 @@ service Im {
   rpc PutConversations(PutConversationsReq)  returns(PutConversationsResp);
 
   rpc CreateGroupConversation(CreateGroupConversationReq) returns(CreateGroupConversationResp);
+  rpc Ping(PingRep) returns(PingResp);
 }

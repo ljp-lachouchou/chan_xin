@@ -51,3 +51,8 @@ func (s *ImServer) CreateGroupConversation(ctx context.Context, in *im.CreateGro
 	l := logic.NewCreateGroupConversationLogic(ctx, s.svcCtx)
 	return l.CreateGroupConversation(in)
 }
+
+func (s *ImServer) Ping(ctx context.Context, in *im.PingRep) (*im.PingResp, error) {
+	l := logic.NewPingLogic(ctx, s.svcCtx)
+	return l.Ping(in)
+}

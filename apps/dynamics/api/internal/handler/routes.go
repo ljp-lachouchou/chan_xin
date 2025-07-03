@@ -107,6 +107,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: pinPostHandler(serverCtx),
 				},
 				{
+					Method:  http.MethodGet,
+					Path:    "/ping",
+					Handler: pingHandler(serverCtx),
+				},
+				{
 					// 设置个人封面
 					Method:  http.MethodPut,
 					Path:    "/setCover",

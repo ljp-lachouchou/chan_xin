@@ -1,0 +1,28 @@
+mysqld, Version: 5.7.43 (MySQL Community Server (GPL)). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+# Time: 2023-11-29T01:56:11.169499Z
+# User@Host: root[root] @  [114.215.194.88]  Id:     3
+# Query_time: 10.000474  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+use easy-chat;
+SET timestamp=1701222971;
+select  sleep(10);
+# Time: 2023-12-01T07:51:08.406649Z
+# User@Host: root[root] @  [114.215.194.88]  Id:     3
+# Query_time: 10.001316  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1701417068;
+select  sleep(10);
+# Time: 2023-12-01T07:54:35.272240Z
+# User@Host: root[root] @  [114.215.194.88]  Id:    10
+# Query_time: 0.000241  Lock_time: 0.000000 Rows_sent: 0  Rows_examined: 0
+SELECT STATE AS `状态`, ROUND(SUM(DURATION),7) AS `期间`, CONCAT(ROUND(SUM(DURATION)/0.001538*100,3), '%') AS `百分比` FROM INFORMATION_SCHEMA.PROFILING WHERE QUERY_ID=3 GROUP BY STATE ORDER BY SEQ;
+# Time: 2023-12-01T07:54:44.498900Z
+# User@Host: root[root] @  [114.215.194.88]  Id:    13
+# Query_time: 0.000178  Lock_time: 0.000000 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1701417284;
+select * from users;
+# Time: 2023-12-01T07:54:44.533387Z
+# User@Host: root[root] @  [114.215.194.88]  Id:    13
+# Query_time: 0.000911  Lock_time: 0.000103 Rows_sent: 357  Rows_examined: 714
+SET timestamp=1701417284;
+SELECT QUERY_ID, SUM(DURATION) AS SUM_DURATION FROM INFORMATION_SCHEMA.PROFILING GROUP BY QUERY_ID;

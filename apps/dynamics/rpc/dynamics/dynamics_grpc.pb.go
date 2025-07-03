@@ -40,6 +40,7 @@ const (
 	Dynamics_ListCommentByPostId_FullMethodName              = "/dynamics.dynamics/ListCommentByPostId"
 	Dynamics_ListNotificationsByUserIdAndType_FullMethodName = "/dynamics.dynamics/ListNotificationsByUserIdAndType"
 	Dynamics_GetUnreadCount_FullMethodName                   = "/dynamics.dynamics/GetUnreadCount"
+	Dynamics_Ping_FullMethodName                             = "/dynamics.dynamics/Ping"
 )
 
 // DynamicsClient is the client API for Dynamics service.
@@ -90,6 +91,7 @@ type DynamicsClient interface {
 	ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 	// 新增：获取未读通知数量
 	GetUnreadCount(ctx context.Context, in *GetUnreadCountRequest, opts ...grpc.CallOption) (*GetUnreadCountResponse, error)
+	Ping(ctx context.Context, in *PingRep, opts ...grpc.CallOption) (*PingResp, error)
 }
 
 type dynamicsClient struct {
@@ -310,6 +312,16 @@ func (c *dynamicsClient) GetUnreadCount(ctx context.Context, in *GetUnreadCountR
 	return out, nil
 }
 
+func (c *dynamicsClient) Ping(ctx context.Context, in *PingRep, opts ...grpc.CallOption) (*PingResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PingResp)
+	err := c.cc.Invoke(ctx, Dynamics_Ping_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DynamicsServer is the server API for Dynamics service.
 // All implementations must embed UnimplementedDynamicsServer
 // for forward compatibility.
@@ -358,6 +370,7 @@ type DynamicsServer interface {
 	ListNotificationsByUserIdAndType(context.Context, *ListNotificationsByUserIdAndTypeReq) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 	// 新增：获取未读通知数量
 	GetUnreadCount(context.Context, *GetUnreadCountRequest) (*GetUnreadCountResponse, error)
+	Ping(context.Context, *PingRep) (*PingResp, error)
 	mustEmbedUnimplementedDynamicsServer()
 }
 
@@ -430,6 +443,9 @@ func (UnimplementedDynamicsServer) ListNotificationsByUserIdAndType(context.Cont
 }
 func (UnimplementedDynamicsServer) GetUnreadCount(context.Context, *GetUnreadCountRequest) (*GetUnreadCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUnreadCount not implemented")
+}
+func (UnimplementedDynamicsServer) Ping(context.Context, *PingRep) (*PingResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
 func (UnimplementedDynamicsServer) mustEmbedUnimplementedDynamicsServer() {}
 func (UnimplementedDynamicsServer) testEmbeddedByValue()                  {}
@@ -830,6 +846,24 @@ func _Dynamics_GetUnreadCount_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Dynamics_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingRep)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).Ping(ctx, req.(*PingRep))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Dynamics_ServiceDesc is the grpc.ServiceDesc for Dynamics service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -920,6 +954,10 @@ var Dynamics_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUnreadCount",
 			Handler:    _Dynamics_GetUnreadCount_Handler,
+		},
+		{
+			MethodName: "Ping",
+			Handler:    _Dynamics_Ping_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

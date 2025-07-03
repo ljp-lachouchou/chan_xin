@@ -1,0 +1,17 @@
+# 输入
+
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /home/ljp/chan_xin/components/apisix/logs/access.log
+    fields_under_root: true
+    fields:
+      type: apisix
+
+# 输出
+#output.console:
+#  pretty: true
+#  enable: true
+output.logstash:
+  hosts: ["114.215.194.88:5044"]

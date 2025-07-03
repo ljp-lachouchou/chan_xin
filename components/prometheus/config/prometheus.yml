@@ -1,0 +1,42 @@
+scrape_configs:
+  - job_name: user-api
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 114.215.194.88:7011
+
+  - job_name: user-rpc
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 114.215.194.88:7010
+
+  - job_name: im-api
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 114.215.194.88:7020
+
+  - job_name: im-rpc
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 114.215.194.88:7021
+
+  - job_name: im-ws
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 114.215.194.88:7022
+
+  - job_name: social-api
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 114.215.194.88:7040
+
+  - job_name: social-rpc
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 114.215.194.88:7041

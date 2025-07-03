@@ -41,6 +41,8 @@ type (
 	Notification                                = dynamics.Notification
 	Pagination                                  = dynamics.Pagination
 	PinPostRequest                              = dynamics.PinPostRequest
+	PingRep                                     = dynamics.PingRep
+	PingResp                                    = dynamics.PingResp
 	Post                                        = dynamics.Post
 	PostContent                                 = dynamics.PostContent
 	PostListResponse                            = dynamics.PostListResponse
@@ -93,6 +95,7 @@ type (
 		ListNotificationsByUserIdAndType(ctx context.Context, in *ListNotificationsByUserIdAndTypeReq, opts ...grpc.CallOption) (*ListNotificationsByUserIdAndTypeReqResponse, error)
 		// 新增：获取未读通知数量
 		GetUnreadCount(ctx context.Context, in *GetUnreadCountRequest, opts ...grpc.CallOption) (*GetUnreadCountResponse, error)
+		Ping(ctx context.Context, in *PingRep, opts ...grpc.CallOption) (*PingResp, error)
 	}
 
 	defaultDynamics struct {
@@ -230,4 +233,9 @@ func (m *defaultDynamics) ListNotificationsByUserIdAndType(ctx context.Context, 
 func (m *defaultDynamics) GetUnreadCount(ctx context.Context, in *GetUnreadCountRequest, opts ...grpc.CallOption) (*GetUnreadCountResponse, error) {
 	client := dynamics.NewDynamicsClient(m.cli.Conn())
 	return client.GetUnreadCount(ctx, in, opts...)
+}
+
+func (m *defaultDynamics) Ping(ctx context.Context, in *PingRep, opts ...grpc.CallOption) (*PingResp, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.Ping(ctx, in, opts...)
 }

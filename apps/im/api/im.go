@@ -14,7 +14,7 @@ import (
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/dev/im-api.yaml", "the config file")
+var configFile = flag.String("f", "etc/dev/im.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -25,7 +25,7 @@ func main() {
 		ETCDEndpoints:  "114.215.194.88:3379",
 		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
 		Namespace:      "im",
-		Configs:        "im-api.yaml",
+		Configs:        "im.yaml",
 		ConfigFilePath: "",
 		LogLevel:       "DEBUG",
 	})).MustLoad(&c, func(bytes []byte) error {

@@ -12,6 +12,13 @@ im-api-dev:
 	@make -f deploy/mk/im-api.mk release-test
 im-ws-dev:
 	@make -f deploy/mk/im-ws.mk release-test
+task-mq-dev:
+	@make -f deploy/mk/task-mq.mk release-test
+dynamics-rpc-dev:
+	@make -f deploy/mk/dynamics-rpc.mk release-test
+dynamics-api-dev:
+	@make -f deploy/mk/dynamics-api.mk release-test
+
 user-api-test:
 	@make -f deploy/mk/user-api.mk run-test
 user-rpc-test:
@@ -22,7 +29,7 @@ social-api-test:
 	@make -f deploy/mk/social-api.mk run-test
 im-rpc-test:
 	@make -f deploy/mk/im-rpc.mk run-test
-release-test: user-rpc-dev user-api-dev social-rpc-dev social-api-dev im-rpc-dev im-api-dev im-ws-dev
+release-test: user-rpc-dev user-api-dev social-rpc-dev social-api-dev im-rpc-dev im-api-dev im-ws-dev dynamics-rpc-dev dynamics-api-dev
 
 install-server:
 	cd ./deploy/script && chmod +x release-test.sh && ./release-test.sh
