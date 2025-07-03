@@ -29,6 +29,10 @@ social-api-test:
 	@make -f deploy/mk/social-api.mk run-test
 im-rpc-test:
 	@make -f deploy/mk/im-rpc.mk run-test
+im-ws-test:
+	@make -f deploy/mk/im-ws.mk run-test
+task-mq-test:
+	@make -f deploy/mk/task-mq.mk run-test
 release-test: user-rpc-dev user-api-dev social-rpc-dev social-api-dev im-rpc-dev im-api-dev im-ws-dev dynamics-rpc-dev dynamics-api-dev
 
 install-server:

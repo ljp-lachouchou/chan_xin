@@ -25,7 +25,7 @@ func main() {
 		ETCDEndpoints:  "114.215.194.88:3379",
 		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
 		Namespace:      "im",
-		Configs:        "im.yaml",
+		Configs:        "im-api.yaml",
 		ConfigFilePath: "",
 		LogLevel:       "DEBUG",
 	})).MustLoad(&c, func(bytes []byte) error {
@@ -35,7 +35,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	rest.WithCors()
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 

@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"sync"
@@ -11,7 +12,7 @@ type Connection struct {
 	*websocket.Conn
 	idleMu      sync.Mutex
 	messageMu   sync.Mutex
-	uid         string
+	Uid         string
 	s           *Server
 	idle        time.Time //当前空闲时间
 	maxConnIdle time.Duration
@@ -37,11 +38,12 @@ func (c *Connection) appendAckMq(m *Message) {
 	c.ackMessages = append(c.ackMessages, m)
 	c.readAckMq[m.Id] = m
 }
-func (c *Connection) readMessage() (messageType int, p []byte, err error) {
+func (c *Connection) ReadMessage() (messageType int, p []byte, err error) {
 	messageType, p, err = c.Conn.ReadMessage()
 	c.idleMu.Lock()
 	defer c.idleMu.Unlock()
 	c.idle = time.Time{}
+	fmt.Println("重置心跳检测时间")
 	return
 }
 func (c *Connection) WriteMessage(messageType int, data []byte) error {

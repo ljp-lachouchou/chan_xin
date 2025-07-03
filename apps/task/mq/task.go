@@ -8,6 +8,7 @@ import (
 	"github.com/ljp-lachouchou/chan_xin/apps/task/mq/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/deploy/configserver"
 	"github.com/zeromicro/go-zero/core/service"
+	"github.com/zeromicro/go-zero/rest"
 )
 
 var configFile = flag.String("f", "etc/dev/task.yaml", "the config file")
@@ -31,6 +32,7 @@ func main() {
 	}
 	ctx := svc.NewServiceContext(c)
 	serviceGroup := service.NewServiceGroup()
+	rest.WithCors()
 	listener := handler.NewListener(ctx)
 	for _, s := range listener.Services() {
 		serviceGroup.Add(s)

@@ -15,4 +15,4 @@ docker pull ${reso_addr}:${tag}
 
 # 如果需要指定配置文件的
 # docker run -p 10001:8080 --network imooc_chan-xin -v /chan-xin/config/dynamics-rpc:/dynamics/conf/ --name=${container_name} -d ${reso_addr}:${tag}
-docker run -p 10000:10000  --name=${container_name} -d ${reso_addr}:${tag}
+docker run -p 10003:10003  --name=${container_name} -d ${reso_addr}:${tag}

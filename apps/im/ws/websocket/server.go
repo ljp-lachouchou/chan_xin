@@ -8,6 +8,7 @@ import (
 	"github.com/ljp-lachouchou/chan_xin/pkg/ldefault"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/threading"
 	"net/http"
 	"sync"
 	"time"
@@ -24,6 +25,7 @@ type Server struct {
 	connToUser map[*Connection]string
 	userToConn map[string]*Connection
 	logx.Logger
+	*threading.TaskRunner
 }
 
 func NewServer(addr string, opts ...ServerOption) *Server {
@@ -33,11 +35,14 @@ func NewServer(addr string, opts ...ServerOption) *Server {
 		patten:         opt.patten,
 		Authentication: opt.Authentication,
 		routes:         make(map[string]HandlerFunc),
-		upgrader:       websocket.Upgrader{},
-		opt:            opt,
-		connToUser:     make(map[*Connection]string),
-		userToConn:     make(map[string]*Connection),
-		Logger:         logx.WithContext(context.Background()),
+		upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool { return true }, //websocket解决跨域
+		},
+		opt:        opt,
+		connToUser: make(map[*Connection]string),
+		userToConn: make(map[string]*Connection),
+		Logger:     logx.WithContext(context.Background()),
+		TaskRunner: threading.NewTaskRunner(opt.concurrency),
 	}
 }
 func (s *Server) Send(msg interface{}, conns ...*Connection) error {
@@ -62,21 +67,22 @@ func (s *Server) Send(msg interface{}, conns ...*Connection) error {
 }
 
 func (s *Server) SendPingMessage() error {
-	s.RWMutex.RLock()
-	defer s.RWMutex.RUnlock()
-	conns := make([]*Connection, 0, len(s.userToConn))
 	for _, conn := range s.userToConn {
-		conns = append(conns, conn)
-	}
-	go func() {
-		for _, v := range conns {
-			err := v.WriteMessage(websocket.PingMessage, []byte{})
-			if err != nil {
-				s.Errorf("ping 发送失败 %v", v)
-			}
+		if conn.Uid == ldefault.SYSTEM_REDIS_UID {
+			continue
 		}
-		return
-	}()
+		go func(c *Connection) {
+			s.RWMutex.RLock()
+			err := c.WriteMessage(websocket.PingMessage, []byte(c.Uid))
+			s.RWMutex.RUnlock()
+			if err != nil {
+				s.Errorf("Ping 失败: UID=%s, Err=%v", c.Uid, err)
+				c.Close()
+				return
+			}
+			return
+		}(conn)
+	}
 	return nil
 }
 func (s *Server) GetConn(uid string) *Connection {
@@ -116,14 +122,14 @@ func (s *Server) WsServer(w http.ResponseWriter, r *http.Request) {
 
 }
 func (s *Server) handleConn(conn *Connection) {
-	conn.uid = s.GetUid(conn)
+	conn.Uid = s.GetUid(conn)
 	go s.handleWrite(conn)
 	go s.readAck(conn)
 	for {
 		_, msg, err := conn.ReadMessage()
 
 		if err != nil {
-			s.Errorf("websocket conn read message err: %v msg %v", err, string(msg))
+			s.Errorf(fmt.Sprintf("websocket conn:%s read message err: %v msg %v", conn.Uid, err, string(msg)))
 			s.Close(conn)
 			return
 		}
@@ -133,7 +139,8 @@ func (s *Server) handleConn(conn *Connection) {
 			s.Close(conn)
 			return
 		}
-		if conn.uid == ldefault.SYSTEM_REDIS_UID {
+		if conn.Uid == ldefault.SYSTEM_REDIS_UID {
+			fmt.Println("root dail")
 			conn.message <- &message
 		} else {
 			conn.appendAckMq(&message)
@@ -151,9 +158,11 @@ func (s *Server) handleWrite(conn *Connection) {
 					s.Send(NewErrMessage(errors.New(fmt.Sprintf("找不到方法 %v", message.Method))))
 				} else {
 					handler(s, conn, message)
-					conn.messageMu.Lock()
-					delete(conn.readAckMq, message.Id)
-					conn.messageMu.Unlock()
+					if _, ok := conn.readAckMq[message.Id]; ok {
+						conn.messageMu.Lock()
+						delete(conn.readAckMq, message.Id)
+						conn.messageMu.Unlock()
+					}
 				}
 			case FramePing:
 				s.Send(NewPingMessage(), conn)
@@ -167,7 +176,7 @@ func (s *Server) readAck(conn *Connection) {
 	for {
 		select {
 		case <-conn.done:
-			s.Info("close message ack uid %v", conn.uid)
+			s.Info("close message ack Uid %v", conn.Uid)
 			return
 		default:
 		}
@@ -238,5 +247,27 @@ func (s *Server) GetConns(ids []string) []*Connection {
 			res = append(res, s.userToConn[conn])
 		}
 	}
+	return res
+}
+
+func (s *Server) GetUsers(conns ...*Connection) []string {
+	s.RWMutex.RLock()
+	defer s.RWMutex.RUnlock()
+
+	var res []string
+	if len(conns) == 0 {
+		// 获取全部
+		res = make([]string, 0, len(s.connToUser))
+		for _, uid := range s.connToUser {
+			res = append(res, uid)
+		}
+	} else {
+		// 获取部分
+		res = make([]string, 0, len(conns))
+		for _, conn := range conns {
+			res = append(res, s.connToUser[conn])
+		}
+	}
+
 	return res
 }

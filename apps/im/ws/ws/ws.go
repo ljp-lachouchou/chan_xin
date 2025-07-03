@@ -16,12 +16,14 @@ type (
 		SendTime       int64             `mapstructure:"sendTime"`
 	}
 	Push struct {
-		ConversationId string            `json:"conversationId"`
-		SendId         string            `json:"sendId"`
-		RecvId         string            `json:"recvId"`
-		ChatType       constant.ChatType `json:"chatType"`
-		MsgType        constant.MType    `json:"msgType"`
-		MsgContent     string            `json:"msgContent"`
-		SendTime       int64             `json:"sendTime"`
+		Id             string            `mapstructure:"id"`
+		ConversationId string            `mapstructure:"conversationId"`
+		SendId         string            `mapstructure:"sendId"`
+		RecvId         string            `mapstructure:"recvId"`
+		RecvIds        []string          `mapstructure:"recvIds"`
+		ChatType       constant.ChatType `mapstructure:"chatType"`
+		MsgType        constant.MType    `mapstructure:"msgType"`
+		MsgContent     string            `mapstructure:"msgContent"`
+		SendTime       int64             `mapstructure:"sendTime"`
 	}
 )

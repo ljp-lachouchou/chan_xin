@@ -57,7 +57,7 @@ func (c *client) pingServer(conn *websocket.Conn) {
 				Method:    "user.online",
 			}
 			data, err := json.Marshal(msg)
-			//fmt.Println("pingserver start:", string(data))
+			fmt.Println("pingserver start:", string(data))
 			if err != nil {
 				fmt.Println("pingServer json marshal message error:", err)
 				return
@@ -74,7 +74,7 @@ func (c *client) pingServer(conn *websocket.Conn) {
 				c.Conn = dail
 				continue
 			}
-			c.timer.Reset(10 * time.Second)
+			c.timer.Reset(3 * time.Second)
 		case <-c.done:
 			return
 		}

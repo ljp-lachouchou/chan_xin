@@ -10,6 +10,7 @@ type serverOption struct {
 	Authentication
 	ackTimeOut  time.Duration
 	maxConnIdle time.Duration
+	concurrency int
 }
 
 func newServerOption(opt ...ServerOption) serverOption {
@@ -18,6 +19,7 @@ func newServerOption(opt ...ServerOption) serverOption {
 		Authentication: NewAuthentication(),
 		ackTimeOut:     defaultAckTimeOut,
 		maxConnIdle:    defaultMaxConnIdle,
+		concurrency:    defaultConcurrency,
 	}
 	for _, v := range opt {
 		v(&o)

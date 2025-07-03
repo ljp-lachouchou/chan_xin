@@ -7,4 +7,5 @@ import (
 const (
 	defaultMaxConnIdle = time.Hour * 9000
 	defaultAckTimeOut  = time.Second * 10
+	defaultConcurrency = 10
 )

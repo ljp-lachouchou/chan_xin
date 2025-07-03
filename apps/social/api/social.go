@@ -35,7 +35,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	rest.WithCors()
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
