@@ -46,7 +46,7 @@ type (
 		ApplyTime int64  `json:"apply_time"`
 	}
 	FriendApplyListReq {
-		UserId string `json:"user_id"` //用户id
+		UserId string `form:"user_id"` //用户id
 	}
 	FriendApplyResp {
 		UserId    string `json:"user_id"` // 用户全局ID
@@ -57,14 +57,14 @@ type (
 		Status    int32  `json:"status"` // 申请状态
 	}
 	FriendApplyListResp {
-		List []*FriendApplyResp `json:"list"`//用户请求添加的好友
+		List []*FriendApplyResp `json:"list"` //用户请求添加的好友
 	}
 	FriendApplyAction {
 		ApplyId    string `json:"apply_id"` // 申请记录ID
 		IsApproved bool   `json:"is_approved"` // 是否同意
 	}
 	FriendListReq {
-		UserId string `json:"user_id"`//用户id
+		UserId string `form:"user_id"` //用户id
 	}
 	FriendListResp {
 		FriendList []*UserInfo `json:"friend_list"` //该用户的好友
@@ -80,7 +80,7 @@ type (
 		Remark   string `json:"remark,omitempty"` // 群备注
 	}
 	GroupPermission {
-		Action int32 `json:"action"`//0-踢出成员 1-设置/取消管理员 2-修改群名
+		Action int32 `json:"action"` //0-踢出成员 1-设置/取消管理员 2-修改群名
 	}
 	GroupInvitation {
 		InviterId string   `json:"inviter_id"` // 邀请人ID
@@ -140,15 +140,15 @@ type (
 		GroupId string `json:"group_id"` //群id
 	}
 	FriendInfoRequest {
-		UserId   string `json:"user_id"` // 查询者ID
-		FriendId string `json:"friend_id"` // 目标好友ID
+		UserId   string `form:"user_id"` // 查询者ID
+		FriendId string `form:"friend_id"` // 目标好友ID
 	}
 	GroupInfoRequest {
-		UserId  string `json:"user_id"` // 查询者ID
-		GroupId string `json:"group_id"` // 目标群ID
+		UserId  string `form:"user_id"` // 查询者ID
+		GroupId string `form:"group_id"` // 目标群ID
 	}
 	GetGroupMembersReq {
-		GroupId string `json:"group_id"` // 群组id
+		GroupId string `form:"group_id"` // 群组id
 	}
 	GetGroupMembersResp {
 		List []*BaseUserInfo `json:"list"` //群成员的信息

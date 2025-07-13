@@ -36,11 +36,11 @@ type CreateGroupConversationResp struct {
 }
 
 type GetChatLogReq struct {
-	ConversationId string `json:"conversationId"`         // 会话ID（查询参数）
-	StartSendTime  int64  `json:"startSendTime,optional"` // 起始时间
-	EndSendTime    int64  `json:"endSendTime,optional"`   // 结束时间
-	Count          int64  `json:"count,optional"`         // 获取数量
-	MsgId          string `json:"msgId,optional"`         // 起始消息ID
+	ConversationId string `form:"conversationId"`         // 会话ID（查询参数）
+	StartSendTime  int64  `form:"startSendTime,optional"` // 起始时间
+	EndSendTime    int64  `form:"endSendTime,optional"`   // 结束时间
+	Count          int64  `form:"count,optional"`         // 获取数量
+	MsgId          string `form:"msgId,optional"`         // 起始消息ID
 }
 
 type GetChatLogResp struct {
@@ -48,7 +48,7 @@ type GetChatLogResp struct {
 }
 
 type GetConversationsReq struct {
-	UserId string `json:"userId"` // 用户ID（查询参数）
+	UserId string `form:"userId"` // 用户ID（查询参数）
 }
 
 type GetConversationsResp struct {

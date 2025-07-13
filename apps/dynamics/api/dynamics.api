@@ -62,7 +62,7 @@ type (
 		PageToken string `json:"pageToken"` // 翻页令牌，若为"",则是无偏移
 	}
 	Ids {
-		ids []string `json:"ids"`//点赞post的用户id
+		ids []string `json:"ids"` //点赞post的用户id
 	}
 	ListCommentRespStruct {
 		userId       string `json:"userId"` //评论用户id
@@ -172,12 +172,12 @@ type Empty {} // 空响应体
 // ================== 请求/响应结构 ==================
 type (
 	GetPostInfoReq {
-		postId string `json:"postId"`//动态id
+		postId string `form:"postId"` //动态id
 	}
 	CreatePostRequest {
-		UserId  string      `json:"userId"`//用户id
+		UserId  string      `json:"userId"` //用户id
 		Content PostContent `json:"content"` //内容
-		Meta    PostMeta    `json:"meta"`//元数据
+		Meta    PostMeta    `json:"meta"` //元数据
 	}
 	DeletePostRequest {
 		UserId string `json:"userId"` // 操作者ID
@@ -193,13 +193,13 @@ type (
 		CoverUrl string `json:"coverUrl"` // 封面URL
 	}
 	ListUserPostsRequest {
-		UserId     string     `json:"userId"` // 目标用户ID
-		IsPin      bool       `json:"isPin"` // 置顶过滤
-		pagination Pagination `json:"pagination"` // 分页参数
+		UserId     string     `form:"userId"` // 目标用户ID
+		IsPin      bool       `form:"isPin"` // 置顶过滤
+		pagination Pagination `form:"pagination"` // 分页参数
 	}
 	ListVisiblePostsRequest {
-		ViewerId   string     `json:"viewerId"` // 浏览者ID
-		pagination Pagination `json:"pagination"`
+		ViewerId   string     `form:"viewerId"` // 浏览者ID
+		pagination Pagination `form:"pagination"`
 	}
 	PostListResponse {
 		Posts         []Post `json:"posts"` //post列表
@@ -234,15 +234,15 @@ type (
 		UserId string `json:"userId"` // 用户ID
 	}
 	ListNotificationsRequest {
-		UserId     string     `json:"userId"` // 用户ID
-		pagination Pagination `json:"pagination"` // 分页参数
+		UserId     string     `form:"userId"` // 用户ID
+		pagination Pagination `form:"pagination"` // 分页参数
 	}
 	ListNotificationsResponse {
 		Notifications []Notification `json:"notifications"`
 		NextPageToken string         `json:"nextPageToken"`
 	}
 	GetUnreadCountRequest {
-		UserId string `json:"userId"` // 用户ID
+		UserId string `form:"userId"` // 用户ID
 	}
 	GetUnreadCountResponse {
 		UnreadCount int `json:"unreadCount"` // 未读数

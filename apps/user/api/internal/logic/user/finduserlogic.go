@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"github.com/ljp-lachouchou/chan_xin/apps/user/rpc/userservice"
 
 	"github.com/ljp-lachouchou/chan_xin/apps/user/api/internal/svc"
@@ -26,6 +27,8 @@ func NewFindUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindUser
 }
 
 func (l *FindUserLogic) FindUser(req *types.FindUserReq) (*types.FindUserResp, error) {
+	l.Error("req:", req.Ids, req.Phone, req.Name)
+	fmt.Println("req", req.Ids, req.Phone, req.Name)
 	user, err := l.svcCtx.FindUser(l.ctx, &userservice.FindUserReq{
 		Name:  req.Name,
 		Phone: req.Phone,
@@ -35,8 +38,8 @@ func (l *FindUserLogic) FindUser(req *types.FindUserReq) (*types.FindUserResp, e
 		return nil, err
 	}
 	var resp []types.User
-	for _,v := range user.User {
-		resp = append(resp,types.User{
+	for _, v := range user.User {
+		resp = append(resp, types.User{
 			Id:       v.Id,
 			Phone:    v.Phone,
 			Nickname: v.Nickname,
@@ -46,5 +49,5 @@ func (l *FindUserLogic) FindUser(req *types.FindUserReq) (*types.FindUserResp, e
 	}
 	return &types.FindUserResp{
 		Infos: resp,
-	},nil
+	}, nil
 }

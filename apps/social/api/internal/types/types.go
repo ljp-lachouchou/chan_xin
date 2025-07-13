@@ -16,11 +16,11 @@ type FriendApplyAction struct {
 }
 
 type FriendApplyListReq struct {
-	UserId string `json:"user_id"`
+	UserId string `form:"user_id"` //用户id
 }
 
 type FriendApplyListResp struct {
-	List []*FriendApplyResp `json:"list"`
+	List []*FriendApplyResp `json:"list"` //用户请求添加的好友
 }
 
 type FriendApplyRequest struct {
@@ -44,16 +44,16 @@ type FriendApplyResponse struct {
 }
 
 type FriendInfoRequest struct {
-	UserId   string `json:"user_id"`   // 查询者ID
-	FriendId string `json:"friend_id"` // 目标好友ID
+	UserId   string `form:"user_id"`   // 查询者ID
+	FriendId string `form:"friend_id"` // 目标好友ID
 }
 
 type FriendListReq struct {
-	UserId string `json:"user_id"`
+	UserId string `form:"user_id"` //用户id
 }
 
 type FriendListResp struct {
-	FriendList []*UserInfo `json:"friend_list"`
+	FriendList []*UserInfo `json:"friend_list"` //该用户的好友
 }
 
 type FriendStatus struct {
@@ -77,27 +77,27 @@ type FriendStatusUpdate struct {
 }
 
 type GetGroupMembersReq struct {
-	GroupId string `json:"group_id"` // 群组id
+	GroupId string `form:"group_id"` // 群组id
 }
 
 type GetGroupMembersResp struct {
-	List []*BaseUserInfo `json:"list"`
+	List []*BaseUserInfo `json:"list"` //群成员的信息
 }
 
 type GroupApplyAction struct {
-	ApplyId    string `json:"apply_id"`
-	ManagerId  string `json:"manager_id"`
-	IsApproved bool   `json:"is_approved"`
+	ApplyId    string `json:"apply_id"`    //申请id
+	ManagerId  string `json:"manager_id"`  //处理人id
+	IsApproved bool   `json:"is_approved"` //是否同意申请
 }
 
 type GroupApplyReq struct {
-	ApplicantId string `json:"applicant_id"`
-	TargetId    string `json:"target_id"`
-	GreetMsg    string `json:"greet_msg"`
+	ApplicantId string `json:"applicant_id"` //申请方---个人
+	TargetId    string `json:"target_id"`    //接收方 --- 群
+	GreetMsg    string `json:"greet_msg"`    // 招呼
 }
 
 type GroupApplyResp struct {
-	ApplyId   string `json:"apply_id"`
+	ApplyId   string `json:"apply_id"` //申请iD
 	ApplyTime int64  `json:"apply_time"`
 }
 
@@ -117,12 +117,12 @@ type GroupInfo struct {
 }
 
 type GroupInfoRequest struct {
-	UserId  string `json:"user_id"`  // 查询者ID
-	GroupId string `json:"group_id"` // 目标群ID
+	UserId  string `form:"user_id"`  // 查询者ID
+	GroupId string `form:"group_id"` // 目标群ID
 }
 
 type GroupInvitation struct {
-	InviterId string   `json:"inviter_id"` // 邀请人ID（群主/管理员）
+	InviterId string   `json:"inviter_id"` // 邀请人ID
 	GroupId   string   `json:"group_id"`   // 群ID
 	TargetIds []string `json:"target_ids"` // 被邀请人ID列表
 }
@@ -145,18 +145,18 @@ type GroupMemberSetting struct {
 }
 
 type GroupMemberSettingUpdate struct {
-	UserId  string             `json:"user_id"`
-	GroupId string             `json:"group_id"`
-	Setting GroupMemberSetting `json:"setting"`
+	UserId  string             `json:"user_id"`  //用户id
+	GroupId string             `json:"group_id"` //群组id
+	Setting GroupMemberSetting `json:"setting"`  //个性化设置
 }
 
 type GroupPermission struct {
-	Action int32 `json:"action"`
+	Action int32 `json:"action"` //0-踢出成员 1-设置/取消管理员 2-修改群名
 }
 
 type GroupQuitRequest struct {
-	UserId  string `json:"user_id"` // 退出者ID
-	GroupId string `json:"group_id"`
+	UserId  string `json:"user_id"`  // 退出者ID
+	GroupId string `json:"group_id"` //群id
 }
 
 type GroupStatus struct {
@@ -166,9 +166,9 @@ type GroupStatus struct {
 }
 
 type GroupStatusUpdate struct {
-	UserId  string      `json:"user_id"` // 操作者ID
-	GroupId string      `json:"group_id"`
-	Status  GroupStatus `json:"status"` // 新状态
+	UserId  string      `json:"user_id"`  // 操作者ID
+	GroupId string      `json:"group_id"` //群id
+	Status  GroupStatus `json:"status"`   // 新状态
 }
 
 type RelationRequest struct {

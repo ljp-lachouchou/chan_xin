@@ -30,7 +30,7 @@
    - 登录: post /login
      - 请求参数:![img_4.png](img/img_4.png)
      - 正确响应:![img_3.png](img/img_3.png)
-   - 获取用户个人信息: get /userinfo
+   - 获取用户个人信息: get /userinfo 注意：请求头中应该携带登录时候的token，这里的id无用
      - 请求参数:![img_7.png](img/img_7.png)
      - 正确响应:![img_8.png](img/img_8.png)
    - 更新用户: patch /update

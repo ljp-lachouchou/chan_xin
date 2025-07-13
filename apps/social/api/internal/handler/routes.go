@@ -136,7 +136,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: group.ManageGroupMemberHandler(serverCtx),
 				},
 				{
-					// 退出群/踢出群成员
+					// 退出群/踢出群成员/解散群
 					Method:  http.MethodDelete,
 					Path:    "/quitGroup",
 					Handler: group.QuitGroupHandler(serverCtx),

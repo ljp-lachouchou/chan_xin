@@ -32,22 +32,62 @@ func (l *FindUserLogic) FindUser(in *user.FindUserReq) (*user.FindUserResp, erro
 		userEntitys []*usermodels.Users
 		err         error
 	)
-	if in.Phone != "" {
-		userEntity, err := l.svcCtx.UsersModel.FindByPhone(l.ctx, in.Phone)
-		if err == nil {
-			userEntitys = append(userEntitys, userEntity)
+	phoneUsers := make(map[string]*usermodels.Users)
+	nameUsers := make(map[string]*usermodels.Users)
+	idUsers := make(map[string]*usermodels.Users)
 
+	// 分支1：手机号查询
+	if in.Phone != "" {
+		user, err := l.svcCtx.UsersModel.FindByPhone(l.ctx, in.Phone)
+		if err == nil && user != nil {
+			phoneUsers[user.Id] = user // 存到临时Map
 		}
-	} else if in.Name != "" {
-		userEntitys, err = l.svcCtx.UsersModel.ListByName(l.ctx, in.Name)
-		if err != nil {
-			logx.Error(err)
+	}
+
+	// 分支2：姓名查询
+	if in.Name != "" {
+		users, err := l.svcCtx.UsersModel.ListByName(l.ctx, in.Name)
+		if err == nil {
+			for _, u := range users {
+				nameUsers[u.Id] = u // 存到临时Map
+			}
+		} else {
+			logx.Errorf("ListByName error: %v", err)
 		}
-	} else if len(in.Ids) > 0 {
-		userEntitys, err = l.svcCtx.UsersModel.ListByIds(l.ctx, in.Ids)
-		if err != nil {
-			logx.Error(err)
+	}
+
+	// 分支3：ID列表查询
+	if len(in.Ids) > 0 {
+		users, err := l.svcCtx.UsersModel.ListByIds(l.ctx, in.Ids)
+		if err == nil {
+			for _, u := range users {
+				idUsers[u.Id] = u // 存到临时Map
+			}
+		} else {
+			logx.Errorf("ListByIds error: %v", err)
 		}
+	}
+	resultMap := make(map[string]*usermodels.Users)
+
+	// 优先级：phone > name > ids
+	for id, user := range phoneUsers {
+		resultMap[id] = user
+	}
+	for id, user := range nameUsers {
+		// 若手机号分支已写入，跳过覆盖
+		if _, exists := resultMap[id]; !exists {
+			resultMap[id] = user
+		}
+	}
+	for id, user := range idUsers {
+		if _, exists := resultMap[id]; !exists {
+			resultMap[id] = user
+		}
+	}
+
+	// 转换为切片
+	for _, user := range resultMap {
+		userEntitys = append(userEntitys, user)
 	}
 	if err != nil {
 		return nil, errors.Wrapf(lerr.NEWDBError(), "db find err: %v req:%v ,%v, %v", err, in.Phone, in.Name, in.Ids)
@@ -60,5 +100,4 @@ func (l *FindUserLogic) FindUser(in *user.FindUserReq) (*user.FindUserResp, erro
 	return &user.FindUserResp{
 		User: resp,
 	}, nil
-	return &user.FindUserResp{}, nil
 }

@@ -4,9 +4,9 @@
 package types
 
 type FindUserReq struct {
-	Name  string   `json:"name"`
-	Phone string   `json:"phone"`
-	Ids   []string `json:"ids"`
+	Name  string   `form:"name",omitempty`  //昵称
+	Phone string   `form:"phone",omitempty` //电话
+	Ids   []string `form:"ids",omitempty`   //id
 }
 
 type FindUserResp struct {
@@ -56,7 +56,7 @@ type User struct {
 }
 
 type UserInfoReq struct {
-	Id string `json:"id"` //用户id
+	Id string `form:"id"` //用户id
 }
 
 type UserInfoResp struct {

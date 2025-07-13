@@ -27,7 +27,7 @@ func ValidatePassword(password string) error {
 		return errors.WithStack(errors.New("密码长度需至少8个字符"))
 	}
 	if len(password) > 17 {
-		return errors.WithStack(errors.New("密码长度需至多8个字符"))
+		return errors.WithStack(errors.New("密码长度需至多16个字符"))
 	}
 	// 条件2: 包含小写字母
 	lowerRegex := regexp.MustCompile(`[a-z]`)

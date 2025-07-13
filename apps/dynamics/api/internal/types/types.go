@@ -30,9 +30,9 @@ type CreateNotificationReq struct {
 }
 
 type CreatePostRequest struct {
-	UserId  string      `json:"userId"`
-	Content PostContent `json:"content"`
-	Meta    PostMeta    `json:"meta"`
+	UserId  string      `json:"userId"`  //用户id
+	Content PostContent `json:"content"` //内容
+	Meta    PostMeta    `json:"meta"`    //元数据
 }
 
 type DeleteCommentReplayReq struct {
@@ -52,11 +52,11 @@ type Empty struct {
 }
 
 type GetPostInfoReq struct {
-	PostId string `json:"postId"`
+	PostId string `form:"postId"` //动态id
 }
 
 type GetUnreadCountRequest struct {
-	UserId string `json:"userId"` // 用户ID
+	UserId string `form:"userId"` // 用户ID
 }
 
 type GetUnreadCountResponse struct {
@@ -64,7 +64,7 @@ type GetUnreadCountResponse struct {
 }
 
 type Ids struct {
-	Ids []string `json:"ids"`
+	Ids []string `json:"ids"` //点赞post的用户id
 }
 
 type LikeAction struct {
@@ -74,18 +74,18 @@ type LikeAction struct {
 }
 
 type ListCommentResp struct {
-	List []ListCommentRespStruct `json:"list"`
+	List []ListCommentRespStruct `json:"list"` //评论列表
 }
 
 type ListCommentRespStruct struct {
-	UserId       string `json:"userId"`
-	TargetUserId string `json:"targetUserId"`
-	Content      string `json:"content"`
+	UserId       string `json:"userId"`       //评论用户id
+	TargetUserId string `json:"targetUserId"` //被评论的用户iD,根评论此字段为""
+	Content      string `json:"content"`      //内容
 }
 
 type ListNotificationsRequest struct {
-	UserId     string     `json:"userId"`     // 用户ID
-	Pagination Pagination `json:"pagination"` // 分页参数
+	UserId     string     `form:"userId"`     // 用户ID
+	Pagination Pagination `form:"pagination"` // 分页参数
 }
 
 type ListNotificationsResponse struct {
@@ -94,14 +94,14 @@ type ListNotificationsResponse struct {
 }
 
 type ListUserPostsRequest struct {
-	UserId     string     `json:"userId"`     // 目标用户ID
-	IsPin      bool       `json:"isPin"`      // 置顶过滤
-	Pagination Pagination `json:"pagination"` // 分页参数
+	UserId     string     `form:"userId"`     // 目标用户ID
+	IsPin      bool       `form:"isPin"`      // 置顶过滤
+	Pagination Pagination `form:"pagination"` // 分页参数
 }
 
 type ListVisiblePostsRequest struct {
-	ViewerId   string     `json:"viewerId"` // 浏览者ID
-	Pagination Pagination `json:"pagination"`
+	ViewerId   string     `form:"viewerId"` // 浏览者ID
+	Pagination Pagination `form:"pagination"`
 }
 
 type Notification struct {
@@ -120,13 +120,13 @@ type NotificationType struct {
 
 type Pagination struct {
 	PageSize  int    `json:"pageSize"`  // 每页数量（默认10）
-	PageToken string `json:"pageToken"` // 翻页令牌
+	PageToken string `json:"pageToken"` // 翻页令牌，若为"",则是无偏移
 }
 
 type PinPostRequest struct {
-	UserId string `json:"userId"`
-	PostId string `json:"postId"`
-	Pin    bool   `json:"pin"` // true=置顶
+	UserId string `json:"userId"` //操作者iD
+	PostId string `json:"postId"` //动态
+	Pin    bool   `json:"pin"`    // true=置顶
 }
 
 type Post struct {
@@ -144,8 +144,8 @@ type PostContent struct {
 }
 
 type PostListResponse struct {
-	Posts         []Post `json:"posts"`
-	NextPageToken string `json:"nextPageToken"`
+	Posts         []Post `json:"posts"`         //post列表
+	NextPageToken string `json:"nextPageToken"` //下一页的token，携带偏移量
 }
 
 type PostMeta struct {
