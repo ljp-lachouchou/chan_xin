@@ -55,10 +55,6 @@ type User struct {
 	Avatar   string `json:"avatar"`
 }
 
-type UserInfoReq struct {
-	Id string `form:"id"` //用户id
-}
-
 type UserInfoResp struct {
 	Info User `json:"info"` //用户信息
 }

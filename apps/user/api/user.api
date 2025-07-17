@@ -33,9 +33,6 @@ type (
 		token  string `json:"token"` //用户登录token
 		expire int64  `json:"expire"` //token有效时长
 	}
-	UserInfoReq {
-		id string `form:"id"` //用户id
-	}
 	UserInfoResp {
 		Info User `json:"info"` //用户信息
 	}
@@ -90,7 +87,7 @@ service user {
 service user {
 	@doc "单个用户查询"
 	@handler userInfo
-	get /userinfo (UserInfoReq) returns (UserInfoResp)
+	get /userinfo returns (UserInfoResp)
 
 	@doc "更新用户"
 	@handler update

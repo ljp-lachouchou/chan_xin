@@ -27,7 +27,7 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 	}
 }
 
-func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (*types.UserInfoResp, error) {
+func (l *UserInfoLogic) UserInfo() (*types.UserInfoResp, error) {
 	// todo: add your logic here and delete this line
 	uid := ctxdata.GetUId(l.ctx)
 	rpcReq := userservice.GetUserRequest{
