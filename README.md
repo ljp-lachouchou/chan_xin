@@ -41,7 +41,7 @@
      - 正确响应: ![img_13.png](img/img_13.png)
    - 注意！！！:更新用户、查询用户需在前端中的请求头中设置鉴权token——即登录后返回的token
  - **社交功能:**
-   - 好友相关路径前缀: /v1/friend/social
+   - 好友相关路径前缀: /v1/firend/social
    - 数据结构: ![img_14.png](img/img_14.png) ![img_28.png](img/img_28.png) ![img_35.png](img/img_35.png) ![img_38.png](img/img_38.png) ![img_43.png](img/img_43.png) ![img.png](img.png)
    - 申请好友: post /applyFriend
      - 请求参数:![img_15.png](img/img_15.png)
