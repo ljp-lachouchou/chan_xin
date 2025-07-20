@@ -19,27 +19,28 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SocialService_ApplyFriend_FullMethodName           = "/social.SocialService/ApplyFriend"
-	SocialService_HandleFriendApply_FullMethodName     = "/social.SocialService/HandleFriendApply"
-	SocialService_DeleteFriend_FullMethodName          = "/social.SocialService/DeleteFriend"
-	SocialService_UpdateFriendStatus_FullMethodName    = "/social.SocialService/UpdateFriendStatus"
-	SocialService_GetFriendInfo_FullMethodName         = "/social.SocialService/GetFriendInfo"
-	SocialService_GetFriendList_FullMethodName         = "/social.SocialService/GetFriendList"
-	SocialService_GetFriendApplyList_FullMethodName    = "/social.SocialService/GetFriendApplyList"
-	SocialService_CreateGroup_FullMethodName           = "/social.SocialService/CreateGroup"
-	SocialService_QuitGroup_FullMethodName             = "/social.SocialService/QuitGroup"
-	SocialService_InviteToGroup_FullMethodName         = "/social.SocialService/InviteToGroup"
-	SocialService_HandleGroupInvite_FullMethodName     = "/social.SocialService/HandleGroupInvite"
-	SocialService_ApplyGroup_FullMethodName            = "/social.SocialService/ApplyGroup"
-	SocialService_HandleGroupApply_FullMethodName      = "/social.SocialService/HandleGroupApply"
-	SocialService_UpdateGroupStatus_FullMethodName     = "/social.SocialService/UpdateGroupStatus"
-	SocialService_ManageGroupMember_FullMethodName     = "/social.SocialService/ManageGroupMember"
-	SocialService_RemoveAdmin_FullMethodName           = "/social.SocialService/RemoveAdmin"
-	SocialService_GetGroupInfo_FullMethodName          = "/social.SocialService/GetGroupInfo"
-	SocialService_GetGroupMembers_FullMethodName       = "/social.SocialService/GetGroupMembers"
-	SocialService_GetGroupAdmins_FullMethodName        = "/social.SocialService/GetGroupAdmins"
-	SocialService_SetGroupMemberSetting_FullMethodName = "/social.SocialService/SetGroupMemberSetting"
-	SocialService_Ping_FullMethodName                  = "/social.SocialService/Ping"
+	SocialService_ApplyFriend_FullMethodName              = "/social.SocialService/ApplyFriend"
+	SocialService_HandleFriendApply_FullMethodName        = "/social.SocialService/HandleFriendApply"
+	SocialService_DeleteFriend_FullMethodName             = "/social.SocialService/DeleteFriend"
+	SocialService_UpdateFriendStatus_FullMethodName       = "/social.SocialService/UpdateFriendStatus"
+	SocialService_GetFriendInfo_FullMethodName            = "/social.SocialService/GetFriendInfo"
+	SocialService_GetFriendList_FullMethodName            = "/social.SocialService/GetFriendList"
+	SocialService_GetFriendApplyList_FullMethodName       = "/social.SocialService/GetFriendApplyList"
+	SocialService_GetHandleFriendApplyList_FullMethodName = "/social.SocialService/GetHandleFriendApplyList"
+	SocialService_CreateGroup_FullMethodName              = "/social.SocialService/CreateGroup"
+	SocialService_QuitGroup_FullMethodName                = "/social.SocialService/QuitGroup"
+	SocialService_InviteToGroup_FullMethodName            = "/social.SocialService/InviteToGroup"
+	SocialService_HandleGroupInvite_FullMethodName        = "/social.SocialService/HandleGroupInvite"
+	SocialService_ApplyGroup_FullMethodName               = "/social.SocialService/ApplyGroup"
+	SocialService_HandleGroupApply_FullMethodName         = "/social.SocialService/HandleGroupApply"
+	SocialService_UpdateGroupStatus_FullMethodName        = "/social.SocialService/UpdateGroupStatus"
+	SocialService_ManageGroupMember_FullMethodName        = "/social.SocialService/ManageGroupMember"
+	SocialService_RemoveAdmin_FullMethodName              = "/social.SocialService/RemoveAdmin"
+	SocialService_GetGroupInfo_FullMethodName             = "/social.SocialService/GetGroupInfo"
+	SocialService_GetGroupMembers_FullMethodName          = "/social.SocialService/GetGroupMembers"
+	SocialService_GetGroupAdmins_FullMethodName           = "/social.SocialService/GetGroupAdmins"
+	SocialService_SetGroupMemberSetting_FullMethodName    = "/social.SocialService/SetGroupMemberSetting"
+	SocialService_Ping_FullMethodName                     = "/social.SocialService/Ping"
 )
 
 // SocialServiceClient is the client API for SocialService service.
@@ -56,6 +57,7 @@ type SocialServiceClient interface {
 	GetFriendInfo(ctx context.Context, in *FriendInfoRequest, opts ...grpc.CallOption) (*UserInfo, error)
 	GetFriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error)
 	GetFriendApplyList(ctx context.Context, in *FriendApplyListReq, opts ...grpc.CallOption) (*FriendApplyListResp, error)
+	GetHandleFriendApplyList(ctx context.Context, in *HandleFriendApplyReq, opts ...grpc.CallOption) (*FriendApplyListResp, error)
 	// === 群组管理接口 ===
 	CreateGroup(ctx context.Context, in *GroupCreationRequest, opts ...grpc.CallOption) (*GroupInfo, error)
 	QuitGroup(ctx context.Context, in *GroupQuitRequest, opts ...grpc.CallOption) (*GroupQuitResp, error)
@@ -145,6 +147,16 @@ func (c *socialServiceClient) GetFriendApplyList(ctx context.Context, in *Friend
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(FriendApplyListResp)
 	err := c.cc.Invoke(ctx, SocialService_GetFriendApplyList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *socialServiceClient) GetHandleFriendApplyList(ctx context.Context, in *HandleFriendApplyReq, opts ...grpc.CallOption) (*FriendApplyListResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FriendApplyListResp)
+	err := c.cc.Invoke(ctx, SocialService_GetHandleFriendApplyList_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -305,6 +317,7 @@ type SocialServiceServer interface {
 	GetFriendInfo(context.Context, *FriendInfoRequest) (*UserInfo, error)
 	GetFriendList(context.Context, *FriendListReq) (*FriendListResp, error)
 	GetFriendApplyList(context.Context, *FriendApplyListReq) (*FriendApplyListResp, error)
+	GetHandleFriendApplyList(context.Context, *HandleFriendApplyReq) (*FriendApplyListResp, error)
 	// === 群组管理接口 ===
 	CreateGroup(context.Context, *GroupCreationRequest) (*GroupInfo, error)
 	QuitGroup(context.Context, *GroupQuitRequest) (*GroupQuitResp, error)
@@ -350,6 +363,9 @@ func (UnimplementedSocialServiceServer) GetFriendList(context.Context, *FriendLi
 }
 func (UnimplementedSocialServiceServer) GetFriendApplyList(context.Context, *FriendApplyListReq) (*FriendApplyListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFriendApplyList not implemented")
+}
+func (UnimplementedSocialServiceServer) GetHandleFriendApplyList(context.Context, *HandleFriendApplyReq) (*FriendApplyListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetHandleFriendApplyList not implemented")
 }
 func (UnimplementedSocialServiceServer) CreateGroup(context.Context, *GroupCreationRequest) (*GroupInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
@@ -536,6 +552,24 @@ func _SocialService_GetFriendApplyList_Handler(srv interface{}, ctx context.Cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SocialServiceServer).GetFriendApplyList(ctx, req.(*FriendApplyListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SocialService_GetHandleFriendApplyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HandleFriendApplyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServiceServer).GetHandleFriendApplyList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SocialService_GetHandleFriendApplyList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServiceServer).GetHandleFriendApplyList(ctx, req.(*HandleFriendApplyReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -826,6 +860,10 @@ var SocialService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetFriendApplyList",
 			Handler:    _SocialService_GetFriendApplyList_Handler,
+		},
+		{
+			MethodName: "GetHandleFriendApplyList",
+			Handler:    _SocialService_GetHandleFriendApplyList_Handler,
 		},
 		{
 			MethodName: "CreateGroup",

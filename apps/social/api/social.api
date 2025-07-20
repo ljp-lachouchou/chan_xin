@@ -48,6 +48,9 @@ type (
 	FriendApplyListReq {
 		UserId string `form:"user_id"` //用户id
 	}
+	HandleFriendApplyReq {
+		targetId string `form:"targetId"` //用户id
+	}
 	FriendApplyResp {
 		UserId    string `json:"user_id"` // 用户全局ID
 		Nickname  string `json:"nickname"` // 昵称
@@ -199,6 +202,10 @@ service social {
 	@doc "获取你请求添加的好友列表"
 	@handler getFriendApplyList
 	get /getFriendApplyList (FriendApplyListReq) returns (FriendApplyListResp)
+
+	@doc "获取谁想添加我为好友的列表"
+	@handler getHandleFriendApplyList
+	get /getHandleFriendApplyList (HandleFriendApplyReq) returns (FriendApplyListResp)
 }
 
 @server (

@@ -163,6 +163,12 @@ message RemoveAdminReq {
   string target_id = 3;    // 被操作成员ID
 }
 message RemoveAdminResp {}
+message HandleFriendApplyReq {
+  string targetId = 1;
+}
+message HandleFriendApplyResp {
+
+}
 // ========== 服务接口定义 ==========
 service SocialService {
   // === 好友管理接口 ===
@@ -173,6 +179,7 @@ service SocialService {
   rpc GetFriendInfo(FriendInfoRequest) returns (UserInfo);
   rpc GetFriendList(FriendListReq) returns(FriendListResp);
   rpc GetFriendApplyList(FriendApplyListReq) returns(FriendApplyListResp);
+  rpc GetHandleFriendApplyList(HandleFriendApplyReq) returns (FriendApplyListResp);
 
   // === 群组管理接口 ===
   rpc CreateGroup(GroupCreationRequest) returns (GroupInfo);

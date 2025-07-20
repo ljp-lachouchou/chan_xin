@@ -59,6 +59,11 @@ func (s *SocialServiceServer) GetFriendApplyList(ctx context.Context, in *social
 	return l.GetFriendApplyList(in)
 }
 
+func (s *SocialServiceServer) GetHandleFriendApplyList(ctx context.Context, in *social.HandleFriendApplyReq) (*social.FriendApplyListResp, error) {
+	l := logic.NewGetHandleFriendApplyListLogic(ctx, s.svcCtx)
+	return l.GetHandleFriendApplyList(in)
+}
+
 // === 群组管理接口 ===
 func (s *SocialServiceServer) CreateGroup(ctx context.Context, in *social.GroupCreationRequest) (*social.GroupInfo, error) {
 	l := logic.NewCreateGroupLogic(ctx, s.svcCtx)

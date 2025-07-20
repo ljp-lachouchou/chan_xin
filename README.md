@@ -64,6 +64,9 @@
    - 获取你请求添加的好友列表: get /getFriendApplyList
      - 请求参数: ![img_26.png](img/img_26.png)
      - 正确响应: ![img_27.png](img/img_27.png)
+   - 获取谁想添加我为好友的列表 get /getHandleFriendApplyList
+     - 请求参数: ![img_1.png](img/img33.png)
+     - 正确响应: ![img_27.png](img/img_27.png)
    - 群组相关路径前缀: /v1/group/social
    - 创建群: post /createGroup
      - 请求参数: ![img_29.png](img/img_29.png)

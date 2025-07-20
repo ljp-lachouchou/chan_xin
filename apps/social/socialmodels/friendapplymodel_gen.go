@@ -39,6 +39,7 @@ type (
 		DeleteByUidAndFId(ctx context.Context,session sqlx.Session, userId, friendId string) error
 		Tranx(ctx context.Context,fn func(ctx context.Context, session sqlx.Session) error) error
 		ListByUserIdJoinUsers(ctx context.Context,uid string) ([]*FriendApplyJoinUsers, error)
+		ListByTargetIdJoinUsers(ctx context.Context,targetId string) ([]*FriendApplyJoinUsers, error)
 	}
 
 	defaultFriendApplyModel struct {
@@ -80,6 +81,19 @@ func (m *defaultFriendApplyModel) DeleteByUidAndFId(ctx context.Context,session 
 	m.DelCacheCtx(ctx, cacheFriendApplyApplicantIdTargetIdKey1)
 	m.DelCacheCtx(ctx, cacheFriendApplyApplicantIdTargetIdKey2)
 	return err
+}
+func (m *defaultFriendApplyModel) ListByTargetIdJoinUsers(ctx context.Context,targetId string) ([]*FriendApplyJoinUsers, error) {
+	query := fmt.Sprintf("SELECT friend_apply.applicant_id as id,users.nickname as nickname,users.avatar as avatar,users.sex as sex,friend_apply.greet_msg as greet_msg,friend_apply.`status` as status FROM  friend_apply JOIN users ON friend_apply.applicant_id = users.id where friend_apply.target_id=?;")
+	var resp []*FriendApplyJoinUsers
+	err:= m.QueryRowsNoCacheCtx(ctx,&resp,query,targetId)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 func (m *defaultFriendApplyModel) ListByUserIdJoinUsers(ctx context.Context,uid string) ([]*FriendApplyJoinUsers, error) {
 	query := fmt.Sprintf("SELECT friend_apply.target_id as id,users.nickname as nickname,users.avatar as avatar,users.sex as sex,friend_apply.greet_msg as greet_msg,friend_apply.`status` as status FROM  friend_apply JOIN users ON friend_apply.target_id = users.id where friend_apply.applicant_id=?;")

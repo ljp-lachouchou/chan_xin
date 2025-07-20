@@ -1830,6 +1830,86 @@ func (*RemoveAdminResp) Descriptor() ([]byte, []int) {
 	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{32}
 }
 
+type HandleFriendApplyReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TargetId      string                 `protobuf:"bytes,1,opt,name=targetId,proto3" json:"targetId,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HandleFriendApplyReq) Reset() {
+	*x = HandleFriendApplyReq{}
+	mi := &file_apps_social_rpc_social_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HandleFriendApplyReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HandleFriendApplyReq) ProtoMessage() {}
+
+func (x *HandleFriendApplyReq) ProtoReflect() protoreflect.Message {
+	mi := &file_apps_social_rpc_social_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HandleFriendApplyReq.ProtoReflect.Descriptor instead.
+func (*HandleFriendApplyReq) Descriptor() ([]byte, []int) {
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *HandleFriendApplyReq) GetTargetId() string {
+	if x != nil {
+		return x.TargetId
+	}
+	return ""
+}
+
+type HandleFriendApplyResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HandleFriendApplyResp) Reset() {
+	*x = HandleFriendApplyResp{}
+	mi := &file_apps_social_rpc_social_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HandleFriendApplyResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HandleFriendApplyResp) ProtoMessage() {}
+
+func (x *HandleFriendApplyResp) ProtoReflect() protoreflect.Message {
+	mi := &file_apps_social_rpc_social_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HandleFriendApplyResp.ProtoReflect.Descriptor instead.
+func (*HandleFriendApplyResp) Descriptor() ([]byte, []int) {
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{34}
+}
+
 // ========== 详细结构定义 ==========
 // 好友状态更新请求
 type FriendStatusUpdate struct {
@@ -1843,7 +1923,7 @@ type FriendStatusUpdate struct {
 
 func (x *FriendStatusUpdate) Reset() {
 	*x = FriendStatusUpdate{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[33]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1855,7 +1935,7 @@ func (x *FriendStatusUpdate) String() string {
 func (*FriendStatusUpdate) ProtoMessage() {}
 
 func (x *FriendStatusUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[33]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1868,7 +1948,7 @@ func (x *FriendStatusUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendStatusUpdate.ProtoReflect.Descriptor instead.
 func (*FriendStatusUpdate) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{33}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *FriendStatusUpdate) GetUserId() string {
@@ -1904,7 +1984,7 @@ type GroupCreationRequest struct {
 
 func (x *GroupCreationRequest) Reset() {
 	*x = GroupCreationRequest{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[34]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1916,7 +1996,7 @@ func (x *GroupCreationRequest) String() string {
 func (*GroupCreationRequest) ProtoMessage() {}
 
 func (x *GroupCreationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[34]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1929,7 +2009,7 @@ func (x *GroupCreationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupCreationRequest.ProtoReflect.Descriptor instead.
 func (*GroupCreationRequest) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{34}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *GroupCreationRequest) GetCreatorId() string {
@@ -1966,7 +2046,7 @@ type GroupMemberManage struct {
 
 func (x *GroupMemberManage) Reset() {
 	*x = GroupMemberManage{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[35]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1978,7 +2058,7 @@ func (x *GroupMemberManage) String() string {
 func (*GroupMemberManage) ProtoMessage() {}
 
 func (x *GroupMemberManage) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[35]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1991,7 +2071,7 @@ func (x *GroupMemberManage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupMemberManage.ProtoReflect.Descriptor instead.
 func (*GroupMemberManage) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{35}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *GroupMemberManage) GetOperatorId() string {
@@ -2033,7 +2113,7 @@ type GroupInviteAction struct {
 
 func (x *GroupInviteAction) Reset() {
 	*x = GroupInviteAction{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[36]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2045,7 +2125,7 @@ func (x *GroupInviteAction) String() string {
 func (*GroupInviteAction) ProtoMessage() {}
 
 func (x *GroupInviteAction) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[36]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2058,7 +2138,7 @@ func (x *GroupInviteAction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupInviteAction.ProtoReflect.Descriptor instead.
 func (*GroupInviteAction) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{36}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *GroupInviteAction) GetInviteId() string {
@@ -2087,7 +2167,7 @@ type GroupStatusUpdate struct {
 
 func (x *GroupStatusUpdate) Reset() {
 	*x = GroupStatusUpdate{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[37]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2099,7 +2179,7 @@ func (x *GroupStatusUpdate) String() string {
 func (*GroupStatusUpdate) ProtoMessage() {}
 
 func (x *GroupStatusUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[37]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2112,7 +2192,7 @@ func (x *GroupStatusUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupStatusUpdate.ProtoReflect.Descriptor instead.
 func (*GroupStatusUpdate) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{37}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *GroupStatusUpdate) GetUserId() string {
@@ -2148,7 +2228,7 @@ type GroupMemberSettingUpdate struct {
 
 func (x *GroupMemberSettingUpdate) Reset() {
 	*x = GroupMemberSettingUpdate{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[38]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2160,7 +2240,7 @@ func (x *GroupMemberSettingUpdate) String() string {
 func (*GroupMemberSettingUpdate) ProtoMessage() {}
 
 func (x *GroupMemberSettingUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[38]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2173,7 +2253,7 @@ func (x *GroupMemberSettingUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupMemberSettingUpdate.ProtoReflect.Descriptor instead.
 func (*GroupMemberSettingUpdate) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{38}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *GroupMemberSettingUpdate) GetUserId() string {
@@ -2208,7 +2288,7 @@ type RelationRequest struct {
 
 func (x *RelationRequest) Reset() {
 	*x = RelationRequest{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[39]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2220,7 +2300,7 @@ func (x *RelationRequest) String() string {
 func (*RelationRequest) ProtoMessage() {}
 
 func (x *RelationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[39]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2233,7 +2313,7 @@ func (x *RelationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelationRequest.ProtoReflect.Descriptor instead.
 func (*RelationRequest) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{39}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *RelationRequest) GetFromUid() string {
@@ -2261,7 +2341,7 @@ type GroupQuitRequest struct {
 
 func (x *GroupQuitRequest) Reset() {
 	*x = GroupQuitRequest{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[40]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2273,7 +2353,7 @@ func (x *GroupQuitRequest) String() string {
 func (*GroupQuitRequest) ProtoMessage() {}
 
 func (x *GroupQuitRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[40]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2286,7 +2366,7 @@ func (x *GroupQuitRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupQuitRequest.ProtoReflect.Descriptor instead.
 func (*GroupQuitRequest) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{40}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *GroupQuitRequest) GetUserId() string {
@@ -2314,7 +2394,7 @@ type FriendInfoRequest struct {
 
 func (x *FriendInfoRequest) Reset() {
 	*x = FriendInfoRequest{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[41]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2326,7 +2406,7 @@ func (x *FriendInfoRequest) String() string {
 func (*FriendInfoRequest) ProtoMessage() {}
 
 func (x *FriendInfoRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[41]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2339,7 +2419,7 @@ func (x *FriendInfoRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendInfoRequest.ProtoReflect.Descriptor instead.
 func (*FriendInfoRequest) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{41}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *FriendInfoRequest) GetUserId() string {
@@ -2366,7 +2446,7 @@ type GroupInfoRequest struct {
 
 func (x *GroupInfoRequest) Reset() {
 	*x = GroupInfoRequest{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[42]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2378,7 +2458,7 @@ func (x *GroupInfoRequest) String() string {
 func (*GroupInfoRequest) ProtoMessage() {}
 
 func (x *GroupInfoRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[42]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2391,7 +2471,7 @@ func (x *GroupInfoRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupInfoRequest.ProtoReflect.Descriptor instead.
 func (*GroupInfoRequest) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{42}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *GroupInfoRequest) GetUserId() string {
@@ -2416,7 +2496,7 @@ type PingReq struct {
 
 func (x *PingReq) Reset() {
 	*x = PingReq{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[43]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2428,7 +2508,7 @@ func (x *PingReq) String() string {
 func (*PingReq) ProtoMessage() {}
 
 func (x *PingReq) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[43]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2441,7 +2521,7 @@ func (x *PingReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PingReq.ProtoReflect.Descriptor instead.
 func (*PingReq) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{43}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{45}
 }
 
 type PingResp struct {
@@ -2453,7 +2533,7 @@ type PingResp struct {
 
 func (x *PingResp) Reset() {
 	*x = PingResp{}
-	mi := &file_apps_social_rpc_social_proto_msgTypes[44]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2465,7 +2545,7 @@ func (x *PingResp) String() string {
 func (*PingResp) ProtoMessage() {}
 
 func (x *PingResp) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_social_rpc_social_proto_msgTypes[44]
+	mi := &file_apps_social_rpc_social_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2478,7 +2558,7 @@ func (x *PingResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PingResp.ProtoReflect.Descriptor instead.
 func (*PingResp) Descriptor() ([]byte, []int) {
-	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{44}
+	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *PingResp) GetMsg() string {
@@ -2625,7 +2705,10 @@ const file_apps_social_rpc_social_proto_rawDesc = "" +
 	"operatorId\x12\x19\n" +
 	"\bgroup_id\x18\x02 \x01(\tR\agroupId\x12\x1b\n" +
 	"\ttarget_id\x18\x03 \x01(\tR\btargetId\"\x11\n" +
-	"\x0fRemoveAdminResp\"x\n" +
+	"\x0fRemoveAdminResp\"2\n" +
+	"\x14HandleFriendApplyReq\x12\x1a\n" +
+	"\btargetId\x18\x01 \x01(\tR\btargetId\"\x17\n" +
+	"\x15HandleFriendApplyResp\"x\n" +
 	"\x12FriendStatusUpdate\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
 	"\tfriend_id\x18\x02 \x01(\tR\bfriendId\x12,\n" +
@@ -2673,7 +2756,7 @@ const file_apps_social_rpc_social_proto_rawDesc = "" +
 	"\x0fGroupPermission\x12\b\n" +
 	"\x04KICK\x10\x00\x12\r\n" +
 	"\tSET_ADMIN\x10\x01\x12\x0f\n" +
-	"\vCHANGE_NAME\x10\x022\xdf\v\n" +
+	"\vCHANGE_NAME\x10\x022\xb6\f\n" +
 	"\rSocialService\x12F\n" +
 	"\vApplyFriend\x12\x1a.social.FriendApplyRequest\x1a\x1b.social.FriendApplyResponse\x12M\n" +
 	"\x11HandleFriendApply\x12\x19.social.FriendApplyAction\x1a\x1d.social.FriendApplyActionResp\x12=\n" +
@@ -2681,7 +2764,8 @@ const file_apps_social_rpc_social_proto_rawDesc = "" +
 	"\x12UpdateFriendStatus\x12\x1a.social.FriendStatusUpdate\x1a\x1e.social.FriendStatusUpdateResp\x12<\n" +
 	"\rGetFriendInfo\x12\x19.social.FriendInfoRequest\x1a\x10.social.UserInfo\x12>\n" +
 	"\rGetFriendList\x12\x15.social.FriendListReq\x1a\x16.social.FriendListResp\x12M\n" +
-	"\x12GetFriendApplyList\x12\x1a.social.FriendApplyListReq\x1a\x1b.social.FriendApplyListResp\x12>\n" +
+	"\x12GetFriendApplyList\x12\x1a.social.FriendApplyListReq\x1a\x1b.social.FriendApplyListResp\x12U\n" +
+	"\x18GetHandleFriendApplyList\x12\x1c.social.HandleFriendApplyReq\x1a\x1b.social.FriendApplyListResp\x12>\n" +
 	"\vCreateGroup\x12\x1c.social.GroupCreationRequest\x1a\x11.social.GroupInfo\x12<\n" +
 	"\tQuitGroup\x12\x18.social.GroupQuitRequest\x1a\x15.social.GroupQuitResp\x12E\n" +
 	"\rInviteToGroup\x12\x17.social.GroupInvitation\x1a\x1b.social.GroupInvitationResp\x12M\n" +
@@ -2712,7 +2796,7 @@ func file_apps_social_rpc_social_proto_rawDescGZIP() []byte {
 }
 
 var file_apps_social_rpc_social_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_apps_social_rpc_social_proto_msgTypes = make([]protoimpl.MessageInfo, 45)
+var file_apps_social_rpc_social_proto_msgTypes = make([]protoimpl.MessageInfo, 47)
 var file_apps_social_rpc_social_proto_goTypes = []any{
 	(GroupPermission)(0),                 // 0: social.GroupPermission
 	(*UserInfo)(nil),                     // 1: social.UserInfo
@@ -2748,18 +2832,20 @@ var file_apps_social_rpc_social_proto_goTypes = []any{
 	(*GetGroupMembersResp)(nil),          // 31: social.GetGroupMembersResp
 	(*RemoveAdminReq)(nil),               // 32: social.RemoveAdminReq
 	(*RemoveAdminResp)(nil),              // 33: social.RemoveAdminResp
-	(*FriendStatusUpdate)(nil),           // 34: social.FriendStatusUpdate
-	(*GroupCreationRequest)(nil),         // 35: social.GroupCreationRequest
-	(*GroupMemberManage)(nil),            // 36: social.GroupMemberManage
-	(*GroupInviteAction)(nil),            // 37: social.GroupInviteAction
-	(*GroupStatusUpdate)(nil),            // 38: social.GroupStatusUpdate
-	(*GroupMemberSettingUpdate)(nil),     // 39: social.GroupMemberSettingUpdate
-	(*RelationRequest)(nil),              // 40: social.RelationRequest
-	(*GroupQuitRequest)(nil),             // 41: social.GroupQuitRequest
-	(*FriendInfoRequest)(nil),            // 42: social.FriendInfoRequest
-	(*GroupInfoRequest)(nil),             // 43: social.GroupInfoRequest
-	(*PingReq)(nil),                      // 44: social.PingReq
-	(*PingResp)(nil),                     // 45: social.PingResp
+	(*HandleFriendApplyReq)(nil),         // 34: social.HandleFriendApplyReq
+	(*HandleFriendApplyResp)(nil),        // 35: social.HandleFriendApplyResp
+	(*FriendStatusUpdate)(nil),           // 36: social.FriendStatusUpdate
+	(*GroupCreationRequest)(nil),         // 37: social.GroupCreationRequest
+	(*GroupMemberManage)(nil),            // 38: social.GroupMemberManage
+	(*GroupInviteAction)(nil),            // 39: social.GroupInviteAction
+	(*GroupStatusUpdate)(nil),            // 40: social.GroupStatusUpdate
+	(*GroupMemberSettingUpdate)(nil),     // 41: social.GroupMemberSettingUpdate
+	(*RelationRequest)(nil),              // 42: social.RelationRequest
+	(*GroupQuitRequest)(nil),             // 43: social.GroupQuitRequest
+	(*FriendInfoRequest)(nil),            // 44: social.FriendInfoRequest
+	(*GroupInfoRequest)(nil),             // 45: social.GroupInfoRequest
+	(*PingReq)(nil),                      // 46: social.PingReq
+	(*PingResp)(nil),                     // 47: social.PingResp
 }
 var file_apps_social_rpc_social_proto_depIdxs = []int32{
 	3,  // 0: social.UserInfo.status:type_name -> social.FriendStatusInfo
@@ -2772,48 +2858,50 @@ var file_apps_social_rpc_social_proto_depIdxs = []int32{
 	11, // 7: social.GroupMemberSettingUpdate.setting:type_name -> social.GroupMemberSetting
 	5,  // 8: social.SocialService.ApplyFriend:input_type -> social.FriendApplyRequest
 	10, // 9: social.SocialService.HandleFriendApply:input_type -> social.FriendApplyAction
-	40, // 10: social.SocialService.DeleteFriend:input_type -> social.RelationRequest
-	34, // 11: social.SocialService.UpdateFriendStatus:input_type -> social.FriendStatusUpdate
-	42, // 12: social.SocialService.GetFriendInfo:input_type -> social.FriendInfoRequest
+	42, // 10: social.SocialService.DeleteFriend:input_type -> social.RelationRequest
+	36, // 11: social.SocialService.UpdateFriendStatus:input_type -> social.FriendStatusUpdate
+	44, // 12: social.SocialService.GetFriendInfo:input_type -> social.FriendInfoRequest
 	23, // 13: social.SocialService.GetFriendList:input_type -> social.FriendListReq
 	7,  // 14: social.SocialService.GetFriendApplyList:input_type -> social.FriendApplyListReq
-	35, // 15: social.SocialService.CreateGroup:input_type -> social.GroupCreationRequest
-	41, // 16: social.SocialService.QuitGroup:input_type -> social.GroupQuitRequest
-	13, // 17: social.SocialService.InviteToGroup:input_type -> social.GroupInvitation
-	37, // 18: social.SocialService.HandleGroupInvite:input_type -> social.GroupInviteAction
-	25, // 19: social.SocialService.ApplyGroup:input_type -> social.GroupApplyReq
-	27, // 20: social.SocialService.HandleGroupApply:input_type -> social.GroupApplyAction
-	38, // 21: social.SocialService.UpdateGroupStatus:input_type -> social.GroupStatusUpdate
-	36, // 22: social.SocialService.ManageGroupMember:input_type -> social.GroupMemberManage
-	32, // 23: social.SocialService.RemoveAdmin:input_type -> social.RemoveAdminReq
-	43, // 24: social.SocialService.GetGroupInfo:input_type -> social.GroupInfoRequest
-	29, // 25: social.SocialService.GetGroupMembers:input_type -> social.GetGroupMembersReq
-	29, // 26: social.SocialService.GetGroupAdmins:input_type -> social.GetGroupMembersReq
-	39, // 27: social.SocialService.SetGroupMemberSetting:input_type -> social.GroupMemberSettingUpdate
-	44, // 28: social.SocialService.Ping:input_type -> social.PingReq
-	6,  // 29: social.SocialService.ApplyFriend:output_type -> social.FriendApplyResponse
-	14, // 30: social.SocialService.HandleFriendApply:output_type -> social.FriendApplyActionResp
-	15, // 31: social.SocialService.DeleteFriend:output_type -> social.RelationResp
-	16, // 32: social.SocialService.UpdateFriendStatus:output_type -> social.FriendStatusUpdateResp
-	1,  // 33: social.SocialService.GetFriendInfo:output_type -> social.UserInfo
-	24, // 34: social.SocialService.GetFriendList:output_type -> social.FriendListResp
-	9,  // 35: social.SocialService.GetFriendApplyList:output_type -> social.FriendApplyListResp
-	2,  // 36: social.SocialService.CreateGroup:output_type -> social.GroupInfo
-	21, // 37: social.SocialService.QuitGroup:output_type -> social.GroupQuitResp
-	22, // 38: social.SocialService.InviteToGroup:output_type -> social.GroupInvitationResp
-	17, // 39: social.SocialService.HandleGroupInvite:output_type -> social.GroupInviteActionResp
-	26, // 40: social.SocialService.ApplyGroup:output_type -> social.GroupApplyResp
-	28, // 41: social.SocialService.HandleGroupApply:output_type -> social.GroupApplyActionResp
-	18, // 42: social.SocialService.UpdateGroupStatus:output_type -> social.GroupStatusUpdateResp
-	19, // 43: social.SocialService.ManageGroupMember:output_type -> social.GroupMemberManageResp
-	33, // 44: social.SocialService.RemoveAdmin:output_type -> social.RemoveAdminResp
-	2,  // 45: social.SocialService.GetGroupInfo:output_type -> social.GroupInfo
-	31, // 46: social.SocialService.GetGroupMembers:output_type -> social.GetGroupMembersResp
-	31, // 47: social.SocialService.GetGroupAdmins:output_type -> social.GetGroupMembersResp
-	20, // 48: social.SocialService.SetGroupMemberSetting:output_type -> social.GroupMemberSettingUpdateResp
-	45, // 49: social.SocialService.Ping:output_type -> social.PingResp
-	29, // [29:50] is the sub-list for method output_type
-	8,  // [8:29] is the sub-list for method input_type
+	34, // 15: social.SocialService.GetHandleFriendApplyList:input_type -> social.HandleFriendApplyReq
+	37, // 16: social.SocialService.CreateGroup:input_type -> social.GroupCreationRequest
+	43, // 17: social.SocialService.QuitGroup:input_type -> social.GroupQuitRequest
+	13, // 18: social.SocialService.InviteToGroup:input_type -> social.GroupInvitation
+	39, // 19: social.SocialService.HandleGroupInvite:input_type -> social.GroupInviteAction
+	25, // 20: social.SocialService.ApplyGroup:input_type -> social.GroupApplyReq
+	27, // 21: social.SocialService.HandleGroupApply:input_type -> social.GroupApplyAction
+	40, // 22: social.SocialService.UpdateGroupStatus:input_type -> social.GroupStatusUpdate
+	38, // 23: social.SocialService.ManageGroupMember:input_type -> social.GroupMemberManage
+	32, // 24: social.SocialService.RemoveAdmin:input_type -> social.RemoveAdminReq
+	45, // 25: social.SocialService.GetGroupInfo:input_type -> social.GroupInfoRequest
+	29, // 26: social.SocialService.GetGroupMembers:input_type -> social.GetGroupMembersReq
+	29, // 27: social.SocialService.GetGroupAdmins:input_type -> social.GetGroupMembersReq
+	41, // 28: social.SocialService.SetGroupMemberSetting:input_type -> social.GroupMemberSettingUpdate
+	46, // 29: social.SocialService.Ping:input_type -> social.PingReq
+	6,  // 30: social.SocialService.ApplyFriend:output_type -> social.FriendApplyResponse
+	14, // 31: social.SocialService.HandleFriendApply:output_type -> social.FriendApplyActionResp
+	15, // 32: social.SocialService.DeleteFriend:output_type -> social.RelationResp
+	16, // 33: social.SocialService.UpdateFriendStatus:output_type -> social.FriendStatusUpdateResp
+	1,  // 34: social.SocialService.GetFriendInfo:output_type -> social.UserInfo
+	24, // 35: social.SocialService.GetFriendList:output_type -> social.FriendListResp
+	9,  // 36: social.SocialService.GetFriendApplyList:output_type -> social.FriendApplyListResp
+	9,  // 37: social.SocialService.GetHandleFriendApplyList:output_type -> social.FriendApplyListResp
+	2,  // 38: social.SocialService.CreateGroup:output_type -> social.GroupInfo
+	21, // 39: social.SocialService.QuitGroup:output_type -> social.GroupQuitResp
+	22, // 40: social.SocialService.InviteToGroup:output_type -> social.GroupInvitationResp
+	17, // 41: social.SocialService.HandleGroupInvite:output_type -> social.GroupInviteActionResp
+	26, // 42: social.SocialService.ApplyGroup:output_type -> social.GroupApplyResp
+	28, // 43: social.SocialService.HandleGroupApply:output_type -> social.GroupApplyActionResp
+	18, // 44: social.SocialService.UpdateGroupStatus:output_type -> social.GroupStatusUpdateResp
+	19, // 45: social.SocialService.ManageGroupMember:output_type -> social.GroupMemberManageResp
+	33, // 46: social.SocialService.RemoveAdmin:output_type -> social.RemoveAdminResp
+	2,  // 47: social.SocialService.GetGroupInfo:output_type -> social.GroupInfo
+	31, // 48: social.SocialService.GetGroupMembers:output_type -> social.GetGroupMembersResp
+	31, // 49: social.SocialService.GetGroupAdmins:output_type -> social.GetGroupMembersResp
+	20, // 50: social.SocialService.SetGroupMemberSetting:output_type -> social.GroupMemberSettingUpdateResp
+	47, // 51: social.SocialService.Ping:output_type -> social.PingResp
+	30, // [30:52] is the sub-list for method output_type
+	8,  // [8:30] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
 	8,  // [8:8] is the sub-list for extension extendee
 	0,  // [0:8] is the sub-list for field type_name
@@ -2833,7 +2921,7 @@ func file_apps_social_rpc_social_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_apps_social_rpc_social_proto_rawDesc), len(file_apps_social_rpc_social_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   45,
+			NumMessages:   47,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

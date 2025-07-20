@@ -61,6 +61,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: friend.GetFriendListHandler(serverCtx),
 				},
 				{
+					// 获取谁想添加我为好友的列表
+					Method:  http.MethodGet,
+					Path:    "/getHandleFriendApplyList",
+					Handler: friend.GetHandleFriendApplyListHandler(serverCtx),
+				},
+				{
 					// 目标方处理申请
 					Method:  http.MethodPost,
 					Path:    "/handleFriendApply",

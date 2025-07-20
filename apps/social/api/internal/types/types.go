@@ -171,6 +171,10 @@ type GroupStatusUpdate struct {
 	Status  GroupStatus `json:"status"`   // 新状态
 }
 
+type HandleFriendApplyReq struct {
+	TargetId string `form:"targetId"` //用户id
+}
+
 type RelationRequest struct {
 	FromUid string `json:"from_uid"` // 发起方
 	ToUid   string `json:"to_uid"`   // 目标方
