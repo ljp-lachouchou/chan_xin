@@ -47,7 +47,7 @@
      - 请求参数:![img_15.png](img/img_15.png)
      - 正确响应:![img_16.png](img/img_16.png)
    - 目标方处理申请: post /handleFriendApply
-     - 请求参数: ![img_17.png](img/img_17.png)
+     - 请求参数: ![img_1.png](img/img34.png)
      - 正确响应: 无返回数据，code为200即为成功
    - 删除好友: delete /deleteFriend
      - 请求参数: ![img_18.png](img/img_18.png)

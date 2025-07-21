@@ -63,8 +63,9 @@ type (
 		List []*FriendApplyResp `json:"list"` //用户请求添加的好友
 	}
 	FriendApplyAction {
-		ApplyId    string `json:"apply_id"` // 申请记录ID
-		IsApproved bool   `json:"is_approved"` // 是否同意
+		applicantId string `json:"applicant_id"` // 申请记录ID
+		targetId    string `json:"target_id"`
+		IsApproved  bool   `json:"is_approved"` // 是否同意
 	}
 	FriendListReq {
 		UserId string `form:"user_id"` //用户id

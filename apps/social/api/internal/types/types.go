@@ -11,8 +11,9 @@ type BaseUserInfo struct {
 }
 
 type FriendApplyAction struct {
-	ApplyId    string `json:"apply_id"`    // 申请记录ID
-	IsApproved bool   `json:"is_approved"` // 是否同意
+	ApplicantId string `json:"applicant_id"` // 申请记录ID
+	TargetId    string `json:"target_id"`
+	IsApproved  bool   `json:"is_approved"` // 是否同意
 }
 
 type FriendApplyListReq struct {

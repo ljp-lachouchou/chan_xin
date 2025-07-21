@@ -29,7 +29,8 @@ func NewHandleFriendApplyLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *HandleFriendApplyLogic) HandleFriendApply(req *types.FriendApplyAction) error {
 	in := socialservice.FriendApplyAction{
-		ApplyId:    req.ApplyId,
+		ApplicantId: req.ApplicantId,
+		TargetId:    req.TargetId,
 		IsApproved: req.IsApproved,
 	}
 	resp, err := l.svcCtx.SocialService.HandleFriendApply(l.ctx, &in)

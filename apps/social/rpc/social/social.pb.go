@@ -659,8 +659,9 @@ func (x *FriendApplyListResp) GetList() []*FriendApplyResp {
 // 好友申请操作
 type FriendApplyAction struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ApplyId       string                 `protobuf:"bytes,1,opt,name=apply_id,json=applyId,proto3" json:"apply_id,omitempty"`           // 申请记录ID
-	IsApproved    bool                   `protobuf:"varint,2,opt,name=is_approved,json=isApproved,proto3" json:"is_approved,omitempty"` // 是否同意
+	ApplicantId   string                 `protobuf:"bytes,1,opt,name=applicantId,proto3" json:"applicantId,omitempty"`                  // 申请人ID
+	TargetId      string                 `protobuf:"bytes,2,opt,name=targetId,proto3" json:"targetId,omitempty"`                        //被申请人id
+	IsApproved    bool                   `protobuf:"varint,3,opt,name=is_approved,json=isApproved,proto3" json:"is_approved,omitempty"` // 是否同意
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -695,9 +696,16 @@ func (*FriendApplyAction) Descriptor() ([]byte, []int) {
 	return file_apps_social_rpc_social_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *FriendApplyAction) GetApplyId() string {
+func (x *FriendApplyAction) GetApplicantId() string {
 	if x != nil {
-		return x.ApplyId
+		return x.ApplicantId
+	}
+	return ""
+}
+
+func (x *FriendApplyAction) GetTargetId() string {
+	if x != nil {
+		return x.TargetId
 	}
 	return ""
 }
@@ -2625,10 +2633,11 @@ const file_apps_social_rpc_social_proto_rawDesc = "" +
 	"\tgreet_msg\x18\x05 \x01(\tR\bgreetMsg\x12\x16\n" +
 	"\x06status\x18\x06 \x01(\x05R\x06status\"B\n" +
 	"\x13FriendApplyListResp\x12+\n" +
-	"\x04List\x18\x01 \x03(\v2\x17.social.FriendApplyRespR\x04List\"O\n" +
-	"\x11FriendApplyAction\x12\x19\n" +
-	"\bapply_id\x18\x01 \x01(\tR\aapplyId\x12\x1f\n" +
-	"\vis_approved\x18\x02 \x01(\bR\n" +
+	"\x04List\x18\x01 \x03(\v2\x17.social.FriendApplyRespR\x04List\"r\n" +
+	"\x11FriendApplyAction\x12 \n" +
+	"\vapplicantId\x18\x01 \x01(\tR\vapplicantId\x12\x1a\n" +
+	"\btargetId\x18\x02 \x01(\tR\btargetId\x12\x1f\n" +
+	"\vis_approved\x18\x03 \x01(\bR\n" +
 	"isApproved\"\xa3\x01\n" +
 	"\x12GroupMemberSetting\x12*\n" +
 	"\x0egroup_nickname\x18\x01 \x01(\tH\x00R\rgroupNickname\x88\x01\x01\x125\n" +

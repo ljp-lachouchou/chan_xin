@@ -68,8 +68,9 @@ message FriendApplyListResp {
 }
 // 好友申请操作
 message FriendApplyAction {
-  string apply_id = 1;      // 申请记录ID
-  bool is_approved = 2;    // 是否同意
+  string applicantId = 1;      // 申请人ID
+  string targetId = 2; //被申请人id
+  bool is_approved = 3;    // 是否同意
 }
 
 // ========== 群组管理模块 ==========

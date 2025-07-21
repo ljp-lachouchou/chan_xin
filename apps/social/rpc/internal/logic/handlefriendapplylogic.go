@@ -33,9 +33,9 @@ func NewHandleFriendApplyLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *HandleFriendApplyLogic) HandleFriendApply(in *social.FriendApplyAction) (*social.FriendApplyActionResp, error) {
-	findOne, err := l.svcCtx.FriendApplyModel.FindOne(l.ctx, in.ApplyId)
+	findOne, err := l.svcCtx.FriendApplyModel.FindByApplicantIdAndTargetId(l.ctx, in.ApplicantId, in.TargetId)
 	if err != nil {
-		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply", in.ApplyId)
+		return nil, lerr.NewWrapError(lerr.NEWDBError(), err, "social-rpc HandleFriendApply", in.ApplicantId, in.TargetId)
 	}
 	switch constant.FriendApplyHandle(findOne.Status) {
 	case constant.SuccessHandleApply:
