@@ -148,7 +148,12 @@ message SetCoverRequest {
   string user_id = 1;    // 用户ID
   string cover_url = 2;  // 封面图URL（需CDN地址）
 }
-
+message GetCoverRequest {
+  string user_id = 1;
+}
+message GetCoverResp {
+  string cover = 1;
+}
 message ListVisiblePostsRequest {
   string viewer_id = 1;      // 浏览者ID（用于权限校验）
   Pagination pagination = 2; // 分页参数
@@ -201,6 +206,9 @@ service dynamics {
 
   // 设置个人动态封面（用于个人主页）
   rpc SetCover (SetCoverRequest) returns (Empty);
+
+  //获取个人动态封面
+  rpc GetCover(GetCoverRequest) returns(GetCoverResp);
 
   // 浏览可见动态流（根据权限过滤+分页）
   rpc ListVisiblePosts (ListVisiblePostsRequest) returns (PostListResponse);

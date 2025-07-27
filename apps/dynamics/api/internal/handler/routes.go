@@ -59,6 +59,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: deletePostHandler(serverCtx),
 				},
 				{
+					// 获取封面
+					Method:  http.MethodGet,
+					Path:    "/getCover",
+					Handler: getCoverHandler(serverCtx),
+				},
+				{
 					// 单个post信息
 					Method:  http.MethodGet,
 					Path:    "/getPostInfo",

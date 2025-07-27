@@ -149,6 +149,9 @@
     - 设置个人朋友圈封面: put /setCover
       - 请求参数: ![img_76.png](img/img_76.png)
       - 正确响应: 无返回数据，code为200即为成功
+    - 获取个人封面: get /getCover
+      - 请求参数:![img_1.png](img_1.png)
+      - 正确响应: ![img_2.png](img_2.png)
     - 浏览朋友圈 get /listVisiblePosts
       - 请求参数: ![img_77.png](img/img_77.png)
       - 正确响应: ![img_78.png](img/img_78.png)

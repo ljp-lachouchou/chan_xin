@@ -59,6 +59,12 @@ func (s *DynamicsServer) SetCover(ctx context.Context, in *dynamics.SetCoverRequ
 	return l.SetCover(in)
 }
 
+// 获取个人动态封面
+func (s *DynamicsServer) GetCover(ctx context.Context, in *dynamics.GetCoverRequest) (*dynamics.GetCoverResp, error) {
+	l := logic.NewGetCoverLogic(ctx, s.svcCtx)
+	return l.GetCover(in)
+}
+
 // 浏览可见动态流（根据权限过滤+分页）
 func (s *DynamicsServer) ListVisiblePosts(ctx context.Context, in *dynamics.ListVisiblePostsRequest) (*dynamics.PostListResponse, error) {
 	l := logic.NewListVisiblePostsLogic(ctx, s.svcCtx)

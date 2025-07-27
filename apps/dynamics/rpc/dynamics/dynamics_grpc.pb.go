@@ -25,6 +25,7 @@ const (
 	Dynamics_PinPost_FullMethodName                          = "/dynamics.dynamics/PinPost"
 	Dynamics_ListUserPosts_FullMethodName                    = "/dynamics.dynamics/ListUserPosts"
 	Dynamics_SetCover_FullMethodName                         = "/dynamics.dynamics/SetCover"
+	Dynamics_GetCover_FullMethodName                         = "/dynamics.dynamics/GetCover"
 	Dynamics_ListVisiblePosts_FullMethodName                 = "/dynamics.dynamics/ListVisiblePosts"
 	Dynamics_CreateComment_FullMethodName                    = "/dynamics.dynamics/CreateComment"
 	Dynamics_CreateCommentReplay_FullMethodName              = "/dynamics.dynamics/CreateCommentReplay"
@@ -61,6 +62,8 @@ type DynamicsClient interface {
 	ListUserPosts(ctx context.Context, in *ListUserPostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
 	// 设置个人动态封面（用于个人主页）
 	SetCover(ctx context.Context, in *SetCoverRequest, opts ...grpc.CallOption) (*Empty, error)
+	// 获取个人动态封面
+	GetCover(ctx context.Context, in *GetCoverRequest, opts ...grpc.CallOption) (*GetCoverResp, error)
 	// 浏览可见动态流（根据权限过滤+分页）
 	ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
 	// 创建评论
@@ -156,6 +159,16 @@ func (c *dynamicsClient) SetCover(ctx context.Context, in *SetCoverRequest, opts
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
 	err := c.cc.Invoke(ctx, Dynamics_SetCover_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) GetCover(ctx context.Context, in *GetCoverRequest, opts ...grpc.CallOption) (*GetCoverResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCoverResp)
+	err := c.cc.Invoke(ctx, Dynamics_GetCover_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -340,6 +353,8 @@ type DynamicsServer interface {
 	ListUserPosts(context.Context, *ListUserPostsRequest) (*PostListResponse, error)
 	// 设置个人动态封面（用于个人主页）
 	SetCover(context.Context, *SetCoverRequest) (*Empty, error)
+	// 获取个人动态封面
+	GetCover(context.Context, *GetCoverRequest) (*GetCoverResp, error)
 	// 浏览可见动态流（根据权限过滤+分页）
 	ListVisiblePosts(context.Context, *ListVisiblePostsRequest) (*PostListResponse, error)
 	// 创建评论
@@ -398,6 +413,9 @@ func (UnimplementedDynamicsServer) ListUserPosts(context.Context, *ListUserPosts
 }
 func (UnimplementedDynamicsServer) SetCover(context.Context, *SetCoverRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetCover not implemented")
+}
+func (UnimplementedDynamicsServer) GetCover(context.Context, *GetCoverRequest) (*GetCoverResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCover not implemented")
 }
 func (UnimplementedDynamicsServer) ListVisiblePosts(context.Context, *ListVisiblePostsRequest) (*PostListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListVisiblePosts not implemented")
@@ -572,6 +590,24 @@ func _Dynamics_SetCover_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DynamicsServer).SetCover(ctx, req.(*SetCoverRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_GetCover_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCoverRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).GetCover(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_GetCover_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).GetCover(ctx, req.(*GetCoverRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -894,6 +930,10 @@ var Dynamics_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetCover",
 			Handler:    _Dynamics_SetCover_Handler,
+		},
+		{
+			MethodName: "GetCover",
+			Handler:    _Dynamics_GetCover_Handler,
 		},
 		{
 			MethodName: "ListVisiblePosts",

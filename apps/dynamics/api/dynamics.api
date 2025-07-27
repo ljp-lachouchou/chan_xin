@@ -72,6 +72,12 @@ type (
 	ListCommentResp {
 		list []ListCommentRespStruct `json:"list"` //评论列表
 	}
+	GetCoverRequest {
+		userId string `form:"userId"`
+	}
+	GetCoverResp {
+		cover string `json:"cover"`
+	}
 )
 
 // ================== 服务路由定义 ==================
@@ -162,6 +168,10 @@ service dynamics {
 	@doc "获取未读数"
 	@handler getUnreadCount
 	get /getUnreadCount (GetUnreadCountRequest) returns (GetUnreadCountResponse)
+
+	@doc "获取封面"
+	@handler getCover
+	get /getCover (GetCoverRequest) returns (GetCoverResp)
 
 	@handler ping
 	get /ping

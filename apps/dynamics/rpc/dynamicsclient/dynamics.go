@@ -24,6 +24,8 @@ type (
 	DeleteCommentReq                            = dynamics.DeleteCommentReq
 	DeletePostRequest                           = dynamics.DeletePostRequest
 	Empty                                       = dynamics.Empty
+	GetCoverRequest                             = dynamics.GetCoverRequest
+	GetCoverResp                                = dynamics.GetCoverResp
 	GetPostInfoReq                              = dynamics.GetPostInfoReq
 	GetUnreadCountRequest                       = dynamics.GetUnreadCountRequest
 	GetUnreadCountResponse                      = dynamics.GetUnreadCountResponse
@@ -65,6 +67,8 @@ type (
 		ListUserPosts(ctx context.Context, in *ListUserPostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
 		// 设置个人动态封面（用于个人主页）
 		SetCover(ctx context.Context, in *SetCoverRequest, opts ...grpc.CallOption) (*Empty, error)
+		// 获取个人动态封面
+		GetCover(ctx context.Context, in *GetCoverRequest, opts ...grpc.CallOption) (*GetCoverResp, error)
 		// 浏览可见动态流（根据权限过滤+分页）
 		ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
 		// 创建评论
@@ -143,6 +147,12 @@ func (m *defaultDynamics) ListUserPosts(ctx context.Context, in *ListUserPostsRe
 func (m *defaultDynamics) SetCover(ctx context.Context, in *SetCoverRequest, opts ...grpc.CallOption) (*Empty, error) {
 	client := dynamics.NewDynamicsClient(m.cli.Conn())
 	return client.SetCover(ctx, in, opts...)
+}
+
+// 获取个人动态封面
+func (m *defaultDynamics) GetCover(ctx context.Context, in *GetCoverRequest, opts ...grpc.CallOption) (*GetCoverResp, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.GetCover(ctx, in, opts...)
 }
 
 // 浏览可见动态流（根据权限过滤+分页）

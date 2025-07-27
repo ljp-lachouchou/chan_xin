@@ -51,6 +51,14 @@ type DeletePostRequest struct {
 type Empty struct {
 }
 
+type GetCoverRequest struct {
+	UserId string `form:"userId"`
+}
+
+type GetCoverResp struct {
+	Cover string `json:"cover"`
+}
+
 type GetPostInfoReq struct {
 	PostId string `form:"postId"` //动态id
 }
