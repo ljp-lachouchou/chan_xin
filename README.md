@@ -136,7 +136,7 @@
       - 正确响应(a-b:content/a:content): ![img_64.png](img/img_64.png)
     - 创建动态: post /createPost 
       - 请求参数: ![img_66.png](img/img_66.png)
-      - 正确响应: ![img_69.png](img/img_69.png)
+      - 正确响应: ![img_3.png](img_3.png)
     - 删除动态 delete /deletePost
       - 请求参数(操作者id为post创建者才success): ![img_70.png](img/img_70.png)
       - 正确响应: 无返回数据，code为200即为成功
@@ -153,7 +153,7 @@
       - 请求参数:![img_1.png](img_1.png)
       - 正确响应: ![img_2.png](img_2.png)
     - 浏览朋友圈 get /listVisiblePosts
-      - 请求参数: ![img_77.png](img/img_77.png)
+      - 请求参数: ![img_4.png](img_4.png)
       - 正确响应: ![img_78.png](img/img_78.png)
     - 点赞/取消点赞: post /toggleLike
       - 请求参数: ![img_79.png](img/img_79.png)

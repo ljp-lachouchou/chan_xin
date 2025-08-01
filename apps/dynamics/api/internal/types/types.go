@@ -108,8 +108,9 @@ type ListUserPostsRequest struct {
 }
 
 type ListVisiblePostsRequest struct {
-	ViewerId   string     `form:"viewerId"` // 浏览者ID
-	Pagination Pagination `form:"pagination"`
+	ViewerId  string `form:"viewerId"` // 浏览者ID
+	PageSize  int    `form:"pageSize"`
+	PageToken string `form:"pageToken"`
 }
 
 type Notification struct {
@@ -138,11 +139,12 @@ type PinPostRequest struct {
 }
 
 type Post struct {
-	PostId   string      `json:"postId"`   // 动态ID
-	UserId   string      `json:"userId"`   // 发布者ID
-	Content  PostContent `json:"content"`  // 内容主体
-	Meta     PostMeta    `json:"meta"`     // 元数据
-	IsPinned bool        `json:"isPinned"` // 是否置顶
+	PostId     string      `json:"postId"`   // 动态ID
+	UserId     string      `json:"userId"`   // 发布者ID
+	Content    PostContent `json:"content"`  // 内容主体
+	Meta       PostMeta    `json:"meta"`     // 元数据
+	IsPinned   bool        `json:"isPinned"` // 是否置顶
+	CreateTime int64       `json:"createTime"`
 }
 
 type PostContent struct {

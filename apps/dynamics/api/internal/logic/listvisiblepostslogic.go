@@ -26,11 +26,15 @@ func NewListVisiblePostsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *ListVisiblePostsLogic) ListVisiblePosts(req *types.ListVisiblePostsRequest) (*types.PostListResponse, error) {
+	var token = req.PageToken
+	if token == "NONE" {
+		token = ""
+	}
 	posts, err := l.svcCtx.ListVisiblePosts(l.ctx, &dynamics.ListVisiblePostsRequest{
 		ViewerId: req.ViewerId,
 		Pagination: &dynamics.Pagination{
-			PageSize:  int32(req.Pagination.PageSize),
-			PageToken: req.Pagination.PageToken,
+			PageSize:  int32(req.PageSize),
+			PageToken: token,
 		},
 	})
 	if err != nil {
@@ -51,7 +55,8 @@ func (l *ListVisiblePostsLogic) ListVisiblePosts(req *types.ListVisiblePostsRequ
 				Scope:          int(v.Meta.Scope),
 				VisibleUserIds: v.Meta.VisibleUserIds,
 			},
-			IsPinned: v.IsPinned,
+			IsPinned:   v.IsPinned,
+			CreateTime: v.CreateTime,
 		})
 	}
 	return &types.PostListResponse{

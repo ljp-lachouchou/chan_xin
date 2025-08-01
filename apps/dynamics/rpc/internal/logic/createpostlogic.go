@@ -6,6 +6,7 @@ import (
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamics"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/pkg/lerr"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -37,6 +38,7 @@ func (l *CreatePostLogic) CreatePost(in *dynamics.CreatePostRequest) (*dynamics.
 		CommentCount: 0,
 		Location:     in.Meta.Location,
 		IsPinned:     false,
+		CreateTime: time.Now().Unix(),
 	}
 	err := l.svcCtx.PostsModel.Insert(l.ctx, &data)
 	if err != nil {
@@ -57,5 +59,6 @@ func (l *CreatePostLogic) CreatePost(in *dynamics.CreatePostRequest) (*dynamics.
 			VisibleUserIds: data.VisibleTo,
 		},
 		IsPinned: false,
+		CreateTime: data.CreateTime,
 	}, nil
 }

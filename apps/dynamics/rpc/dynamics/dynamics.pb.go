@@ -336,6 +336,7 @@ type Post struct {
 	Content       *PostContent           `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`                    // 动态内容主体
 	Meta          *PostMeta              `protobuf:"bytes,4,opt,name=meta,proto3" json:"meta,omitempty"`                          // 动态元数据
 	IsPinned      bool                   `protobuf:"varint,5,opt,name=is_pinned,json=isPinned,proto3" json:"is_pinned,omitempty"` // 是否置顶（置顶动态不参与时间线排序）
+	CreateTime    int64                  `protobuf:"varint,6,opt,name=createTime,proto3" json:"createTime,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -403,6 +404,13 @@ func (x *Post) GetIsPinned() bool {
 		return x.IsPinned
 	}
 	return false
+}
+
+func (x *Post) GetCreateTime() int64 {
+	if x != nil {
+		return x.CreateTime
+	}
+	return 0
 }
 
 // 点赞/取消点赞操作
@@ -2222,13 +2230,16 @@ const file_apps_dynamics_rpc_dynamics_proto_rawDesc = "" +
 	"\bPostMeta\x12\x1a\n" +
 	"\blocation\x18\x01 \x01(\tR\blocation\x12,\n" +
 	"\x05scope\x18\x02 \x01(\x0e2\x16.dynamics.VisibleScopeR\x05scope\x12(\n" +
-	"\x10visible_user_ids\x18\x03 \x03(\tR\x0evisibleUserIds\"\xae\x01\n" +
+	"\x10visible_user_ids\x18\x03 \x03(\tR\x0evisibleUserIds\"\xce\x01\n" +
 	"\x04Post\x12\x17\n" +
 	"\apost_id\x18\x01 \x01(\tR\x06postId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12/\n" +
 	"\acontent\x18\x03 \x01(\v2\x15.dynamics.PostContentR\acontent\x12&\n" +
 	"\x04meta\x18\x04 \x01(\v2\x12.dynamics.PostMetaR\x04meta\x12\x1b\n" +
-	"\tis_pinned\x18\x05 \x01(\bR\bisPinned\"]\n" +
+	"\tis_pinned\x18\x05 \x01(\bR\bisPinned\x12\x1e\n" +
+	"\n" +
+	"createTime\x18\x06 \x01(\x03R\n" +
+	"createTime\"]\n" +
 	"\n" +
 	"LikeAction\x12\x17\n" +
 	"\apost_id\x18\x01 \x01(\tR\x06postId\x12\x19\n" +

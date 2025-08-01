@@ -17,6 +17,7 @@ type Posts struct {
 	LikeCount    int                `bson:"likeCount"`    // 点赞数[7](@ref)
 	CommentCount int                `bson:"commentCount"` // 评论数
 	Location     string             `bson:"location"`     // 发布位置（如"北京·故宫"）[1](@ref)
+	CreateTime   int64              `bson:"createTime"`
 	//Tags         []string           `bson:"tags"`         // 话题标签（如#旅行）
 	IsPinned bool      `bson:"isPinned"`
 	UpdateAt time.Time `bson:"updateAt,omitempty" json:"updateAt,omitempty"`

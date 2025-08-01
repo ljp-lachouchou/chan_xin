@@ -45,6 +45,9 @@ func (m *defaultPostsModel) Insert(ctx context.Context, data *Posts) error {
 }
 func (m *defaultPostsModel) FindCanVisiablePosts(ctx context.Context,userId string,offset,limit int64) ([]*Posts, error) {
 	opt := options.FindOptions{Limit: &DefaultPostCount,Sort: bson.M{"createAt": -1}}
+	if limit > 0 {
+		opt.Limit = &limit
+	}
 	opt.SetSkip(offset)
 	filiter := bson.M{
 		"$or":bson.A{

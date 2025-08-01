@@ -47,6 +47,7 @@ message Post {
   PostContent content = 3;  // 动态内容主体
   PostMeta meta = 4;       // 动态元数据
   bool is_pinned = 5;      // 是否置顶（置顶动态不参与时间线排序）
+  int64 createTime = 6;
 }
 
 // 点赞/取消点赞操作

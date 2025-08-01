@@ -95,6 +95,7 @@ func copyPosts(posts []*dynamicsmodels.Posts) []*dynamics.Post {
 				VisibleUserIds: v.VisibleTo,
 			},
 			IsPinned: v.IsPinned,
+			CreateTime: v.CreateTime,
 		}
 		postsDynamics = append(postsDynamics, post)
 	}

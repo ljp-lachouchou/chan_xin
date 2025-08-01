@@ -57,5 +57,6 @@ func (l *CreatePostLogic) CreatePost(req *types.CreatePostRequest) (*types.Post,
 			VisibleUserIds: post.Meta.VisibleUserIds,
 		},
 		IsPinned: post.IsPinned,
+		CreateTime: post.CreateTime,
 	}, nil
 }

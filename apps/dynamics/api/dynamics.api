@@ -38,11 +38,12 @@ type (
 		VisibleUserIds []string `json:"visibleUserIds"` // 自定义可见用户ID
 	}
 	Post {
-		PostId   string      `json:"postId"` // 动态ID
-		UserId   string      `json:"userId"` // 发布者ID
-		Content  PostContent `json:"content"` // 内容主体
-		Meta     PostMeta    `json:"meta"` // 元数据
-		IsPinned bool        `json:"isPinned"` // 是否置顶
+		PostId     string      `json:"postId"` // 动态ID
+		UserId     string      `json:"userId"` // 发布者ID
+		Content    PostContent `json:"content"` // 内容主体
+		Meta       PostMeta    `json:"meta"` // 元数据
+		IsPinned   bool        `json:"isPinned"` // 是否置顶
+		createTime int64       `json:"createTime"`
 	}
 	LikeAction {
 		PostId   string `json:"postId"` // 目标动态ID
@@ -208,8 +209,9 @@ type (
 		pagination Pagination `form:"pagination"` // 分页参数
 	}
 	ListVisiblePostsRequest {
-		ViewerId   string     `form:"viewerId"` // 浏览者ID
-		pagination Pagination `form:"pagination"`
+		ViewerId  string `form:"viewerId"` // 浏览者ID
+		pageSize  int    `form:"pageSize"`
+		pageToken string `form:"pageToken"`
 	}
 	PostListResponse {
 		Posts         []Post `json:"posts"` //post列表
