@@ -147,6 +147,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/updateNotification",
 					Handler: updateNotificationHandler(serverCtx),
 				},
+				{
+					// 用户是否点在动态
+					Method:  http.MethodGet,
+					Path:    "/userLikedPost",
+					Handler: userLikedPostHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithPrefix("/v1/dynamics"),

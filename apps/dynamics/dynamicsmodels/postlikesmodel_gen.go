@@ -37,6 +37,7 @@ type (
 		FindOneByPostIdUserId(ctx context.Context, postId string, userId string) (*PostLikes, error)
 		Update(ctx context.Context, data *PostLikes) error
 		Delete(ctx context.Context, id string) error
+		UserInPost(ctx context.Context, userId string, postId string) (*bool, error)
 	}
 
 	defaultPostLikesModel struct {
@@ -59,7 +60,19 @@ func newPostLikesModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Optio
 		table:      "`post_likes`",
 	}
 }
-
+func (m *defaultPostLikesModel) UserInPost(ctx context.Context, userId string, postId string) (*bool, error) {
+	query := fmt.Sprintf("select `is_deleted` from %s where `post_id` = ? and `user_id` = ?",m.table)
+	var isDeleted bool
+	err := m.QueryRowNoCacheCtx(ctx, &isDeleted, query,postId,userId)
+	switch err {
+	case nil:
+		return &isDeleted, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
 func (m *defaultPostLikesModel) Delete(ctx context.Context, id string) error {
 	data, err := m.FindOne(ctx, id)
 	if err != nil {

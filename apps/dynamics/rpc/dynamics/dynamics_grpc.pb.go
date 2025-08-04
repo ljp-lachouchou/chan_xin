@@ -27,6 +27,7 @@ const (
 	Dynamics_SetCover_FullMethodName                         = "/dynamics.dynamics/SetCover"
 	Dynamics_GetCover_FullMethodName                         = "/dynamics.dynamics/GetCover"
 	Dynamics_ListVisiblePosts_FullMethodName                 = "/dynamics.dynamics/ListVisiblePosts"
+	Dynamics_UserLikedPost_FullMethodName                    = "/dynamics.dynamics/UserLikedPost"
 	Dynamics_CreateComment_FullMethodName                    = "/dynamics.dynamics/CreateComment"
 	Dynamics_CreateCommentReplay_FullMethodName              = "/dynamics.dynamics/CreateCommentReplay"
 	Dynamics_UpdateComment_FullMethodName                    = "/dynamics.dynamics/UpdateComment"
@@ -66,6 +67,7 @@ type DynamicsClient interface {
 	GetCover(ctx context.Context, in *GetCoverRequest, opts ...grpc.CallOption) (*GetCoverResp, error)
 	// 浏览可见动态流（根据权限过滤+分页）
 	ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
+	UserLikedPost(ctx context.Context, in *UserLikedPostReq, opts ...grpc.CallOption) (*UserLikedPostResp, error)
 	// 创建评论
 	CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*CreateCommentResp, error)
 	// 创建评论回复
@@ -179,6 +181,16 @@ func (c *dynamicsClient) ListVisiblePosts(ctx context.Context, in *ListVisiblePo
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PostListResponse)
 	err := c.cc.Invoke(ctx, Dynamics_ListVisiblePosts_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dynamicsClient) UserLikedPost(ctx context.Context, in *UserLikedPostReq, opts ...grpc.CallOption) (*UserLikedPostResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserLikedPostResp)
+	err := c.cc.Invoke(ctx, Dynamics_UserLikedPost_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -357,6 +369,7 @@ type DynamicsServer interface {
 	GetCover(context.Context, *GetCoverRequest) (*GetCoverResp, error)
 	// 浏览可见动态流（根据权限过滤+分页）
 	ListVisiblePosts(context.Context, *ListVisiblePostsRequest) (*PostListResponse, error)
+	UserLikedPost(context.Context, *UserLikedPostReq) (*UserLikedPostResp, error)
 	// 创建评论
 	CreateComment(context.Context, *CreateCommentReq) (*CreateCommentResp, error)
 	// 创建评论回复
@@ -419,6 +432,9 @@ func (UnimplementedDynamicsServer) GetCover(context.Context, *GetCoverRequest) (
 }
 func (UnimplementedDynamicsServer) ListVisiblePosts(context.Context, *ListVisiblePostsRequest) (*PostListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListVisiblePosts not implemented")
+}
+func (UnimplementedDynamicsServer) UserLikedPost(context.Context, *UserLikedPostReq) (*UserLikedPostResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserLikedPost not implemented")
 }
 func (UnimplementedDynamicsServer) CreateComment(context.Context, *CreateCommentReq) (*CreateCommentResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateComment not implemented")
@@ -626,6 +642,24 @@ func _Dynamics_ListVisiblePosts_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DynamicsServer).ListVisiblePosts(ctx, req.(*ListVisiblePostsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dynamics_UserLikedPost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserLikedPostReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DynamicsServer).UserLikedPost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dynamics_UserLikedPost_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DynamicsServer).UserLikedPost(ctx, req.(*UserLikedPostReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -938,6 +972,10 @@ var Dynamics_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListVisiblePosts",
 			Handler:    _Dynamics_ListVisiblePosts_Handler,
+		},
+		{
+			MethodName: "UserLikedPost",
+			Handler:    _Dynamics_UserLikedPost_Handler,
 		},
 		{
 			MethodName: "CreateComment",

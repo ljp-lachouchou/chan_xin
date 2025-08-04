@@ -71,6 +71,11 @@ func (s *DynamicsServer) ListVisiblePosts(ctx context.Context, in *dynamics.List
 	return l.ListVisiblePosts(in)
 }
 
+func (s *DynamicsServer) UserLikedPost(ctx context.Context, in *dynamics.UserLikedPostReq) (*dynamics.UserLikedPostResp, error) {
+	l := logic.NewUserLikedPostLogic(ctx, s.svcCtx)
+	return l.UserLikedPost(in)
+}
+
 // 创建评论
 func (s *DynamicsServer) CreateComment(ctx context.Context, in *dynamics.CreateCommentReq) (*dynamics.CreateCommentResp, error) {
 	l := logic.NewCreateCommentLogic(ctx, s.svcCtx)

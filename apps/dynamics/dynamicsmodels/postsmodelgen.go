@@ -23,6 +23,8 @@ type postsModel interface {
 	FindPostsByUserId(ctx context.Context, userId string,offset,limit int64,isPin bool) ([]*Posts, error)
 	//in表示存在元素在目标集合之中
 	FindCanVisiablePosts(ctx context.Context,userId string,offset,limit int64) ([]*Posts, error)
+
+
 }
 
 type defaultPostsModel struct {

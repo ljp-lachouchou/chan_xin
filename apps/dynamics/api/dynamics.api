@@ -79,6 +79,13 @@ type (
 	GetCoverResp {
 		cover string `json:"cover"`
 	}
+	UserLikedPostReq {
+		userId string `form:"userId"`
+		postId string `form:"postId"`
+	}
+	UserLiekdPostResp {
+		isLiked bool `json:"isLiked"`
+	}
 )
 
 // ================== 服务路由定义 ==================
@@ -173,6 +180,10 @@ service dynamics {
 	@doc "获取封面"
 	@handler getCover
 	get /getCover (GetCoverRequest) returns (GetCoverResp)
+
+	@doc "用户是否点在动态"
+	@handler userLikedPost
+	get /userLikedPost (UserLikedPostReq) returns (UserLiekdPostResp)
 
 	@handler ping
 	get /ping

@@ -53,6 +53,8 @@ type (
 	UpdateCommentReplayReq                      = dynamics.UpdateCommentReplayReq
 	UpdateCommentReq                            = dynamics.UpdateCommentReq
 	UpdateNotificationReq                       = dynamics.UpdateNotificationReq
+	UserLikedPostReq                            = dynamics.UserLikedPostReq
+	UserLikedPostResp                           = dynamics.UserLikedPostResp
 
 	Dynamics interface {
 		// 创建动态（需提供内容和隐私设置）
@@ -71,6 +73,7 @@ type (
 		GetCover(ctx context.Context, in *GetCoverRequest, opts ...grpc.CallOption) (*GetCoverResp, error)
 		// 浏览可见动态流（根据权限过滤+分页）
 		ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
+		UserLikedPost(ctx context.Context, in *UserLikedPostReq, opts ...grpc.CallOption) (*UserLikedPostResp, error)
 		// 创建评论
 		CreateComment(ctx context.Context, in *CreateCommentReq, opts ...grpc.CallOption) (*CreateCommentResp, error)
 		// 创建评论回复
@@ -159,6 +162,11 @@ func (m *defaultDynamics) GetCover(ctx context.Context, in *GetCoverRequest, opt
 func (m *defaultDynamics) ListVisiblePosts(ctx context.Context, in *ListVisiblePostsRequest, opts ...grpc.CallOption) (*PostListResponse, error) {
 	client := dynamics.NewDynamicsClient(m.cli.Conn())
 	return client.ListVisiblePosts(ctx, in, opts...)
+}
+
+func (m *defaultDynamics) UserLikedPost(ctx context.Context, in *UserLikedPostReq, opts ...grpc.CallOption) (*UserLikedPostResp, error) {
+	client := dynamics.NewDynamicsClient(m.cli.Conn())
+	return client.UserLikedPost(ctx, in, opts...)
 }
 
 // 创建评论

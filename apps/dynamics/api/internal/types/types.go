@@ -183,6 +183,15 @@ type UpdateNotificationReq struct {
 	UserId string `json:"userId"` // 用户ID
 }
 
+type UserLiekdPostResp struct {
+	IsLiked bool `json:"isLiked"`
+}
+
+type UserLikedPostReq struct {
+	UserId string `form:"userId"`
+	PostId string `form:"postId"`
+}
+
 type VisibleScope struct {
 	FRIENDS int `json:"friends"` // 仅好友可见
 	PRIVATE int `json:"private"` // 仅自己可见
