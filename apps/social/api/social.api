@@ -92,8 +92,8 @@ type (
 		TargetIds []string `json:"target_ids"` // 被邀请人ID列表
 	}
 	RelationRequest {
-		FromUid string `json:"from_uid"` // 发起方
-		ToUid   string `json:"to_uid"` // 目标方
+		FromUid string `form:"from_uid"` // 发起方
+		ToUid   string `form:"to_uid"` // 目标方
 	}
 	GroupApplyReq {
 		ApplicantId string `json:"applicant_id"` //申请方---个人
@@ -140,8 +140,8 @@ type (
 		Setting GroupMemberSetting `json:"setting"` //个性化设置
 	}
 	GroupQuitRequest {
-		UserId  string `json:"user_id"` // 退出者ID
-		GroupId string `json:"group_id"` //群id
+		UserId  string `form:"user_id"` // 退出者ID
+		GroupId string `form:"group_id"` //群id
 	}
 	FriendInfoRequest {
 		UserId   string `form:"user_id"` // 查询者ID
@@ -164,9 +164,9 @@ type (
 		Gender    uint32 `json:"gender"` // 性别 (0-未知 1-男 2-女)
 	}
 	RemoveAdminReq {
-		OperatorId string `json:"operator_id"` // 操作者ID
-		GroupId    string `json:"group_id"`
-		TargetId   string `json:"target_id"` // 被操作成员ID
+		OperatorId string `form:"operator_id"` // 操作者ID
+		GroupId    string `form:"group_id"`
+		TargetId   string `form:"target_id"` // 被操作成员ID
 	}
 )
 

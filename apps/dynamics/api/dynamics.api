@@ -191,8 +191,8 @@ type (
 		Meta    PostMeta    `json:"meta"` //元数据
 	}
 	DeletePostRequest {
-		UserId string `json:"userId"` // 操作者ID
-		PostId string `json:"postId"` // 路径参数
+		UserId string `form:"userId"` // 操作者ID
+		PostId string `form:"postId"` // 路径参数
 	}
 	PinPostRequest {
 		UserId string `json:"userId"` //操作者iD
@@ -260,10 +260,10 @@ type (
 		UnreadCount int `json:"unreadCount"` // 未读数
 	}
 	DeleteCommentReq {
-		CommentId string `json:"commentId"`
+		CommentId string `form:"commentId"`
 	}
 	DeleteCommentReplayReq {
-		CommentReplayId string `json:"commentReplayId"`
+		CommentReplayId string `form:"commentReplayId"`
 	}
 )
 

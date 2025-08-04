@@ -36,16 +36,16 @@ type CreatePostRequest struct {
 }
 
 type DeleteCommentReplayReq struct {
-	CommentReplayId string `json:"commentReplayId"`
+	CommentReplayId string `form:"commentReplayId"`
 }
 
 type DeleteCommentReq struct {
-	CommentId string `json:"commentId"`
+	CommentId string `form:"commentId"`
 }
 
 type DeletePostRequest struct {
-	UserId string `json:"userId"` // 操作者ID
-	PostId string `json:"postId"` // 路径参数
+	UserId string `form:"userId"` // 操作者ID
+	PostId string `form:"postId"` // 路径参数
 }
 
 type Empty struct {

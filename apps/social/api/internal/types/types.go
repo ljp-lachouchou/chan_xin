@@ -156,8 +156,8 @@ type GroupPermission struct {
 }
 
 type GroupQuitRequest struct {
-	UserId  string `json:"user_id"`  // 退出者ID
-	GroupId string `json:"group_id"` //群id
+	UserId  string `form:"user_id"`  // 退出者ID
+	GroupId string `form:"group_id"` //群id
 }
 
 type GroupStatus struct {
@@ -177,14 +177,14 @@ type HandleFriendApplyReq struct {
 }
 
 type RelationRequest struct {
-	FromUid string `json:"from_uid"` // 发起方
-	ToUid   string `json:"to_uid"`   // 目标方
+	FromUid string `form:"from_uid"` // 发起方
+	ToUid   string `form:"to_uid"`   // 目标方
 }
 
 type RemoveAdminReq struct {
-	OperatorId string `json:"operator_id"` // 操作者ID
-	GroupId    string `json:"group_id"`
-	TargetId   string `json:"target_id"` // 被操作成员ID
+	OperatorId string `form:"operator_id"` // 操作者ID
+	GroupId    string `form:"group_id"`
+	TargetId   string `form:"target_id"` // 被操作成员ID
 }
 
 type UserInfo struct {
