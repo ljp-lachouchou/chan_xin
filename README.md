@@ -108,6 +108,8 @@
      - 请求参数: ![img_46.png](img/img_46.png)
      - 正确响应: ![img_47.png](img/img_47.png)
  - **即时通讯功能**
+   数据结构:
+    - ![img_5.png](img_5.png)
    - 前缀: /v1/im 
    - 群聊/私聊功能: /ws (websocket协议)
      - 请求参数(此处没有注释就是固定用法,你可以自己扩展): ![img_48.png](img/img_48.png) 
