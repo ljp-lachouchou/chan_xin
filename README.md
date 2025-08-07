@@ -126,7 +126,7 @@
      - 正确响应: ![img_58.png](img/img_58.png)
   - **动态功能**
     - 前缀: /v1/dynamics
-    - 数据结构: ![img_61.png](img/img_61.png) ![img_65.png](img/img_65.png) ![img_67.png](img/img_67.png) ![img_68.png](img/img_68.png) ![img_74.png](img/img_74.png) ![img_88.png](img/img_88.png)
+    - 数据结构: ![img_61.png](img/img_61.png) ![img_8.png](img_8.png) ![img_67.png](img/img_67.png) ![img_68.png](img/img_68.png) ![img_74.png](img/img_74.png) ![img_88.png](img/img_88.png)
     - 用户是否点赞动态 get /userLikedPost
       - 请求参数: ![img_6.png](img_6.png)
       - 正确响应: ![img_7.png](img_7.png)
@@ -165,10 +165,10 @@
       - 正确响应: 无返回数据，code为200即为成功
     - 创建评论: post /createComment
       - 请求参数: ![img_80.png](img/img_80.png)
-      - 正确响应: 无返回数据，code为200即为成功
+      - 正确响应: ![img_9.png](img_9.png)
     - 创建评论回复: post /createCommentReplay
       - 请求参数: ![img_81.png](img/img_81.png)
-      - 正确响应: 无返回数据，code为200即为成功
+      - 正确响应: ![img_10.png](img_10.png)
     - 更新评论状态 put /updateComment
       - 请求参数: ![img_82.png](img/img_82.png)
       - 正确响应: 无返回数据，code为200即为成功

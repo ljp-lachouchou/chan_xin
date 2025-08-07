@@ -25,7 +25,7 @@ func NewCreateCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 	}
 }
 
-func (l *CreateCommentLogic) CreateComment(req *types.CreateCommentReq) (*types.Empty, error) {
+func (l *CreateCommentLogic) CreateComment(req *types.CreateCommentReq) (*types.CreateCommentResp, error) {
 	postInfo, err2 := l.svcCtx.Dynamics.GetPostInfo(l.ctx, &dynamicsclient.GetPostInfoReq{
 		PostId: req.PostId,
 	})
@@ -50,5 +50,7 @@ func (l *CreateCommentLogic) CreateComment(req *types.CreateCommentReq) (*types.
 	if err2 != nil {
 		return nil, err2
 	}
-	return &types.Empty{}, nil
+	return &types.CreateCommentResp{
+		CommentId: resp.CommentId,
+	}, nil
 }

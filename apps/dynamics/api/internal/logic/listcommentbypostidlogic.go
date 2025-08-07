@@ -35,6 +35,7 @@ func (l *ListCommentByPostIdLogic) ListCommentByPostId(req *types.GetPostInfoReq
 	var list []types.ListCommentRespStruct
 	for _, v := range ls.List {
 		list = append(list, types.ListCommentRespStruct{
+			CommentId: v.CommentId,
 			UserId:       v.UserId,
 			TargetUserId: v.TargetUserId,
 			Content:      v.Content,

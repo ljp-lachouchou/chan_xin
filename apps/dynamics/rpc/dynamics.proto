@@ -265,9 +265,10 @@ message IdsMap {
   map<string,string> IdsMap = 1;
 }
 message ListCommentRespStruct {
-  string user_id = 1; //发送方
-  string target_user_id = 2; //接收方
-  string content = 3;//内容
+  string comment_id = 1;
+  string user_id = 2; //发送方
+  string target_user_id = 3; //接收方
+  string content = 4;//内容
 }
 message ListCommentResp {
   repeated ListCommentRespStruct list = 1;

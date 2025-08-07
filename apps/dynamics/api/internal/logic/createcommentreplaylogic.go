@@ -2,10 +2,9 @@ package logic
 
 import (
 	"context"
-	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamicsclient"
-
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/svc"
 	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/api/internal/types"
+	"github.com/ljp-lachouchou/chan_xin/apps/dynamics/rpc/dynamicsclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,7 +24,7 @@ func NewCreateCommentReplayLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
-func (l *CreateCommentReplayLogic) CreateCommentReplay(req *types.CreateCommentReplayReq) (*types.Empty, error) {
+func (l *CreateCommentReplayLogic) CreateCommentReplay(req *types.CreateCommentReplayReq) (*types.CreateCommentReplayResp, error) {
 	resp, err := l.svcCtx.Dynamics.CreateCommentReplay(l.ctx, &dynamicsclient.CreateCommentReplayReq{
 		CommentId: req.CommentId,
 		UserId:    req.UserId,
@@ -50,5 +49,8 @@ func (l *CreateCommentReplayLogic) CreateCommentReplay(req *types.CreateCommentR
 	if err != nil {
 		return nil, err
 	}
-	return &types.Empty{}, nil
+	return &types.CreateCommentReplayResp{
+		CommentReplyId: resp.CommentReplyId,
+		PostId:         resp.PostId,
+	}, nil
 }

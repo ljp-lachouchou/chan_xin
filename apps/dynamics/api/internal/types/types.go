@@ -15,10 +15,19 @@ type CreateCommentReplayReq struct {
 	Content   string `json:"content"` // 回复内容
 }
 
+type CreateCommentReplayResp struct {
+	CommentReplyId string `json:"commentReplyId"`
+	PostId         string `json:"postId"`
+}
+
 type CreateCommentReq struct {
 	PostId  string `json:"postId"`
 	UserId  string `json:"userId"`  // 评论者ID
 	Content string `json:"content"` // 评论内容
+}
+
+type CreateCommentResp struct {
+	CommentId string `json:"commentId"`
 }
 
 type CreateNotificationReq struct {
@@ -86,6 +95,7 @@ type ListCommentResp struct {
 }
 
 type ListCommentRespStruct struct {
+	CommentId    string `json:"commentId"`
 	UserId       string `json:"userId"`       //评论用户id
 	TargetUserId string `json:"targetUserId"` //被评论的用户iD,根评论此字段为""
 	Content      string `json:"content"`      //内容

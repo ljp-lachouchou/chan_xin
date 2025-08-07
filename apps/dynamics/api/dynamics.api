@@ -66,6 +66,7 @@ type (
 		ids []string `json:"ids"` //点赞post的用户id
 	}
 	ListCommentRespStruct {
+		commentId    string `json:"commentId"`
 		userId       string `json:"userId"` //评论用户id
 		targetUserId string `json:"targetUserId"` //被评论的用户iD,根评论此字段为""
 		content      string `json:"content"` //内容
@@ -138,11 +139,11 @@ service dynamics {
 
 	@doc "创建评论"
 	@handler createComment
-	post /createComment (CreateCommentReq) returns (Empty)
+	post /createComment (CreateCommentReq) returns (CreateCommentResp)
 
 	@doc "创建评论回复"
 	@handler createCommentReplay
-	post /createCommentReplay (CreateCommentReplayReq) returns (Empty)
+	post /createCommentReplay (CreateCommentReplayReq) returns (CreateCommentReplayResp)
 
 	@doc "更新评论状态"
 	@handler updateComment
@@ -240,10 +241,17 @@ type (
 		UserId  string `json:"userId"` // 评论者ID
 		Content string `json:"content"` // 评论内容
 	}
+	CreateCommentResp {
+		commentId string `json:"commentId"`
+	}
 	CreateCommentReplayReq {
 		CommentId string `json:"commentId"`
 		UserId    string `json:"userId"` // 回复者ID
 		Content   string `json:"content"` // 回复内容
+	}
+	CreateCommentReplayResp {
+		commentReplyId string `json:"commentReplyId"`
+		postId         string `json:"postId"`
 	}
 	UpdateCommentReq {
 		IsDeleted bool   `json:"isDeleted"` // 删除状态

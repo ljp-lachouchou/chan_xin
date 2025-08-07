@@ -2210,9 +2210,10 @@ func (x *IdsMap) GetIdsMap() map[string]string {
 
 type ListCommentRespStruct struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                     //发送方
-	TargetUserId  string                 `protobuf:"bytes,2,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"` //接收方
-	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`                                 //内容
+	CommentId     string                 `protobuf:"bytes,1,opt,name=comment_id,json=commentId,proto3" json:"comment_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                     //发送方
+	TargetUserId  string                 `protobuf:"bytes,3,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"` //接收方
+	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`                                 //内容
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2245,6 +2246,13 @@ func (x *ListCommentRespStruct) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ListCommentRespStruct.ProtoReflect.Descriptor instead.
 func (*ListCommentRespStruct) Descriptor() ([]byte, []int) {
 	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *ListCommentRespStruct) GetCommentId() string {
+	if x != nil {
+		return x.CommentId
+	}
+	return ""
 }
 
 func (x *ListCommentRespStruct) GetUserId() string {
@@ -2451,11 +2459,13 @@ const file_apps_dynamics_rpc_dynamics_proto_rawDesc = "" +
 	"\x06IdsMap\x18\x01 \x03(\v2\x1c.dynamics.IdsMap.IdsMapEntryR\x06IdsMap\x1a9\n" +
 	"\vIdsMapEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"p\n" +
-	"\x15ListCommentRespStruct\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12$\n" +
-	"\x0etarget_user_id\x18\x02 \x01(\tR\ftargetUserId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\"F\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x8f\x01\n" +
+	"\x15ListCommentRespStruct\x12\x1d\n" +
+	"\n" +
+	"comment_id\x18\x01 \x01(\tR\tcommentId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12$\n" +
+	"\x0etarget_user_id\x18\x03 \x01(\tR\ftargetUserId\x12\x18\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\"F\n" +
 	"\x0fListCommentResp\x123\n" +
 	"\x04list\x18\x01 \x03(\v2\x1f.dynamics.ListCommentRespStructR\x04list*@\n" +
 	"\vContentType\x12\b\n" +

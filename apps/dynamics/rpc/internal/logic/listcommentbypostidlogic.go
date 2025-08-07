@@ -57,6 +57,7 @@ func (l *ListCommentByPostIdLogic) ListCommentByPostId(in *dynamics.GetPostInfoR
 	})
 	for _, v := range listOne {
 		resp = append(resp, &dynamics.ListCommentRespStruct{
+			CommentId:    v.CommentId,
 			UserId:       v.UserId,
 			TargetUserId: v.TargetUserId,
 			Content:      v.Content,
