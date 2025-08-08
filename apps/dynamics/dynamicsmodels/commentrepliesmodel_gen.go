@@ -34,6 +34,7 @@ type (
 		FindByCommentIds(ctx context.Context, commentIds ...string) ([]*CommentReplies, error)
 		Update(ctx context.Context, data *CommentReplies) error
 		Delete(ctx context.Context, commentReplieId string) error
+		FindByPostId(ctx context.Context, postId string) ([]*CommentReplies, error)
 	}
 
 	defaultCommentRepliesModel struct {
@@ -66,6 +67,19 @@ func (m *defaultCommentRepliesModel) Delete(ctx context.Context, commentReplieId
 		return conn.ExecCtx(ctx, query, commentReplieId)
 	}, commentRepliesCommentReplieIdKey)
 	return err
+}
+func (m *defaultCommentRepliesModel) FindByPostId(ctx context.Context, postId string) ([]*CommentReplies, error) {
+	var list []*CommentReplies
+	query := fmt.Sprintf("select %s from %s where `comment_id` = ? and `is_deleted` = 0 order by `created_at`", commentRepliesRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &list, query, postId)
+	switch err {
+	case nil:
+		return list, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 func (m *defaultCommentRepliesModel) FindByCommentIds(ctx context.Context, commentIds ...string) ([]*CommentReplies, error) {
 	var list []*CommentReplies

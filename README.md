@@ -163,15 +163,9 @@
     - 点赞/取消点赞: post /toggleLike
       - 请求参数: ![img_79.png](img/img_79.png)
       - 正确响应: 无返回数据，code为200即为成功
-    - 创建评论: post /createComment
-      - 请求参数: ![img_80.png](img/img_80.png)
-      - 正确响应: ![img_9.png](img_9.png)
     - 创建评论回复: post /createCommentReplay
-      - 请求参数: ![img_81.png](img/img_81.png)
+      - 请求参数: ![img_11.png](img_11.png)
       - 正确响应: ![img_10.png](img_10.png)
-    - 更新评论状态 put /updateComment
-      - 请求参数: ![img_82.png](img/img_82.png)
-      - 正确响应: 无返回数据，code为200即为成功
     - 更新回复状态 put /updateCommentReplay
       - 请求参数: ![img_83.png](img/img_83.png)
       - 正确响应: 无返回数据，code为200即为成功

@@ -28,16 +28,12 @@ func NewCreateCommentReplayLogic(ctx context.Context, svcCtx *svc.ServiceContext
 
 // 创建评论回复
 func (l *CreateCommentReplayLogic) CreateCommentReplay(in *dynamics.CreateCommentReplayReq) (*dynamics.CreateCommentReplayResp, error) {
-	findOne, err2 := l.svcCtx.CommentsModel.FindOne(l.ctx, in.CommentId)
-	if err2 != nil {
-		return nil, lerr.NewWrapError(lerr.NEWDBError(), err2, "dynamics-rpc CreateCommentReplay CommentsModel.FindOne ", in.CommentId)
-	}
 	commentReplyId := wuid.GenUid(l.svcCtx.Config.Mysql.DataSource)
 	_, err := l.svcCtx.CommentRepliesModel.Insert(l.ctx, &dynamicsmodels.CommentReplies{
 		CommentReplieId: commentReplyId,
-		CommentId:       in.CommentId,
+		CommentId:       in.PostId,
 		UserId:          in.UserId,
-		TargetUserId:    findOne.UserId,
+		TargetUserId:    in.TargetUserId,
 		Content:         in.Content,
 		IsDeleted:       false,
 	})
@@ -47,6 +43,6 @@ func (l *CreateCommentReplayLogic) CreateCommentReplay(in *dynamics.CreateCommen
 
 	return &dynamics.CreateCommentReplayResp{
 		CommentReplyId: commentReplyId,
-		PostId:         findOne.PostId,
+		PostId:         in.PostId,
 	}, nil
 }

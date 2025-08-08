@@ -847,9 +847,10 @@ func (x *CreateCommentResp) GetCommentId() string {
 
 type CreateCommentReplayReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	CommentId     string                 `protobuf:"bytes,1,opt,name=commentId,proto3" json:"commentId,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=userId,proto3" json:"userId,omitempty"` //发送这
-	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	PostId        string                 `protobuf:"bytes,1,opt,name=postId,proto3" json:"postId,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=userId,proto3" json:"userId,omitempty"`             //发送者
+	TargetUserId  string                 `protobuf:"bytes,3,opt,name=targetUserId,proto3" json:"targetUserId,omitempty"` //接受者
+	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -884,9 +885,9 @@ func (*CreateCommentReplayReq) Descriptor() ([]byte, []int) {
 	return file_apps_dynamics_rpc_dynamics_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *CreateCommentReplayReq) GetCommentId() string {
+func (x *CreateCommentReplayReq) GetPostId() string {
 	if x != nil {
-		return x.CommentId
+		return x.PostId
 	}
 	return ""
 }
@@ -894,6 +895,13 @@ func (x *CreateCommentReplayReq) GetCommentId() string {
 func (x *CreateCommentReplayReq) GetUserId() string {
 	if x != nil {
 		return x.UserId
+	}
+	return ""
+}
+
+func (x *CreateCommentReplayReq) GetTargetUserId() string {
+	if x != nil {
+		return x.TargetUserId
 	}
 	return ""
 }
@@ -2376,11 +2384,12 @@ const file_apps_dynamics_rpc_dynamics_proto_rawDesc = "" +
 	"\x06userId\x18\x02 \x01(\tR\x06userId\x12\x18\n" +
 	"\acontent\x18\x03 \x01(\tR\acontent\"1\n" +
 	"\x11CreateCommentResp\x12\x1c\n" +
-	"\tcommentId\x18\x01 \x01(\tR\tcommentId\"h\n" +
-	"\x16CreateCommentReplayReq\x12\x1c\n" +
-	"\tcommentId\x18\x01 \x01(\tR\tcommentId\x12\x16\n" +
-	"\x06userId\x18\x02 \x01(\tR\x06userId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\"Y\n" +
+	"\tcommentId\x18\x01 \x01(\tR\tcommentId\"\x86\x01\n" +
+	"\x16CreateCommentReplayReq\x12\x16\n" +
+	"\x06postId\x18\x01 \x01(\tR\x06postId\x12\x16\n" +
+	"\x06userId\x18\x02 \x01(\tR\x06userId\x12\"\n" +
+	"\ftargetUserId\x18\x03 \x01(\tR\ftargetUserId\x12\x18\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\"Y\n" +
 	"\x17CreateCommentReplayResp\x12&\n" +
 	"\x0ecommentReplyId\x18\x01 \x01(\tR\x0ecommentReplyId\x12\x16\n" +
 	"\x06postId\x18\x02 \x01(\tR\x06postId\"0\n" +

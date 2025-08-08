@@ -10,9 +10,10 @@ type ContentType struct {
 }
 
 type CreateCommentReplayReq struct {
-	CommentId string `json:"commentId"`
-	UserId    string `json:"userId"`  // 回复者ID
-	Content   string `json:"content"` // 回复内容
+	PostId       string `json:"postId"`
+	UserId       string `json:"userId"` // 回复者ID
+	TargetUserId string `json:"targetUserId"`
+	Content      string `json:"content"` // 回复内容
 }
 
 type CreateCommentReplayResp struct {

@@ -94,9 +94,10 @@ message CreateCommentResp {
   string commentId = 1;
 }
 message CreateCommentReplayReq {
-  string commentId = 1;
-  string userId = 2;//发送这
-  string content = 3;
+  string postId = 1;
+  string userId = 2;//发送者
+  string targetUserId = 3; //接受者
+  string content = 4;
 
 }
 message CreateCommentReplayResp {

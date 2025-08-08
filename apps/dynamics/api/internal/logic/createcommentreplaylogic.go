@@ -26,21 +26,16 @@ func NewCreateCommentReplayLogic(ctx context.Context, svcCtx *svc.ServiceContext
 
 func (l *CreateCommentReplayLogic) CreateCommentReplay(req *types.CreateCommentReplayReq) (*types.CreateCommentReplayResp, error) {
 	resp, err := l.svcCtx.Dynamics.CreateCommentReplay(l.ctx, &dynamicsclient.CreateCommentReplayReq{
-		CommentId: req.CommentId,
-		UserId:    req.UserId,
-		Content:   req.Content,
+		PostId:       req.PostId,
+		UserId:       req.UserId,
+		TargetUserId: req.TargetUserId,
+		Content:      req.Content,
 	})
 	if err != nil {
 		return nil, err
 	}
-	postInfo, err2 := l.svcCtx.Dynamics.GetPostInfo(l.ctx, &dynamicsclient.GetPostInfoReq{
-		PostId: resp.PostId,
-	})
-	if err2 != nil {
-		return nil, err2
-	}
 	_, err = l.svcCtx.Dynamics.CreateNotification(l.ctx, &dynamicsclient.CreateNotificationReq{
-		UserId:        postInfo.UserId,
+		UserId:        req.TargetUserId,
 		Type:          1,
 		TriggerUserId: req.UserId,
 		PostId:        resp.PostId,

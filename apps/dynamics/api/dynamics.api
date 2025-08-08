@@ -245,9 +245,10 @@ type (
 		commentId string `json:"commentId"`
 	}
 	CreateCommentReplayReq {
-		CommentId string `json:"commentId"`
-		UserId    string `json:"userId"` // 回复者ID
-		Content   string `json:"content"` // 回复内容
+		postId       string `json:"postId"`
+		UserId       string `json:"userId"` // 回复者ID
+		targetUserId string `json:"targetUserId"`
+		Content      string `json:"content"` // 回复内容
 	}
 	CreateCommentReplayResp {
 		commentReplyId string `json:"commentReplyId"`
