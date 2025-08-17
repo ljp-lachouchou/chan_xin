@@ -149,7 +149,7 @@
       - 请求参数(操作者id同删除动态): ![img_71.png](img/img_71.png)
       - 正确响应: 无返回数据，code为200即为成功
     - 获取用户动态列表 get /listUserPosts 
-      - 请求参数: ![img_72.png](img/img_72.png)
+      - 请求参数: ![img_14.png](img_14.png)
       - 正确响应: ![img_75.png](img/img_75.png)
     - 设置个人朋友圈封面: put /setCover
       - 请求参数: ![img_76.png](img/img_76.png)
