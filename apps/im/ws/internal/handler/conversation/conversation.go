@@ -92,7 +92,7 @@ func Chat(svc *svc.ServiceContext) websocket.HandlerFunc {
 			}
 		}
 		if data.SendTime == 0 {
-			data.SendTime = time.Now().Unix()
+			data.SendTime = time.Now().UnixMilli()
 		}
 		err := svc.Client.Push(&mq.MsgChatTransfer{
 			MsgId:          msg.Id,

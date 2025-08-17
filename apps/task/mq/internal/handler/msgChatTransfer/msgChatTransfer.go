@@ -31,14 +31,14 @@ func (m *MsgChatTransfer) Consume(ctx context.Context, key, value string) error 
 	if err := json.Unmarshal([]byte(value), &data); err != nil {
 		return err
 	}
-	err := m.addChatLog(ctx, &data)
+	id, err := m.addChatLog(ctx, &data)
 	if err != nil {
 		return err
 	}
 	fmt.Println("ws client is", m.svc.Client)
-
+	data.Id = id
 	return m.svc.Client.Send(websocket.Message{
-		Id:        data.MsgId,
+		Id:        id,
 		FrameType: websocket.FrameData,
 		FromId:    constant.SYSTEM_ROOT_ID,
 		ToId:      data.RecvId,
@@ -46,7 +46,7 @@ func (m *MsgChatTransfer) Consume(ctx context.Context, key, value string) error 
 		Data:      data,
 	})
 }
-func (m *MsgChatTransfer) addChatLog(ctx context.Context, data *mq.MsgChatTransfer) error {
+func (m *MsgChatTransfer) addChatLog(ctx context.Context, data *mq.MsgChatTransfer) (string, error) {
 	chatLog := &immodels.ChatLog{
 		ConversationId: data.ConversationId,
 		SendId:         data.SendId,
@@ -58,7 +58,7 @@ func (m *MsgChatTransfer) addChatLog(ctx context.Context, data *mq.MsgChatTransf
 	}
 	//加入到消息记录里面
 	if err := m.svc.ChatLogModel.Insert(ctx, chatLog); err != nil {
-		return err
+		return "", err
 	}
 	return m.svc.ConversationModel.UpdateMsg(ctx, chatLog)
 }

@@ -26,11 +26,15 @@ func NewListNotificationsLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *ListNotificationsLogic) ListNotifications(req *types.ListNotificationsRequest) (*types.ListNotificationsResponse, error) {
+	var token = req.PageToken
+	if token == "NONE" {
+		token = ""
+	}
 	notifications, err := l.svcCtx.Dynamics.ListNotifications(l.ctx, &dynamics.ListNotificationsRequest{
 		UserId: req.UserId,
 		Pagination: &dynamics.Pagination{
-			PageSize:  int32(req.Pagination.PageSize),
-			PageToken: req.Pagination.PageToken,
+			PageSize:  int32(req.PageSize),
+			PageToken: token,
 		},
 	})
 	if err != nil {

@@ -216,9 +216,10 @@ type (
 		CoverUrl string `json:"coverUrl"` // 封面URL
 	}
 	ListUserPostsRequest {
-		UserId     string     `form:"userId"` // 目标用户ID
-		IsPin      bool       `form:"isPin"` // 置顶过滤
-		pagination Pagination `form:"pagination"` // 分页参数
+		UserId    string `form:"userId"` // 目标用户ID
+		IsPin     bool   `form:"isPin"` // 置顶过滤
+		pageSize  int    `form:"pageSize"`
+		pageToken string `form:"pageToken"`
 	}
 	ListVisiblePostsRequest {
 		ViewerId  string `form:"viewerId"` // 浏览者ID
@@ -266,8 +267,9 @@ type (
 		UserId string `json:"userId"` // 用户ID
 	}
 	ListNotificationsRequest {
-		UserId     string     `form:"userId"` // 用户ID
-		pagination Pagination `form:"pagination"` // 分页参数
+		UserId    string `form:"userId"` // 用户ID
+		pageSize  int    `form:"pageSize"`
+		pageToken string `form:"pageToken"`
 	}
 	ListNotificationsResponse {
 		Notifications []Notification `json:"notifications"`

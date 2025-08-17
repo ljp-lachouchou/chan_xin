@@ -20,7 +20,7 @@ type conversationModel interface {
 	ListByConversationIds(ctx context.Context, ids []string) ([]*Conversation, error)
 	Update(ctx context.Context, data *Conversation) (*mongo.UpdateResult, error)
 	Delete(ctx context.Context, id string) (int64, error)
-	UpdateMsg(ctx context.Context, chatLog *ChatLog) error
+	UpdateMsg(ctx context.Context, chatLog *ChatLog) (string,error)
 }
 
 type defaultConversationModel struct {
@@ -91,13 +91,13 @@ func (m *defaultConversationModel) Update(ctx context.Context, data *Conversatio
 	res, err := m.conn.UpdateOne(ctx, bson.M{"_id": data.ID}, bson.M{"$set": data})
 	return res, err
 }
-func (m *defaultConversationModel) UpdateMsg(ctx context.Context,  chatLog *ChatLog) error{
+func (m *defaultConversationModel) UpdateMsg(ctx context.Context,  chatLog *ChatLog) (string,error){
 	_, err := m.conn.UpdateOne(ctx, bson.M{"conversationId": chatLog.ConversationId},
 		bson.M{
 			"$inc": bson.M{
 				"total": 1},
 			"$set": bson.M{"lastMsg": chatLog}})
-	return err
+	return chatLog.ID.Hex(),err
 }
 func (m *defaultConversationModel) Delete(ctx context.Context, id string) (int64, error) {
 	oid, err := primitive.ObjectIDFromHex(id)

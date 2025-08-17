@@ -47,5 +47,6 @@ func (l *GetPostInfoLogic) GetPostInfo(req *types.GetPostInfoReq) (*types.Post, 
 			VisibleUserIds: info.Meta.VisibleUserIds,
 		},
 		IsPinned: info.IsPinned,
+		CreateTime: info.CreateTime,
 	}, nil
 }

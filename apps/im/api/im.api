@@ -55,7 +55,7 @@ type GetChatLogReq {
 	StartSendTime  int64  `form:"startSendTime,optional"` // 起始时间
 	EndSendTime    int64  `form:"endSendTime,optional"` // 结束时间
 	Count          int64  `form:"count,optional"` // 获取数量
-	MsgId          string `form:"msgId,optional"` // 起始消息ID
+	MsgId          string `form:"msgId,optional"` // 消息ID
 }
 
 type GetChatLogResp {

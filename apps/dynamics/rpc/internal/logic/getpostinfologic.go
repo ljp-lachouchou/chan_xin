@@ -44,5 +44,6 @@ func (l *GetPostInfoLogic) GetPostInfo(in *dynamics.GetPostInfoReq) (*dynamics.P
 			VisibleUserIds: findOne.VisibleTo,
 		},
 		IsPinned: findOne.IsPinned,
+		CreateTime: findOne.CreateTime,
 	}, nil
 }

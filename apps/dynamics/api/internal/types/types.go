@@ -103,8 +103,9 @@ type ListCommentRespStruct struct {
 }
 
 type ListNotificationsRequest struct {
-	UserId     string     `form:"userId"`     // 用户ID
-	Pagination Pagination `form:"pagination"` // 分页参数
+	UserId    string `form:"userId"` // 用户ID
+	PageSize  int    `form:"pageSize"`
+	PageToken string `form:"pageToken"`
 }
 
 type ListNotificationsResponse struct {
@@ -113,9 +114,10 @@ type ListNotificationsResponse struct {
 }
 
 type ListUserPostsRequest struct {
-	UserId     string     `form:"userId"`     // 目标用户ID
-	IsPin      bool       `form:"isPin"`      // 置顶过滤
-	Pagination Pagination `form:"pagination"` // 分页参数
+	UserId    string `form:"userId"` // 目标用户ID
+	IsPin     bool   `form:"isPin"`  // 置顶过滤
+	PageSize  int    `form:"pageSize"`
+	PageToken string `form:"pageToken"`
 }
 
 type ListVisiblePostsRequest struct {

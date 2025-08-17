@@ -26,13 +26,16 @@ func NewListUserPostsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Lis
 }
 
 func (l *ListUserPostsLogic) ListUserPosts(req *types.ListUserPostsRequest) (*types.PostListResponse, error) {
-
+	var token = req.PageToken
+	if token == "NONE" {
+		token = ""
+	}
 	posts, err := l.svcCtx.Dynamics.ListUserPosts(l.ctx, &dynamics.ListUserPostsRequest{
 		UserId: req.UserId,
 		IsPin:  &req.IsPin,
 		Pagination: &dynamics.Pagination{
-			PageSize:  int32(req.Pagination.PageSize),
-			PageToken: req.Pagination.PageToken,
+			PageSize:  int32(req.PageSize),
+			PageToken: token,
 		},
 	})
 	if err != nil {
@@ -53,7 +56,8 @@ func (l *ListUserPostsLogic) ListUserPosts(req *types.ListUserPostsRequest) (*ty
 				Scope:          int(v.Meta.Scope),
 				VisibleUserIds: v.Meta.VisibleUserIds,
 			},
-			IsPinned: v.IsPinned,
+			IsPinned:   v.IsPinned,
+			CreateTime: v.CreateTime,
 		})
 	}
 	return &types.PostListResponse{

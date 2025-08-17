@@ -5,7 +5,7 @@ import (
 )
 
 type MsgChatTransfer struct {
-	MsgId          string            `json:"msgId"`
+	Id          string            `json:"id"`
 	ConversationId string            `json:"conversationId"`
 	SendId         string            `json:"sendId"`
 	RecvId         string            `json:"recvId"`

@@ -126,13 +126,13 @@
      - 正确响应: ![img_58.png](img/img_58.png)
   - **动态功能**
     - 前缀: /v1/dynamics
-    - 数据结构: ![img_61.png](img/img_61.png) ![img_8.png](img_8.png) ![img_67.png](img/img_67.png) ![img_68.png](img/img_68.png) ![img_74.png](img/img_74.png) ![img_88.png](img/img_88.png)
+    - 数据结构: ![img_13.png](img_13.png) ![img_8.png](img_8.png) ![img_67.png](img/img_67.png) ![img_68.png](img/img_68.png) ![img_74.png](img/img_74.png) ![img_88.png](img/img_88.png)
     - 用户是否点赞动态 get /userLikedPost
       - 请求参数: ![img_6.png](img_6.png)
       - 正确响应: ![img_7.png](img_7.png)
     - 单个post信息 get /getPostInfo 
       - 请求参数: ![img_59.png](img/img_59.png)
-      - 正确响应: ![img_60.png](img/img_60.png)
+      - 正确响应: ![img_12.png](img_12.png)
     - 点赞列表 get /listLikeByPostId 
       - 请求参数: ![img_62.png](img/img_62.png)
       - 正确相应: ![img_63.png](img/img_63.png)
